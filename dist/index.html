@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sporeganizer</title>
+    <link rel="icon" type="image/x-icon" href="/images/aperture.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <main id="app-root">
+      <aside class="sb-expanded">
+        <nav>
+          <ul>
+            <li>
+              <a>
+                <i><img src="./images/Sporeganizer.png" class="logo" alt="" srcset="" /></i>
+                <span class="logo">Sporeganizer</span>
+              </a>
+            </li>
+            <li id="nav-signInTab">
+              <a href="#signIn">
+                <i><img src="images/person.png" style="width: 75%" srcset="" /></i>
+                <span>Sign In</span>
+              </a>
+            </li>
+            <li id="nav-accountTab" style="display: none">
+              <a href="#account">
+                <i><img src="images/person.png" style="width: 75%" srcset="" /></i>
+                <span class="displayName">Account</span>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <i><img src="images/home.svg" style="width: 80%" alt="" srcset="" /> </i>
+                <span>Overview</span>
+              </a>
+            </li>
+            <li>
+              <a href="#options">
+                <i><img src="images/settings.png" style="width: 80%" srcset="" /></i>
+                <span>Options</span>
+              </a>
+            </li>
+            <li>
+              <button role="button" class="clickable sidebarToggle">
+                <i
+                  ><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path
+                      fill="currentColor"
+                      d="M20 11v2H8v2H6v-2H4v-2h2V9h2v2zM10 7H8v2h2zm0 0h2V5h-2zm0 10H8v-2h2zm0 0h2v2h-2z" />
+                  </svg>
+                </i>
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+      <div id="app">
+        <div class="mainContainer"></div>
+      </div>
+    </main>
+    <script
+      src="https://gigabyte5671.github.io/CookieManager/cookieManager.min.js"
+      type="module"></script>
+    <script type="module" src="app/app.js"></script>
+  </body>
+</html>

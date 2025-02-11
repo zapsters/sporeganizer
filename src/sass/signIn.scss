@@ -1,0 +1,160 @@
+@use "themes.scss" as *;
+
+.signIn {
+  width: 90%;
+  display: flex;
+  align-items: center;
+  max-width: 800px;
+  justify-content: center;
+  flex-direction: column;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 24px;
+  font-family: "Roboto Condensed", Arial, Helvetica, sans-serif;
+  input {
+    font-size: 18px;
+    padding: 10px 0;
+    font-family: "Roboto Condensed", Arial, Helvetica, sans-serif;
+    color: inherit;
+  }
+  h1 {
+    font-size: 55px;
+    margin-bottom: 0px;
+    font-weight: 500;
+  }
+  h2 {
+    font-weight: 500;
+    font-size: 20px;
+    margin-bottom: 19px;
+    @include themify($themes) {
+      color: themed("primary");
+    }
+  }
+  .orBox {
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin: 28px 0 28px 0;
+    opacity: 1;
+    hr {
+      @include themify($themes) {
+        border: 1px solid themed("primary");
+        width: 100%;
+        opacity: 0.2;
+      }
+    }
+    span {
+      @include themify($themes) {
+        background-color: themed("background") !important;
+        display: block;
+        padding: 0;
+        position: absolute;
+        font-size: 24px;
+        z-index: 10;
+        padding: 4px 15px;
+        color: themed("primary");
+      }
+    }
+  }
+  form {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
+    gap: 15px;
+    font-size: 20px;
+    width: 100%;
+    span {
+      @include themify($themes) {
+        color: themed("alertRed");
+      }
+    }
+    label {
+      position: absolute;
+      left: 5px;
+      scale: 1;
+      opacity: 1;
+      font-size: inherit;
+      transition-property: left, top, transform, scale, opacity;
+      transition-duration: 0.2s;
+      transition-timing-function: ease;
+      z-index: 10;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+
+    .input-container {
+      width: 85%;
+      max-width: 380px;
+      position: relative;
+      margin: 10px 0;
+      .toggleVisibility {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 35px;
+      }
+    }
+    @include themify($themes) {
+      color: themed("text");
+
+      input[type="text"],
+      input[type="password"],
+      input[type="email"] {
+        width: 100%;
+        background-color: transparent;
+        border: none;
+        border-bottom: solid 2px #4db68a;
+        outline: none;
+      }
+
+      input[type="text"]:focus ~ label,
+      input[type="text"]:valid ~ label,
+      input[type="password"]:focus ~ label,
+      input[type="password"]:valid ~ label,
+      input[type="email"]:focus ~ label,
+      input[type="email"]:valid ~ label {
+        top: -10px;
+        left: 0px;
+        opacity: 0.6;
+      }
+
+      input[type="submit"] {
+        cursor: pointer;
+        margin: auto;
+        width: 100%;
+        background-color: #4db689;
+        color: #e0f2f1;
+        font-size: 1.25em;
+        padding: 10px 0;
+        border: solid #009666;
+        border-width: 0 0 4px 0;
+        border-radius: 3px;
+        outline: none;
+      }
+
+      input[type="submit"]:hover {
+        background: #26a680;
+        border: solid #00895e;
+        border-width: 0 0 4px 0;
+      }
+      input[type="submit"]:focus {
+        background: #26a680;
+        border: 3px inset black;
+      }
+
+      input[type="submit"]:active {
+        background: #009664;
+        border: 1px solid black;
+        border-width: 0 0 0px 0;
+      }
+    }
+  }
+}

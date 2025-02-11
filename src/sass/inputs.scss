@@ -1,0 +1,81 @@
+@use "themes.scss" as *;
+
+.inline {
+  display: flex;
+  align-items: stretch;
+  justify-content: left;
+
+  gap: 10px;
+  margin-bottom: 10px;
+  input,
+  .button {
+    display: inline;
+    margin: 0;
+    border-radius: 7px;
+  }
+  span,
+  .alert {
+    font-size: 18px;
+    @include themify($themes) {
+      color: themed("alertRed");
+    }
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+  }
+}
+
+.readOnly {
+  color: grey;
+}
+
+.button.dangerous {
+  transition-property: background-color, color;
+  transition-duration: 0.1s;
+  transition-timing-function: linear;
+  &:hover,
+  &:focus {
+    background-color: rgb(36, 17, 17);
+    color: red;
+  }
+}
+
+input,
+.button {
+  border: 3px solid #313131;
+  padding: 3px 6px;
+  background-color: white;
+  font-size: 20px;
+  font-family: "Roboto", "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+
+.button {
+  color: white;
+  background-color: #222;
+  font-weight: 300;
+  border-radius: 7px;
+  min-width: 160px;
+  font-family: "Roboto", Courier, monospace;
+  padding: 7px 20px;
+  margin: 10px 0;
+  cursor: pointer;
+  text-align: center;
+  border: none;
+
+  display: block;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.button:hover {
+  background-color: #313131;
+}
+
+.button svg {
+  display: inline;
+  width: 1.3rem;
+  background-color: red;
+  height: 1.3rem;
+  margin-right: 0.75rem;
+  color: white;
+}

@@ -1,0 +1,96 @@
+@use "themes.scss" as *;
+
+.mainContainer {
+  flex: 1;
+  border-radius: 12px;
+  font-size: 25px;
+  section {
+    padding-left: 5px;
+  }
+  @include themify($themes) {
+    color: themed("text");
+    background-color: themed("background");
+    svg:not(.gsi-material-button svg),
+    img {
+      width: 38px;
+      cursor: pointer;
+      filter: themed("filterToBlack");
+      transform: translateY(2px);
+    }
+    header {
+      padding: 10px 16px;
+      min-height: 65px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 28px;
+      font-weight: 600;
+
+      border-bottom: 2px solid themed("text");
+
+      h1,
+      h2,
+      h3,
+      h4,
+      p {
+        transform: translateY(1px);
+        font-size: inherit;
+        font-weight: inherit;
+        margin: 0;
+      }
+    }
+    .content {
+      padding: 10px 10px;
+      input {
+        font-size: 20px;
+      }
+    }
+  }
+}
+
+.mainContainer-alt {
+  @include themify($themes) {
+    header {
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 38px;
+      font-weight: 600;
+
+      border-bottom: 2px solid themed("text");
+
+      h1,
+      h2,
+      h3,
+      h4,
+      p {
+        transform: translateY(1px);
+        font-size: inherit;
+        font-weight: inherit;
+        margin: 0;
+      }
+    }
+    .content {
+      padding: 20px;
+    }
+  }
+}
+
+.mainContainer-raw {
+  flex: 1;
+  border-radius: 12px;
+  @include themify($themes) {
+    color: themed("text");
+    background-color: themed("background");
+  }
+  section {
+    padding-left: 5px;
+  }
+}
+
+.mainContainer.flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}

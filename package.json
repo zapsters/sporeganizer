@@ -1,0 +1,22 @@
+{
+  "name": "sporeganizer",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "serve": "live-server dist",
+    "sass": "sass src/sass/styles.scss dist/css/styles.css -w",
+    "build": "webpack"
+  },
+  "author": "Erin Ballinger",
+  "license": "ISC",
+  "devDependencies": {
+    "sass": "^1.83.0",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^6.0.1"
+  },
+  "dependencies": {
+    "firebase": "^11.3.0",
+    "jquery": "^3.7.1",
+    "pixelarticons": "^1.8.1"
+  }
+}

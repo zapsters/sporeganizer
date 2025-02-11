@@ -1,0 +1,22 @@
+@use "themes.scss" as *;
+
+.options {
+  .content {
+    h4 {
+      margin-bottom: 10px;
+    }
+    span {
+      font-size: 20px;
+      margin-bottom: 4px;
+      display: block;
+    }
+    img {
+      border-bottom: 3.5px solid transparent;
+    }
+    img.active {
+      @include themify($themes) {
+        border-bottom: 3.5px solid themed("text");
+      }
+    }
+  }
+}
