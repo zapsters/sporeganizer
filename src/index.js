@@ -150,7 +150,9 @@ function initTogglePasswordVisibilityListeners() {
 
 function initGoogleLoginBtn() {
   console.log("init listener");
-  $("#googleSignIn").on("click", function () {
+  $(".googleSignIn").on("click", function () {
+    console.log("Attempting pop up");
+
     googlePopup();
   });
 }

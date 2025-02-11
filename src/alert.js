@@ -5,11 +5,17 @@ var modalAllowClickOut = true;
 var modalContainerReference = null;
 var modalBackground = null;
 var modalReference = null;
+var modalButtonsReference = null;
 
-// SVG COLLECTION
-const closeBtn = `<svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 24 24">
-	<path fill="#fff" d="M5 5h2v2H5zm4 4H7V7h2zm2 2H9V9h2zm2 0h-2v2H9v2H7v2H5v2h2v-2h2v-2h2v-2h2v2h2v2h2v2h2v-2h-2v-2h-2v-2h-2zm2-2v2h-2V9zm2-2v2h-2V7zm0 0V5h2v2z" />
-</svg>`;
+const alertParams = {
+  icon: "alert",
+  header: "headerText",
+  subHeader: "subHeaderText",
+  includeDismissBtn: true,
+};
+
+// Icons currently use PixelArtIcons from Gerrit Halfmann found here:
+// https://icon-sets.iconify.design/pixelarticons/
 
 debug();
 createModalElement();
@@ -17,22 +23,27 @@ createModalElement();
 export function createModalElement() {
   if (document.getElementById("modalContainer") == null) {
     $("body").append(
-      `<div id=${"modalContainer"} class="modalContainer">
-        <div class="modalBackground" id=${"modalContainer-bg"}>
-          <div class="modal" id="${"modalContainer-modal"}">
-            <span class="closeBtn" id="modalCloseBtn">${closeBtn}</span>
-            <div id="modalIcon"></div>
-            <h2>Header</h2>
-            <p>Subheader</p>
-            <div id="modalButtonSection">buttons</div>
+      `<div id="modalContainer" class="modalContainer">
+        <div class="modalBackground" id="modalContainer-bg">
+          <div class="modal" id="modalContainer-modal}">
+            <button class="closeBtn pixelart-icons-font-close-box" id="modalCloseBtn"></button>
+            <div id="modalMainContent">
+              <icon id="modalIcon"></icon>
+              <h2>Header</h2>
+              <h3>Subheader</h3>
+              <div id="modalMainButtons">
+                <button type="button" class="button dismissBtn">Dismiss</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>`
     );
 
     modalContainerReference = document.getElementById("modalContainer");
-    modalReference = document.getElementById("modalContainer-modal");
     modalBackground = document.getElementById("modalContainer-bg");
+    modalReference = document.getElementById("modalMainContent");
+    modalButtonsReference = document.getElementById("modalMainButtons");
 
     modalContainerReference.addEventListener("click", function (e) {
       if (modalAllowClickOut && e.target == modalBackground) closeModal();
@@ -40,7 +51,27 @@ export function createModalElement() {
     document.getElementById("modalCloseBtn").addEventListener("click", function (e) {
       closeModal();
     });
+    $(modalReference)
+      .find(".dismissBtn")
+      .on("click", function (e) {
+        closeModal();
+      });
   }
+}
+
+function populateModalElement(customAlertParams) {
+  customAlertParams = { ...alertParams, ...customAlertParams };
+
+  // Populate the Icon
+  var iconRef = $(modalReference).find("icon");
+  iconRef.removeClass();
+  iconRef.addClass(`pixelart-icons-font-${customAlertParams.icon}`);
+
+  // Populate Text
+  var headerRef = $(modalReference).find("h2");
+  var subHeaderRef = $(modalReference).find("h3");
+  headerRef.html(customAlertParams.header);
+  subHeaderRef.html(customAlertParams.subHeader);
 }
 
 function displayModal() {
@@ -51,15 +82,28 @@ function closeModal() {
   modalContainerReference.classList.add("out");
 }
 
-export function generateModalAlert() {
+export function generateModalAlert(params) {
   createModalElement();
+  populateModalElement(params);
   displayModal();
 }
 
 function debug() {
   document.addEventListener("keypress", function (event) {
-    if (event.key === "`") {
-      generateModalAlert();
+    switch (event.key) {
+      case "`":
+        generateModalAlert({});
+        break;
+      case "1":
+        generateModalAlert({ icon: "subscriptions", header: "header", subHeader: "mySubtitle" });
+        break;
+      case "2":
+        generateModalAlert({
+          icon: "cake",
+          header: "Happy Cake Day!",
+          subHeader: "<i>the cake is a lie.</i>",
+        });
+        break;
     }
   });
 }
