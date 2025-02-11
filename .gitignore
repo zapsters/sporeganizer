@@ -11,7 +11,6 @@ firebase-debug.*.log*
 .firebase/
 
 # Firebase config
-firebaseConfig.js
 package-lock.json
 
 # Uncomment this if you'd like others to create their own Firebase project.
