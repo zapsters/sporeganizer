@@ -7,9 +7,11 @@ import { GoogleAuthProvider } from "firebase/auth";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// console.log(process.env.SPOREGANZIER_FIREBASE_APIKEY);
+
 const firebaseConfig = {
-  apiKey: `${process.env.SPOREGANZIER_FIREBASE_APIKEY}`,
-  authDomain: `sporeganizer.firebaseapp.com`,
+  apiKey: "AIzaSyBEzlCVVXLZk2gfOiSorG2ZyISFvZklTpU",
+  authDomain: "sporeganizer.firebaseapp.com",
   projectId: "sporeganizer",
   storageBucket: "sporeganizer.firebasestorage.app",
   messagingSenderId: "137178577763",

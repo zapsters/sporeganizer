@@ -16,6 +16,7 @@ import * as $ from "jquery";
 import { app, db, provider } from "./firebaseConfig";
 let uid = "";
 const auth = getAuth(app);
+const currentHost = window.location.host;
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
@@ -77,8 +78,22 @@ export function signUserIn(siEmail, siPassword) {
   signInWithEmailAndPassword(auth, siEmail, siPassword)
     .then((userCredential) => {
       // Signed in
-      const user = userCredential.user;
-      console.log("signed in!", user);
+      return userCredential.user.getIdToken(); // 🔥 Get the ID token
+    })
+    .then((idToken) => {
+      // 🔥 Send the token to your backend for verification
+
+      return fetch(`http://${currentHost}/auth/verify-token`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
+      });
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log("Authenticated successfully:", data);
       window.location.hash = "";
     })
     .catch((error) => {

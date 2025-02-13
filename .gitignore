@@ -85,3 +85,4 @@ node_modules/
 # project
 styles.css.map
 .prepros
+firebase-service-account.json
