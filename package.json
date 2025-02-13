@@ -2,6 +2,7 @@
   "name": "sporeganizer",
   "version": "1.0.0",
   "main": "index.js",
+  "description": "A homework tracking and productivity app with a mushroom theme!",
   "scripts": {
     "serve": "nodemon server.js",
     "sass": "sass src/sass/styles.scss dist/css/styles.css -w",
