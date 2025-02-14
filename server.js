@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const authRoutes = require("./routes/auth.js");
 const verifyToken = require("./middlewares/authMiddleware"); // Import the middleware
+require("dotenv").config();
 
 const app = express();
 
