@@ -11,7 +11,7 @@ import {
   updateUser,
   getCurrentUser,
   reloadUserInfo,
-  validateInputField,
+  sanitizeField,
 } from "./model";
 
 import * as alertManager from "./alert.js";
@@ -116,13 +116,13 @@ export function initListenersByPage(pageID) {
         const auth = getAuth();
         const user = auth.currentUser;
 
-        var newName = validateInputField($("#displayNameInput").val());
+        var newName = $("#displayNameInput").val();
 
         if ($("#displayNameInput").val() != user.displayName) {
           alertManager.generateModalAlert({
             icon: "label",
             header: "Change Display Name?",
-            subHeader: `${user.displayName} &#8674; ${newName}`,
+            subHeader: `${sanitizeField(user.displayName)} &#8674; ${sanitizeField(newName)}`,
             buttons: [
               { text: "Cancel" },
               {

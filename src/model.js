@@ -43,7 +43,6 @@ export function signUserUp(displayName, email, password) {
   // console.log(`${firstName}, ${lastName}, ${email}, ${password}`);
   if (displayName.length > 30) return;
 
-  displayName = validateInputField(displayName);
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       updateProfile(auth.currentUser, {
@@ -96,10 +95,10 @@ export function updateUser(body, responseElement) {
       alertManager.generateModalAlert({
         icon: "check",
         header: `Your display name is now`,
-        subHeader: `'${data.userRecord.displayName}'`,
+        subHeader: `'${sanitizeField(data.userRecord.displayName)}'`,
       });
 
-      $(".displayName").html(data.userRecord.displayName);
+      $(".displayName").html(sanitizeField(data.userRecord.displayName));
       $("#displayNameInput").val(data.userRecord.displayName);
     })
     .then(() => {
@@ -220,7 +219,7 @@ export function getUserDisplayName() {
     const photoURL = user.photoURL;
     const emailVerified = user.emailVerified;
 
-    return displayName;
+    return sanitizeField(displayName);
   }
   return "anonymous";
 }
@@ -286,7 +285,7 @@ export function googlePopup() {
     });
 }
 
-export function validateInputField(value) {
+export function sanitizeField(value) {
   var lt = /</g,
     gt = />/g,
     ap = /'/g,
