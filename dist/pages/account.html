@@ -9,23 +9,29 @@
       <section>
         <h3>Display Name</h3>
         <div class="inline">
-          <input type="text" autocomplete="off" id="displayNameInput" />
-          <button type="button" class="button changeDisplayName" autocomplete="nickname">
+          <input type="text" maxlength="30" autocomplete="off" id="displayNameInput" />
+          <button
+            type="button"
+            class="button changeDisplayName"
+            id="displayNameChangeButton"
+            autocomplete="nickname">
             Change Display Name
           </button>
-          <span>Display name is already taken</span>
+          <span id="displayNameChangeStatusText"></span>
         </div>
         <h3>Password</h3>
         <div class="inline">
           <input class="readOnly" type="password" readonly id="passwordInput" />
-          <button type="button" class="button changePasswordBtn">Change Password</button>
-          <span>Password changed</span>
+          <button type="button" class="button changePasswordBtn" id="passwordChangeButton">
+            Change Password
+          </button>
+          <span id="passwordStatusText"></span>
         </div>
         <h3>Email</h3>
         <div class="inline">
           <input class="readOnly" type="email" readonly id="emailInput" />
           <button type="button" class="button changeEmailBtn">Change Email</button>
-          <span>Email changed</span>
+          <span id="emailStatusText"></span>
         </div>
         <button type="button" class="button signoutBtn">Signout</button>
         <button type="button" style="margin-top: 15px" class="button signoutBtn dangerous">

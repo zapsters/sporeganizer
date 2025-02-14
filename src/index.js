@@ -8,11 +8,15 @@ import {
   getUserDisplayName,
   googlePopup,
   getUserAuth,
+  updateUser,
+  getCurrentUser,
+  reloadUserInfo,
+  validateInputField,
 } from "./model";
 
 import * as alertManager from "./alert.js";
 
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, getAuth } from "firebase/auth";
 import * as cookieManager from "./cookieManager.min.js";
 import { checkDarkModePreference, setTheme, browserTheme } from "./browserTheme.js";
 
@@ -107,6 +111,67 @@ export function initListenersByPage(pageID) {
           // User is signed out
         }
       });
+
+      $("#displayNameChangeButton").on("click", () => {
+        const auth = getAuth();
+        const user = auth.currentUser;
+
+        var newName = validateInputField($("#displayNameInput").val());
+
+        if ($("#displayNameInput").val() != user.displayName) {
+          alertManager.generateModalAlert({
+            icon: "label",
+            header: "Change Display Name?",
+            subHeader: `${user.displayName} &#8674; ${newName}`,
+            buttons: [
+              { text: "Cancel" },
+              {
+                text: "Change Name",
+                // closeModalOnClick: "false",
+                onClick: () => {
+                  updateUser(
+                    {
+                      uid: getCurrentUser().uid,
+                      displayName: newName,
+                    },
+                    "#displayNameChangeStatusText"
+                  );
+                },
+              },
+            ],
+          });
+        } else {
+          setStatusText(
+            "#displayNameChangeStatusText",
+            "<span>Enter a new display name to change it.</span>"
+          );
+        }
+      });
+      $("#passwordChangeButton").on("click", () => {
+        const auth = getAuth();
+        const user = auth.currentUser;
+        alertManager.generateModalAlert({
+          icon: "label",
+          header: "Change Password?",
+          bodyText: `Enter your current password`,
+          buttons: [
+            { text: "Cancel" },
+            {
+              text: "Change Name",
+              // closeModalOnClick: "false",
+              onClick: () => {
+                updateUser(
+                  {
+                    uid: getCurrentUser().uid,
+                    displayName: $("#displayNameInput").val(),
+                  },
+                  "#displayNameChangeStatusText"
+                );
+              },
+            },
+          ],
+        });
+      });
       break;
     case "options":
       $("#appearanceSelect img").on("click", function () {
@@ -149,10 +214,16 @@ function initTogglePasswordVisibilityListeners() {
 }
 
 function initGoogleLoginBtn() {
-  console.log("init listener");
   $(".googleSignIn").on("click", function () {
     console.log("Attempting pop up");
 
     googlePopup();
   });
+}
+
+function setStatusText(id, text, time = 5) {
+  $(id).html(text);
+  setTimeout(() => {
+    $(id).html("");
+  }, time * 1000);
 }

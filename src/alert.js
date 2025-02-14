@@ -9,9 +9,22 @@ var modalButtonsReference = null;
 
 const alertParams = {
   icon: "alert",
-  header: "headerText",
-  subHeader: "subHeaderText",
-  includeDismissBtn: true,
+  header: "",
+  subHeader: "",
+  bodyText: "",
+  allowClickOff: true,
+  buttons: [
+    {
+      /* Empty object will default to the dismiss button */
+    },
+  ],
+};
+
+const buttonParams = {
+  text: "Dismiss",
+  closeModalOnClick: true,
+  onClick: () => {},
+  class: "secondary",
 };
 
 // Icons currently use PixelArtIcons from Gerrit Halfmann found here:
@@ -31,6 +44,7 @@ export function createModalElement() {
               <icon id="modalIcon"></icon>
               <h2>Header</h2>
               <h3>Subheader</h3>
+              <p>bodyText</p>
               <div id="modalMainButtons">
                 <button type="button" class="button dismissBtn">Dismiss</button>
               </div>
@@ -45,22 +59,26 @@ export function createModalElement() {
     modalReference = document.getElementById("modalMainContent");
     modalButtonsReference = document.getElementById("modalMainButtons");
 
-    modalContainerReference.addEventListener("click", function (e) {
-      if (modalAllowClickOut && e.target == modalBackground) closeModal();
-    });
     document.getElementById("modalCloseBtn").addEventListener("click", function (e) {
       closeModal();
     });
-    $(modalReference)
-      .find(".dismissBtn")
-      .on("click", function (e) {
-        closeModal();
-      });
+
+    modalContainerReference.addEventListener("click", handleModalClickOff);
   }
+}
+
+function handleModalClickOff(event) {
+  if (
+    event.target == modalBackground &&
+    $(modalContainerReference).attr("allowClickOff") != "false"
+  )
+    closeModal();
 }
 
 function populateModalElement(customAlertParams) {
   customAlertParams = { ...alertParams, ...customAlertParams };
+
+  $(modalContainerReference).attr("allowClickOff", customAlertParams.allowClickOff);
 
   // Populate the Icon
   var iconRef = $(modalReference).find("icon");
@@ -70,8 +88,27 @@ function populateModalElement(customAlertParams) {
   // Populate Text
   var headerRef = $(modalReference).find("h2");
   var subHeaderRef = $(modalReference).find("h3");
+  var bodyTextRef = $(modalReference).find("p");
   headerRef.html(customAlertParams.header);
   subHeaderRef.html(customAlertParams.subHeader);
+  bodyTextRef.html(customAlertParams.bodyText);
+
+  // Populate buttons
+  $(modalButtonsReference).html("");
+
+  customAlertParams.buttons.forEach((buttonElement, index) => {
+    buttonElement = { ...buttonParams, ...buttonElement };
+    var buttonElementHtml = `<button type="button" id="button${index}" class="button">${buttonElement.text}</button>`;
+    $(modalButtonsReference).append(buttonElementHtml);
+    var buttonElementRef = $(`#button${index}`);
+    $(buttonElementRef).addClass(`${buttonElement.class}`);
+    $(buttonElementRef).attr("closeModalOnClick", buttonElement.closeModalOnClick);
+    $(`#button${index}`).on("click", function () {
+      buttonElement.onClick();
+
+      if ($(this).attr("closeModalOnClick") == "true") closeModal();
+    });
+  });
 }
 
 function displayModal() {
@@ -91,17 +128,38 @@ export function generateModalAlert(params) {
 function debug() {
   document.addEventListener("keypress", function (event) {
     switch (event.key) {
-      case "`":
+      case "~":
         generateModalAlert({});
         break;
-      case "1":
-        generateModalAlert({ icon: "subscriptions", header: "header", subHeader: "mySubtitle" });
+      case "!":
+        generateModalAlert({
+          icon: "subscriptions",
+          header: "header",
+          subHeader: "mySubtitle",
+          bodyText: "myBodyText",
+        });
         break;
-      case "2":
+      case "@":
         generateModalAlert({
           icon: "cake",
           header: "Happy Cake Day!",
-          subHeader: "<i>the cake is a lie.</i>",
+          subHeader: "the cake is a lie.",
+          bodyText: "Or is it?",
+          allowClickOff: false,
+        });
+        break;
+      case "#":
+        generateModalAlert({
+          icon: "alert",
+          header: "headerText",
+          subHeader: "subHeaderText",
+          bodyText: "",
+          allowClickOff: true,
+          buttons: [
+            {
+              closeModalOnClick: false,
+            },
+          ],
         });
         break;
     }

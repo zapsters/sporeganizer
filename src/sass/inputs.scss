@@ -13,12 +13,14 @@
     margin: 0;
     border-radius: 7px;
   }
-  span,
   .alert {
-    font-size: 18px;
     @include themify($themes) {
       color: themed("alertRed");
     }
+  }
+  .alert,
+  span {
+    font-size: 18px;
     display: flex;
     align-items: center;
     justify-content: space-evenly;

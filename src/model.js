@@ -8,12 +8,15 @@ import {
   signInWithRedirect,
   getRedirectResult,
   GoogleAuthProvider,
+  reload,
 } from "firebase/auth";
 
 import { initListenersByPage } from "./index.js";
 
 import * as $ from "jquery";
 import { app, db, provider } from "./firebaseConfig";
+import * as alertManager from "./alert.js";
+
 let uid = "";
 const auth = getAuth(app);
 const currentHost = window.location.host;
@@ -25,10 +28,10 @@ onAuthStateChanged(auth, (user) => {
 
     uid = user.uid;
     $(".displayName").html(getUserDisplayName());
+    $("#displayNameInput").val(getUserDisplayName());
     $("#status").html("signed in");
     $("#nav-accountTab").css("display", "block");
     $("#nav-signInTab").css("display", "none");
-    $("#displayNameInput").val(getUserDisplayName());
   } else {
     $("#status").html("not signed in");
     $("#nav-accountTab").css("display", "none");
@@ -38,6 +41,9 @@ onAuthStateChanged(auth, (user) => {
 
 export function signUserUp(displayName, email, password) {
   // console.log(`${firstName}, ${lastName}, ${email}, ${password}`);
+  if (displayName.length > 30) return;
+
+  displayName = validateInputField(displayName);
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       updateProfile(auth.currentUser, {
@@ -71,6 +77,48 @@ export function signUserOut() {
     })
     .catch((error) => {
       console.log("Error" + error);
+    });
+}
+
+export function updateUser(body, responseElement) {
+  return fetch(`http://${currentHost}/auth/update`, {
+    method: "POST",
+    headers: body,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log("Updated user successfully:", data);
+      $(responseElement).html(data.message);
+      alertManager.generateModalAlert({
+        icon: "check",
+        header: `Your display name is now`,
+        subHeader: `'${data.userRecord.displayName}'`,
+      });
+
+      $(".displayName").html(data.userRecord.displayName);
+      $("#displayNameInput").val(data.userRecord.displayName);
+    })
+    .then(() => {
+      try {
+        const auth = getAuth();
+        const user = auth.currentUser;
+        reload(user).then(() => {
+          console.log("User information reloaded:", auth.currentUser);
+        });
+        // User information has been reloaded successfully
+      } catch (error) {
+        // Handle errors, such as network issues or user not found
+        console.error("Error reloading user information:", error);
+      }
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      $(responseElement).html(`${errorCode} ${errorMessage}`);
     });
 }
 
@@ -142,6 +190,24 @@ export function checkRequired(id) {
 export function getUserAuth() {
   const auth = getAuth();
   return auth;
+}
+
+export function getCurrentUser() {
+  const auth = getAuth();
+  const user = auth.currentUser;
+  // if (user !== null) {
+  //   // The user object has basic properties such as display name, email, etc.
+  //   const displayName = user.displayName;
+  //   const email = user.email;
+  //   const photoURL = user.photoURL;
+  //   const emailVerified = user.emailVerified;
+
+  //   // The user's ID, unique to the Firebase project. Do NOT use
+  //   // this value to authenticate with your backend server, if
+  //   // you have one. Use User.getToken() instead.
+  //   const uid = user.uid;
+  // }
+  return user;
 }
 
 export function getUserDisplayName() {
@@ -218,4 +284,17 @@ export function googlePopup() {
       const credential = GoogleAuthProvider.credentialFromError(error);
       // ...
     });
+}
+
+export function validateInputField(value) {
+  var lt = /</g,
+    gt = />/g,
+    ap = /'/g,
+    ic = /"/g;
+  return value
+    .toString()
+    .replace(lt, "&lt;")
+    .replace(gt, "&gt;")
+    .replace(ap, "&#39;")
+    .replace(ic, "&#34;");
 }

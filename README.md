@@ -16,3 +16,5 @@ This project is very much still in development with many key features planned fo
 - **CSS & SASS**: For styling the website and making it responsive across devices.
 - **JavaScript / JQuery**: For form validation and interactivity.
 - **Firebase**: For authentication & data storage
+
+- **Node.js**: For backend-server operations
