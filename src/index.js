@@ -11,11 +11,11 @@ import {
   updateUser,
   getCurrentUser,
   reloadUserInfo,
-  sanitizeField,
 } from "./model";
 
 import * as alertManager from "./alert.js";
 
+import sanitizeHtml from "sanitize-html";
 import { onAuthStateChanged, getAuth } from "firebase/auth";
 import * as cookieManager from "./cookieManager.min.js";
 import { checkDarkModePreference, setTheme, browserTheme } from "./browserTheme.js";
@@ -112,17 +112,47 @@ export function initListenersByPage(pageID) {
         }
       });
 
+      $("#deleteAccountBtn").on("click", () => {
+        alertManager.generateModalAlert({
+          icon: "downasaur",
+          header: "Delete Account?",
+          subHeader: `<span class="alert">This is un-reverseable.</span>`,
+          buttons: [
+            { text: "Cancel" },
+            {
+              text: "Delete Account",
+              class: "dangerous",
+              // closeModalOnClick: "false",
+              onClick: () => {
+                updateUser(
+                  {
+                    uid: getCurrentUser().uid,
+                    displayName: newName,
+                  },
+                  "#displayNameChangeStatusText"
+                );
+              },
+            },
+          ],
+        });
+      });
+
+      $("#displayNameInput").on("change", function () {
+        $(this).val(sanitizeHtml($(this).val(), { allowedTags: [], allowedAttributes: {} }));
+      });
       $("#displayNameChangeButton").on("click", () => {
         const auth = getAuth();
         const user = auth.currentUser;
 
-        var newName = $("#displayNameInput").val();
+        console.log($("#displayNameInput").val());
+
+        var newName = stripHtml($("#displayNameInput").val());
 
         if ($("#displayNameInput").val() != user.displayName) {
           alertManager.generateModalAlert({
             icon: "label",
             header: "Change Display Name?",
-            subHeader: `${sanitizeField(user.displayName)} &#8674; ${sanitizeField(newName)}`,
+            subHeader: `${stripHtml(user.displayName)} &#8674; ${stripHtml(newName)}`,
             buttons: [
               { text: "Cancel" },
               {
@@ -132,7 +162,7 @@ export function initListenersByPage(pageID) {
                   updateUser(
                     {
                       uid: getCurrentUser().uid,
-                      displayName: newName,
+                      displayName: stripHtml(newName),
                     },
                     "#displayNameChangeStatusText"
                   );
@@ -226,4 +256,10 @@ function setStatusText(id, text, time = 5) {
   setTimeout(() => {
     $(id).html("");
   }, time * 1000);
+}
+
+function stripHtml(html) {
+  let tmp = document.createElement("DIV");
+  tmp.innerHTML = html;
+  return tmp.textContent || tmp.innerText || "";
 }

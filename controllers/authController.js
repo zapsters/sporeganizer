@@ -1,9 +1,13 @@
 const firebaseAdmin = require("../config/firebaseAdmin");
 const { getAuth } = require("firebase-admin/auth");
+const sanitizeHtml = require("sanitize-html");
+
+var sanitizeHtmlParams = { allowedTags: [], allowedAttributes: {} };
 
 exports.signup = async (req, res) => {
   try {
-    const { displayName, email, password } = req.body;
+    var { displayName, email, password } = req.body;
+    displayName = sanitizeHtml(displayName, sanitizeHtmlParams);
     const user = await firebaseAdmin.auth().createUser({
       email: email,
       password: password,
@@ -19,7 +23,8 @@ exports.signup = async (req, res) => {
 
 exports.update = async (req, res) => {
   try {
-    const { uid, displayName, email } = req.body;
+    var { uid, displayName, email } = req.body;
+    displayName = sanitizeHtml(displayName, sanitizeHtmlParams);
     getAuth()
       .updateUser(uid, {
         email: email,

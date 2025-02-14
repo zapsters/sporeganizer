@@ -95,10 +95,10 @@ export function updateUser(body, responseElement) {
       alertManager.generateModalAlert({
         icon: "check",
         header: `Your display name is now`,
-        subHeader: `'${sanitizeField(data.userRecord.displayName)}'`,
+        subHeader: `'${data.userRecord.displayName}'`,
       });
 
-      $(".displayName").html(sanitizeField(data.userRecord.displayName));
+      $(".displayName").html(data.userRecord.displayName);
       $("#displayNameInput").val(data.userRecord.displayName);
     })
     .then(() => {
@@ -219,7 +219,7 @@ export function getUserDisplayName() {
     const photoURL = user.photoURL;
     const emailVerified = user.emailVerified;
 
-    return sanitizeField(displayName);
+    return displayName;
   }
   return "anonymous";
 }
@@ -283,17 +283,4 @@ export function googlePopup() {
       const credential = GoogleAuthProvider.credentialFromError(error);
       // ...
     });
-}
-
-export function sanitizeField(value) {
-  var lt = /</g,
-    gt = />/g,
-    ap = /'/g,
-    ic = /"/g;
-  return value
-    .toString()
-    .replace(lt, "&lt;")
-    .replace(gt, "&gt;")
-    .replace(ap, "&#39;")
-    .replace(ic, "&#34;");
 }
