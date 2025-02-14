@@ -2631,6 +2631,7 @@ aside nav ul li:last-child {
   max-width: 380px;
   position: relative;
   margin: 10px 0;
+  height: 100%;
 }
 .signIn form .input-container .toggleVisibility {
   display: flex;
@@ -2641,6 +2642,15 @@ aside nav ul li:last-child {
   top: 50%;
   transform: translateY(-50%);
   width: 35px;
+  font-size: 30px;
+  height: 50px;
+  background-color: red;
+}
+.signIn form .input-container .toggleVisibility img {
+  width: 38px;
+  cursor: pointer;
+  filter: none;
+  transform: translateY(2px);
 }
 .theme-light .signIn form {
   color: #110d09;

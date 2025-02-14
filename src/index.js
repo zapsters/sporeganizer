@@ -10,7 +10,8 @@ import {
   getUserAuth,
   updateUser,
   getCurrentUser,
-  reloadUserInfo,
+  reauthenticate,
+  deleteCurrentUser,
 } from "./model";
 
 import * as alertManager from "./alert.js";
@@ -113,6 +114,7 @@ export function initListenersByPage(pageID) {
       });
 
       $("#deleteAccountBtn").on("click", () => {
+        // promptForCredentials();
         alertManager.generateModalAlert({
           icon: "downasaur",
           header: "Delete Account?",
@@ -122,15 +124,9 @@ export function initListenersByPage(pageID) {
             {
               text: "Delete Account",
               class: "dangerous",
-              // closeModalOnClick: "false",
+              closeModalOnClick: "false",
               onClick: () => {
-                updateUser(
-                  {
-                    uid: getCurrentUser().uid,
-                    displayName: newName,
-                  },
-                  "#displayNameChangeStatusText"
-                );
+                deleteCurrentUser();
               },
             },
           ],
@@ -140,6 +136,7 @@ export function initListenersByPage(pageID) {
       $("#displayNameInput").on("change", function () {
         $(this).val(sanitizeHtml($(this).val(), { allowedTags: [], allowedAttributes: {} }));
       });
+
       $("#displayNameChangeButton").on("click", () => {
         const auth = getAuth();
         const user = auth.currentUser;
@@ -262,4 +259,45 @@ function stripHtml(html) {
   let tmp = document.createElement("DIV");
   tmp.innerHTML = html;
   return tmp.textContent || tmp.innerText || "";
+}
+
+function promptForCredentials() {
+  alertManager.generateModalAlert({
+    header: "Confirm your Credentials",
+    bodyText: `For your security, confirm your login details.
+    <div class="signIn" style="margin-top: 20px">
+      <form action="" id="signIn-form" autocomplete="off" data-np-autofill-form-type="login" data-np-checked="1" data-np-watching="1" class="">
+        <div class="input-container">
+          <input required="" type="text" id="signIn-email" autocomplete="email" data-np-autofill-field-type="username" data-np-uid="787df108-3938-4481-93a3-f87348a4b9d3">
+          <label>Email</label>
+        <nordpass-icon data-np-uid="787df108-3938-4481-93a3-f87348a4b9d3" style="all: initial !important;"></nordpass-icon></div>
+        <div class="input-container">
+          <input required="" type="password" id="signIn-password" autocomplete="current-password" data-np-autofill-field-type="password" data-np-uid="24bad00c-c9bf-4240-87d9-fe2ac60fc0ed">
+          <label>Password</label>
+          <button class="toggleVisibility">
+            <img src="images/eye-open.svg" alt="" srcset="">
+          </button>
+        <nordpass-icon data-np-uid="24bad00c-c9bf-4240-87d9-fe2ac60fc0ed" style="all: initial !important;"></nordpass-icon></div>
+        <span id="signIn-statusText"></span>
+        <div class="input-container">
+          <input autocomplete="off" type="submit" id="signIn-submit" value="Sign In">
+        </div>
+      </form>
+      </div>`,
+    buttons: [],
+  });
+  initTogglePasswordVisibilityListeners();
+  $("#signIn-submit").on("click", (e) => {
+    e.preventDefault();
+    var checkRequiredResponse = checkRequired("signIn-form");
+    if (checkRequiredResponse[0]) {
+      const email = $("#signIn-email").val();
+      const password = $("#signIn-password").val();
+      reauthenticate(email, password)
+        .then((res) => console.log(res))
+        .catch((error) => console.log(error));
+    } else {
+      $("#signIn-statusText").html(checkRequiredResponse[1]);
+    }
+  });
 }

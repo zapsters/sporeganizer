@@ -9,6 +9,8 @@ import {
   getRedirectResult,
   GoogleAuthProvider,
   reload,
+  reauthenticateWithCredential,
+  deleteUser,
 } from "firebase/auth";
 
 import { initListenersByPage } from "./index.js";
@@ -25,6 +27,7 @@ onAuthStateChanged(auth, (user) => {
   if (user) {
     // User is signed in, see docs for a list of available properties
     // https://firebase.google.com/docs/reference/js/auth.user
+    console.log(user);
 
     uid = user.uid;
     $(".displayName").html(getUserDisplayName());
@@ -262,6 +265,7 @@ export function changeRoute(e) {
 
 export function googlePopup() {
   const provider = new GoogleAuthProvider();
+  window.sessionStorage.setItem("pending", 1);
   signInWithRedirect(auth, provider)
     .then((result) => {
       // This gives you a Google Access Token. You can use it to access the Google API.
@@ -284,3 +288,63 @@ export function googlePopup() {
       // ...
     });
 }
+if (window.sessionStorage.getItem("pending")) {
+  window.sessionStorage.removeItem("pending");
+
+  getRedirectResult(auth)
+    .then((result) => {
+      // This gives you a Google Access Token. You can use it to access Google APIs.
+      console.log(result);
+
+      // const credential = GoogleAuthProvider.credentialFromResult(result);
+      // const token = credential.accessToken;
+
+      // // The signed-in user info.
+      // const user = result.user;
+      // IdP data available using getAdditionalUserInfo(result)
+      // ...
+    })
+    .catch((error) => {
+      // Handle Errors here.
+      console.log(error);
+
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      // The email of the user's account used.
+      const email = error.customData.email;
+      // The AuthCredential type that was used.
+      const credential = GoogleAuthProvider.credentialFromError(error);
+      // ...
+    });
+}
+
+export function deleteCurrentUser() {
+  const user = auth.currentUser;
+  console.log(user.providerId);
+
+  deleteUser(user)
+    .then(() => {
+      // User deleted.
+      alertManager.generateModalAlert({ header: "Your account is now deleted." });
+    })
+    .catch((error) => {
+      // An error ocurred
+      alertManager.generateModalAlert({
+        header: `An error occurred while deleting your account.`,
+        bodyText: `${error.message}`,
+      });
+    });
+}
+
+// export function reauthenticate(credentials) {
+//   const auth = getAuth();
+//   const user = auth.currentUser;
+//   reauthenticateWithCredential(user, credentials)
+//     .then(() => {
+//       // User re-authenticated.
+//     })
+//     .catch((error) => {
+//       // An error ocurred
+//       // ...
+//     });
+// }

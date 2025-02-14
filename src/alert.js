@@ -33,7 +33,7 @@ const buttonParams = {
 debug();
 createModalElement();
 
-export function createModalElement() {
+function createModalElement() {
   if (document.getElementById("modalContainer") == null) {
     $("body").append(
       `<div id="modalContainer" class="modalContainer">

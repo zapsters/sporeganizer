@@ -91,6 +91,7 @@
       max-width: 380px;
       position: relative;
       margin: 10px 0;
+      height: 100%;
       .toggleVisibility {
         display: flex;
         align-items: center;
@@ -100,6 +101,15 @@
         top: 50%;
         transform: translateY(-50%);
         width: 35px;
+        font-size: 30px;
+        height: 50px;
+        background-color: red;
+        img {
+          width: 38px;
+          cursor: pointer;
+          filter: none;
+          transform: translateY(2px);
+        }
       }
     }
     @include themify($themes) {
