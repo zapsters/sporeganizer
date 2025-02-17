@@ -87,23 +87,19 @@ export function signUserOut() {
 
 export function updateUserDisplayName(displayName, responseElement) {
   updateProfile(auth.currentUser, {
-    displayName: displayName,
+    displayName: sanitizeHtmlFunc(displayName),
   })
-    .then((userRecord) => {
-      console.log("Successfully updated user display name", userRecord.toJSON());
-    })
-    .then((res) => res.json())
     .then((data) => {
-      console.log("Updated user successfully:", data);
-      $(responseElement).html(data.message);
+      console.log("Updated user successfully:", auth.currentUser.displayName);
+      $(responseElement).html("Display Name Updated!");
       alertManager.generateModalAlert({
         icon: "check",
         header: `Your display name is now`,
-        subHeader: `'${data.userRecord.displayName}'`,
+        subHeader: `'${auth.currentUser.displayName}'`,
       });
 
-      $(".displayName").html(data.userRecord.displayName);
-      $("#displayNameInput").val(data.userRecord.displayName);
+      $(".displayName").html(auth.currentUser.displayName);
+      $("#displayNameInput").val(auth.currentUser.displayName);
     })
     .then(() => {
       try {
@@ -130,11 +126,7 @@ export function signUserIn(siEmail, siPassword) {
   signInWithEmailAndPassword(auth, siEmail, siPassword)
     .then((userCredential) => {
       // Signed in
-      return userCredential.user.getIdToken(); // 🔥 Get the ID token
-    })
-    .then((res) => res.json())
-    .then((data) => {
-      console.log("Authenticated successfully:", data);
+      // console.log(userCredential);
       window.location.hash = "";
     })
     .catch((error) => {
@@ -317,6 +309,7 @@ export function deleteCurrentUser() {
     .then(() => {
       // User deleted.
       alertManager.generateModalAlert({ header: "Your account is now deleted." });
+      window.location.hash = "";
     })
     .catch((error) => {
       // An error ocurred

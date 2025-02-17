@@ -174,19 +174,56 @@ export function initListenersByPage(pageID) {
         const user = auth.currentUser;
         alertManager.generateModalAlert({
           icon: "label",
-          header: "Change Password?",
-          bodyText: `Enter your current password`,
-          buttons: [
-            { text: "Cancel" },
-            {
-              text: "Change Name",
-              // closeModalOnClick: "false",
-              onClick: () => {
-                alert("logic unfinished");
-              },
-            },
-          ],
+          header: "Change Password",
+          bodyText: `For your security, confirm your login details.
+            <div class="signIn" style="margin-top: 20px">
+              <form action="" id="signIn-form" autocomplete="off" data-np-autofill-form-type="login" data-np-checked="1" data-np-watching="1" class="">
+                <div class="input-container">
+                  <input required="" type="password" id="changePassword-currentPassword" autocomplete="current-password" data-np-autofill-field-type="password" data-np-uid="24bad00c-c9bf-4240-87d9-fe2ac60fc0ed">
+                  <label>Current Password</label>
+                  <div class="toggleVisibility">
+                    <img src="images/eye-open.svg" alt="" srcset="">
+                  </div>
+                </div>
+                <div class="input-container">
+                  <input required="" type="password" id="changePassword-newPassword" autocomplete="current-password" data-np-autofill-field-type="password" data-np-uid="24bad00c-c9bf-4240-87d9-fe2ac60fc0ed">
+                  <label>New Password</label>
+                  <div class="toggleVisibility">
+                    <img src="images/eye-open.svg" alt="" srcset="">
+                  </div>
+                </div>
+                <div class="input-container">
+                  <input required="" type="password" id="changePassword-newPasswordSecond" autocomplete="current-password" data-np-autofill-field-type="password" data-np-uid="24bad00c-c9bf-4240-87d9-fe2ac60fc0ed">
+                  <label>New Password</label>
+                  <div class="toggleVisibility">
+                    <img src="images/eye-open.svg" alt="" srcset="">
+                  </div>
+                </div>
+                <span id="signIn-statusText"></span>
+                <div class="input-container">
+                  <input autocomplete="off" type="submit" id="signIn-submit" value="Sign In">
+                </div>
+              </form>
+              </div>`,
+          buttons: [],
         });
+        initTogglePasswordVisibilityListeners();
+
+        // alertManager.generateModalAlert({
+        //   icon: "label",
+        //   header: "Change Password?",
+        //   bodyText: `Enter your current password`,
+        //   buttons: [
+        //     { text: "Cancel" },
+        //     {
+        //       text: "Change Password",
+        //       // closeModalOnClick: "false",
+        //       onClick: () => {
+        //         alert("logic unfinished");
+        //       },
+        //     },
+        //   ],
+        // });
       });
       break;
     case "options":
@@ -216,6 +253,7 @@ export function initListenersByPage(pageID) {
 }
 
 function initTogglePasswordVisibilityListeners() {
+  $(".toggleVisibility").attr("tabindex", "0");
   $(".toggleVisibility").on("click", function (e) {
     e.preventDefault();
     $(this).toggleClass("visibility");

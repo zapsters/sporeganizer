@@ -13,6 +13,7 @@ const alertParams = {
   subHeader: "",
   bodyText: "",
   allowClickOff: true,
+  // onModalOut: function () {},
   buttons: [
     {
       /* Empty object will default to the dismiss button */
@@ -59,10 +60,6 @@ function createModalElement() {
     modalReference = document.getElementById("modalMainContent");
     modalButtonsReference = document.getElementById("modalMainButtons");
 
-    document.getElementById("modalCloseBtn").addEventListener("click", function (e) {
-      closeModal();
-    });
-
     modalContainerReference.addEventListener("click", handleModalClickOff);
   }
 }
@@ -106,7 +103,7 @@ function populateModalElement(customAlertParams) {
     $(`#button${index}`).on("click", function () {
       buttonElement.onClick();
 
-      if ($(this).attr("closeModalOnClick") == "true") closeModal();
+      if ($(this).attr("closeModalOnClick") == "true") closeModal(customAlertParams);
     });
   });
 }
