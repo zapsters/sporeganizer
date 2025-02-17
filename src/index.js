@@ -21,6 +21,7 @@ import sanitizeHtml from "sanitize-html";
 import { onAuthStateChanged, getAuth } from "firebase/auth";
 import * as cookieManager from "./cookieManager.min.js";
 import { checkDarkModePreference, setTheme, browserTheme } from "./browserTheme.js";
+import * as firestoreDatabase from "./firestoreDatabase.js";
 
 var sidebarOpen = true;
 
@@ -80,6 +81,7 @@ export function initListenersByPage(pageID) {
       initGoogleLoginBtn();
 
       $("#signIn-submit").on("click", (e) => {
+        firestoreDatabase.testWrite();
         e.preventDefault();
         var checkRequiredResponse = checkRequired("signIn-form");
         if (checkRequiredResponse[0]) {
@@ -227,6 +229,7 @@ export function initListenersByPage(pageID) {
       });
       break;
     case "options":
+      firestoreDatabase.testWrite();
       $("#appearanceSelect img").on("click", function () {
         $("#appearanceSelect img").each(function () {
           $(this).removeClass("active");
@@ -308,17 +311,17 @@ function promptForCredentials() {
     buttons: [],
   });
   initTogglePasswordVisibilityListeners();
-  $("#signIn-submit").on("click", (e) => {
-    e.preventDefault();
-    var checkRequiredResponse = checkRequired("signIn-form");
-    if (checkRequiredResponse[0]) {
-      const email = $("#signIn-email").val();
-      const password = $("#signIn-password").val();
-      reauthenticate(email, password)
-        .then((res) => console.log(res))
-        .catch((error) => console.log(error));
-    } else {
-      $("#signIn-statusText").html(checkRequiredResponse[1]);
-    }
-  });
+  // $("#signIn-submit").on("click", (e) => {
+  //   e.preventDefault();
+  //   var checkRequiredResponse = checkRequired("signIn-form");
+  //   if (checkRequiredResponse[0]) {
+  //     const email = $("#signIn-email").val();
+  //     const password = $("#signIn-password").val();
+  //     reauthenticate(email, password)
+  //       .then((res) => console.log(res))
+  //       .catch((error) => console.log(error));
+  //   } else {
+  //     $("#signIn-statusText").html(checkRequiredResponse[1]);
+  //   }
+  // });
 }

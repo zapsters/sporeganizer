@@ -19,6 +19,7 @@ import * as $ from "jquery";
 import { app, db, provider } from "./firebaseConfig";
 import * as alertManager from "./alert.js";
 import * as sanitizeHtml from "sanitize-html";
+import * as firestoreDatabase from "./firestoreDatabase.js";
 
 let uid = "";
 const auth = getAuth(app);
@@ -30,7 +31,7 @@ onAuthStateChanged(auth, (user) => {
   if (user) {
     // User is signed in, see docs for a list of available properties
     // https://firebase.google.com/docs/reference/js/auth.user
-    console.log(user);
+    // console.log(user);
 
     uid = user.uid;
     $(".displayName").html(getUserDisplayName());
@@ -56,6 +57,7 @@ export function signUserUp(displayName, email, password) {
       })
         .then(() => {
           $(".displayName").html(getUserDisplayName());
+          firestoreDatabase.testWrite();
           // Profile updated!
           // ...
         })

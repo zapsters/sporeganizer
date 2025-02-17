@@ -2651,6 +2651,12 @@ aside nav ul li:last-child {
   filter: none;
   transform: translateY(2px);
 }
+.theme-light .signIn form .input-container .toggleVisibility img {
+  filter: brightness(10%);
+}
+.theme-dark .signIn form .input-container .toggleVisibility img {
+  filter: none;
+}
 .theme-light .signIn form {
   color: #110d09;
 }
