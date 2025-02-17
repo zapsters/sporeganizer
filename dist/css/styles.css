@@ -2693,7 +2693,7 @@ aside nav ul li:last-child {
 }
 .theme-light .signIn form input[type=submit]:focus {
   background: #26a680;
-  border: 3px inset black;
+  border: 2px dashed black;
 }
 .theme-light .signIn form input[type=submit]:active {
   background: #009664;
@@ -2742,7 +2742,7 @@ aside nav ul li:last-child {
 }
 .theme-dark .signIn form input[type=submit]:focus {
   background: #26a680;
-  border: 3px inset black;
+  border: 2px dashed black;
 }
 .theme-dark .signIn form input[type=submit]:active {
   background: #009664;
