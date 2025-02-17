@@ -8,10 +8,11 @@ import {
   getUserDisplayName,
   googlePopup,
   getUserAuth,
-  updateUser,
+  updateUserDisplayName,
   getCurrentUser,
   reauthenticate,
   deleteCurrentUser,
+  sanitizeHtmlFunc,
 } from "./model";
 
 import * as alertManager from "./alert.js";
@@ -143,26 +144,20 @@ export function initListenersByPage(pageID) {
 
         console.log($("#displayNameInput").val());
 
-        var newName = stripHtml($("#displayNameInput").val());
+        var newName = sanitizeHtmlFunc($("#displayNameInput").val());
 
         if ($("#displayNameInput").val() != user.displayName) {
           alertManager.generateModalAlert({
             icon: "label",
             header: "Change Display Name?",
-            subHeader: `${stripHtml(user.displayName)} &#8674; ${stripHtml(newName)}`,
+            subHeader: `${sanitizeHtmlFunc(user.displayName)} &#8674; ${sanitizeHtmlFunc(newName)}`,
             buttons: [
               { text: "Cancel" },
               {
                 text: "Change Name",
                 // closeModalOnClick: "false",
                 onClick: () => {
-                  updateUser(
-                    {
-                      uid: getCurrentUser().uid,
-                      displayName: stripHtml(newName),
-                    },
-                    "#displayNameChangeStatusText"
-                  );
+                  updateUserDisplayName(sanitizeHtmlFunc(newName), "#displayNameChangeStatusText");
                 },
               },
             ],
@@ -187,13 +182,7 @@ export function initListenersByPage(pageID) {
               text: "Change Name",
               // closeModalOnClick: "false",
               onClick: () => {
-                updateUser(
-                  {
-                    uid: getCurrentUser().uid,
-                    displayName: $("#displayNameInput").val(),
-                  },
-                  "#displayNameChangeStatusText"
-                );
+                alert("logic unfinished");
               },
             },
           ],
@@ -253,12 +242,6 @@ function setStatusText(id, text, time = 5) {
   setTimeout(() => {
     $(id).html("");
   }, time * 1000);
-}
-
-function stripHtml(html) {
-  let tmp = document.createElement("DIV");
-  tmp.innerHTML = html;
-  return tmp.textContent || tmp.innerText || "";
 }
 
 function promptForCredentials() {

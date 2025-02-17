@@ -18,10 +18,13 @@ import { initListenersByPage } from "./index.js";
 import * as $ from "jquery";
 import { app, db, provider } from "./firebaseConfig";
 import * as alertManager from "./alert.js";
+import * as sanitizeHtml from "sanitize-html";
 
 let uid = "";
 const auth = getAuth(app);
 const currentHost = window.location.host;
+
+var sanitizeHtmlParams = { allowedTags: [], allowedAttributes: {} };
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
@@ -82,15 +85,13 @@ export function signUserOut() {
     });
 }
 
-export function updateUser(body, responseElement) {
-  return fetch(`http://${currentHost}/auth/update`, {
-    method: "POST",
-    headers: body,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
+export function updateUserDisplayName(displayName, responseElement) {
+  updateProfile(auth.currentUser, {
+    displayName: displayName,
   })
+    .then((userRecord) => {
+      console.log("Successfully updated user display name", userRecord.toJSON());
+    })
     .then((res) => res.json())
     .then((data) => {
       console.log("Updated user successfully:", data);
@@ -120,6 +121,7 @@ export function updateUser(body, responseElement) {
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
+      console.error(errorCode, errorMessage);
       $(responseElement).html(`${errorCode} ${errorMessage}`);
     });
 }
@@ -129,17 +131,6 @@ export function signUserIn(siEmail, siPassword) {
     .then((userCredential) => {
       // Signed in
       return userCredential.user.getIdToken(); // 🔥 Get the ID token
-    })
-    .then((idToken) => {
-      // 🔥 Send the token to your backend for verification
-
-      return fetch(`http://${currentHost}/auth/verify-token`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${idToken}`,
-        },
-      });
     })
     .then((res) => res.json())
     .then((data) => {
@@ -348,3 +339,7 @@ export function deleteCurrentUser() {
 //       // ...
 //     });
 // }
+
+export function sanitizeHtmlFunc(input) {
+  return sanitizeHtml(input, sanitizeHtmlParams);
+}
