@@ -6,14 +6,13 @@ import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBEzlCVVXLZk2gfOiSorG2ZyISFvZklTpU",
-  authDomain: "sporeganizer.erinballinger.com",
+  authDomain: "sporeganizer.com",
   projectId: "sporeganizer",
   storageBucket: "sporeganizer.firebasestorage.app",
   messagingSenderId: "137178577763",
   appId: "1:137178577763:web:4bad7573d35588ef2d7156",
   measurementId: "G-G5ND6E0VDC",
 };
-
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
 export const analytics = getAnalytics(app);
