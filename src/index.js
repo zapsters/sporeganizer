@@ -55,8 +55,6 @@ function initURLListener() {
 }
 
 export function initListenersByPage(pageID) {
-  console.log(pageID);
-
   $(".displayName").html(getUserDisplayName());
   switch (pageID) {
     case "home":
@@ -66,8 +64,6 @@ export function initListenersByPage(pageID) {
           $("#classAddBtn").on("click", () => {
             firestoreDatabase.addClass(getAuth().currentUser.uid, "testLol");
           });
-          console.log($("#classAddBtn"));
-
           homePageAuthStateChange();
         }
       });
