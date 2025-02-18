@@ -15,6 +15,5 @@ This project is very much still in development with many key features planned fo
 - **HTML**: For the structure and content of the site.
 - **CSS & SASS**: For styling the website and making it responsive across devices.
 - **JavaScript / JQuery**: For form validation and interactivity.
-- **Firebase**: For authentication & data storage
-
-- **Node.js**: For backend-server operations
+- **Firebase: Auth + Functions + Firestore**: For authentication & data storage
+- **Firebase: Emulator**: For local development testing.

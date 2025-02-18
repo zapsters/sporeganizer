@@ -60,6 +60,18 @@ export function initListenersByPage(pageID) {
   $(".displayName").html(getUserDisplayName());
   switch (pageID) {
     case "home":
+      // Listen for the auth to update / load, then fill data
+      const homePageAuthStateChange = onAuthStateChanged(getUserAuth(), (user) => {
+        if (user) {
+          $("#classAddBtn").on("click", () => {
+            firestoreDatabase.addClass(getAuth().currentUser.uid, "testLol");
+          });
+          console.log($("#classAddBtn"));
+
+          homePageAuthStateChange();
+        }
+      });
+
       break;
     case "signup":
       initTogglePasswordVisibilityListeners();
@@ -83,7 +95,6 @@ export function initListenersByPage(pageID) {
       initGoogleLoginBtn();
 
       $("#signIn-submit").on("click", (e) => {
-        firestoreDatabase.testWrite();
         e.preventDefault();
         var checkRequiredResponse = checkRequired("signIn-form");
         if (checkRequiredResponse[0]) {
@@ -98,7 +109,7 @@ export function initListenersByPage(pageID) {
     case "account":
       $(".signoutBtn").on("click", (e) => {
         signUserOut();
-        window.location = "#signIn";
+        window.location = "#signin";
       });
       // console.log(getUserAuth());
 
@@ -112,7 +123,7 @@ export function initListenersByPage(pageID) {
           // User is signed in
         } else {
           console.log("no user");
-          window.location = "#signIn";
+          window.location = "#signin";
           unsubscribe();
           // User is signed out
         }
@@ -231,7 +242,6 @@ export function initListenersByPage(pageID) {
       });
       break;
     case "options":
-      firestoreDatabase.testWrite();
       $("#appearanceSelect img").on("click", function () {
         $("#appearanceSelect img").each(function () {
           $(this).removeClass("active");

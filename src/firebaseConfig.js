@@ -1,14 +1,8 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { GoogleAuthProvider } from "firebase/auth";
+import { GoogleAuthProvider, getAuth, connectAuthEmulator } from "firebase/auth";
 import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-// console.log(process.env.SPOREGANZIER_FIREBASE_APIKEY);
 
 const firebaseConfig = {
   apiKey: "AIzaSyBEzlCVVXLZk2gfOiSorG2ZyISFvZklTpU",
@@ -24,8 +18,10 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 export const analytics = getAnalytics(app);
 export const provider = new GoogleAuthProvider();
-export const firestore = getFirestore(app);
+export const db = getFirestore(app);
+export const auth = getAuth();
 if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
   console.log("FIRESTORE EMULATOR ACTIVE -- CALL ");
-  connectFirestoreEmulator(firestore, "localhost", 8080);
+  connectFirestoreEmulator(db, "localhost", 8080);
+  connectAuthEmulator(auth, "http://127.0.0.1:9099");
 }

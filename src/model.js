@@ -52,12 +52,12 @@ export function signUserUp(displayName, email, password) {
 
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
+      firestoreDatabase.addUserToCollection(auth.currentUser.uid, displayName, email);
       updateProfile(auth.currentUser, {
         displayName: `${displayName}`,
       })
         .then(() => {
           $(".displayName").html(getUserDisplayName());
-          firestoreDatabase.testWrite();
           // Profile updated!
           // ...
         })

@@ -1,0 +1,21 @@
+users (collection)
+  ├── userId (document)
+  │   ├── name: "John Doe"
+  │   ├── email: "john@example.com"
+  │   ├── settings: { theme: "dark", notifications: true }
+
+homework (collection)
+  ├── homeworkId (document)
+  │   ├── userId: "user123"
+  │   ├── title: "Math Assignment"
+  │   ├── dueDate: "2025-02-20"
+  │   ├── createdAt: "2025-02-01"
+  │   ├── completed: false
+
+classes (collection)
+  ├── classId (document)
+  │   ├── userId: "user123"
+  │   ├── name: "Physics 101"
+  │   ├── teacher: "Mr. Smith"
+  │   ├── createdAt: "2025-02-01"
+

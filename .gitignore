@@ -86,3 +86,4 @@ node_modules/
 styles.css.map
 .prepros
 firebase-service-account.json
+functions/
