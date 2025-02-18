@@ -25,4 +25,7 @@ export const app = initializeApp(firebaseConfig);
 export const analytics = getAnalytics(app);
 export const provider = new GoogleAuthProvider();
 export const firestore = getFirestore(app);
-connectFirestoreEmulator(firestore, "localhost", 8080);
+if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
+  console.log("FIRESTORE EMULATOR ACTIVE -- CALL ");
+  connectFirestoreEmulator(firestore, "localhost", 8080);
+}

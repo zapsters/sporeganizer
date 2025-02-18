@@ -55,11 +55,13 @@ function initURLListener() {
 }
 
 export function initListenersByPage(pageID) {
+  console.log(pageID);
+
   $(".displayName").html(getUserDisplayName());
   switch (pageID) {
     case "home":
       break;
-    case "signUp":
+    case "signup":
       initTogglePasswordVisibilityListeners();
       initGoogleLoginBtn();
       $("#signUp-submit").on("click", (e) => {
@@ -76,7 +78,7 @@ export function initListenersByPage(pageID) {
       });
       break;
 
-    case "signIn":
+    case "signin":
       initTogglePasswordVisibilityListeners();
       initGoogleLoginBtn();
 
