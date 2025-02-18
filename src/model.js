@@ -28,9 +28,10 @@ const currentHost = window.location.host;
 
 var sanitizeHtmlParams = { allowedTags: [], allowedAttributes: {} };
 
-document.addEventListener("DOMContentLoaded", function (event) {
+document.addEventListener("DOMContentLoaded", async function (event) {
   if (window.sessionStorage.getItem("pending")) {
     window.sessionStorage.removeItem("pending");
+
     getRedirectResult(auth)
       .then((result) => {
         // This gives you a Google Access Token. You can use it to access Google APIs.
@@ -277,10 +278,10 @@ export function changeRoute(e) {
     });
 }
 
-export function googlePopup() {
+export async function googlePopup() {
   const provider = new GoogleAuthProvider();
   window.sessionStorage.setItem("pending", 1);
-  if (false) {
+  if (true) {
     signInWithPopup(auth, provider)
       .then((result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
