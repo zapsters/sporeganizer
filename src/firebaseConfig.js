@@ -6,7 +6,7 @@ import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBEzlCVVXLZk2gfOiSorG2ZyISFvZklTpU",
-  authDomain: "sporeganizer.firebaseapp.com",
+  authDomain: "sporeganizer.erinballinger.com",
   projectId: "sporeganizer",
   storageBucket: "sporeganizer.firebasestorage.app",
   messagingSenderId: "137178577763",
