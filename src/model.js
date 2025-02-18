@@ -45,14 +45,8 @@ document.addEventListener("DOMContentLoaded", async function (event) {
         window.location.hash = "";
       })
       .catch((error) => {
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.customData.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        // ...
+        alert(error);
+        console.log(error);
       });
   }
 });
@@ -294,14 +288,7 @@ export async function googlePopup() {
         window.location.hash = "";
       })
       .catch((error) => {
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.customData.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        // ...
+        alert(error);
       });
   } else {
     signInWithRedirect(auth, provider);
