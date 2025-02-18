@@ -4,7 +4,7 @@
   "main": "index.js",
   "description": "A homework tracking and productivity app with a mushroom theme!",
   "scripts": {
-    "serve": "live-server dist --port=8000",
+    "serve": "live-server dist",
     "sass": "sass src/sass/styles.scss dist/css/styles.css -w",
     "build": "webpack"
   },
