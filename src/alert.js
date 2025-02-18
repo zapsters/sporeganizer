@@ -60,6 +60,10 @@ function createModalElement() {
     modalReference = document.getElementById("modalMainContent");
     modalButtonsReference = document.getElementById("modalMainButtons");
 
+    document.getElementById("modalCloseBtn").addEventListener("click", function (e) {
+      closeModal();
+    });
+
     modalContainerReference.addEventListener("click", handleModalClickOff);
   }
 }
