@@ -5,6 +5,7 @@ import {
   updateProfile,
   signInWithEmailAndPassword,
   onAuthStateChanged,
+  signInWithPopup,
   signInWithRedirect,
   getRedirectResult,
   GoogleAuthProvider,
@@ -251,48 +252,48 @@ export function changeRoute(e) {
 export function googlePopup() {
   const provider = new GoogleAuthProvider();
   window.sessionStorage.setItem("pending", 1);
-  signInWithRedirect(auth, provider)
-    .then((result) => {
-      // This gives you a Google Access Token. You can use it to access the Google API.
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const token = credential.accessToken;
-      // The signed-in user info.
-      const user = result.user;
-      // IdP data available using getAdditionalUserInfo(result)
-      console.log(user);
-      console.log(result);
-    })
-    .catch((error) => {
-      // Handle Errors here.
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      // The email of the user's account used.
-      const email = error.customData.email;
-      // The AuthCredential type that was used.
-      const credential = GoogleAuthProvider.credentialFromError(error);
-      // ...
-    });
+  if (false) {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        // IdP data available using getAdditionalUserInfo(result)
+        // ...
+        window.location.hash = "";
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+      });
+  } else {
+    signInWithRedirect(auth, provider);
+  }
 }
 if (window.sessionStorage.getItem("pending")) {
   window.sessionStorage.removeItem("pending");
-
   getRedirectResult(auth)
     .then((result) => {
       // This gives you a Google Access Token. You can use it to access Google APIs.
-      console.log(result);
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential.accessToken;
 
-      // const credential = GoogleAuthProvider.credentialFromResult(result);
-      // const token = credential.accessToken;
-
-      // // The signed-in user info.
-      // const user = result.user;
+      // The signed-in user info.
+      const user = result.user;
       // IdP data available using getAdditionalUserInfo(result)
       // ...
+      window.location.hash = "";
     })
     .catch((error) => {
       // Handle Errors here.
-      console.log(error);
-
       const errorCode = error.code;
       const errorMessage = error.message;
       // The email of the user's account used.
