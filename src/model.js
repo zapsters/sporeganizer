@@ -7,7 +7,6 @@ import {
   onAuthStateChanged,
   signInWithPopup,
   signInWithRedirect,
-  getRedirectResult,
   GoogleAuthProvider,
   reload,
   reauthenticateWithCredential,
@@ -27,29 +26,6 @@ const auth = getAuth(app);
 const currentHost = window.location.host;
 
 var sanitizeHtmlParams = { allowedTags: [], allowedAttributes: {} };
-
-document.addEventListener("DOMContentLoaded", async function (event) {
-  if (window.sessionStorage.getItem("pending")) {
-    window.sessionStorage.removeItem("pending");
-
-    getRedirectResult(auth)
-      .then((result) => {
-        // This gives you a Google Access Token. You can use it to access Google APIs.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-
-        // The signed-in user info.
-        const user = result.user;
-        // IdP data available using getAdditionalUserInfo(result)
-        // ...
-        window.location.hash = "";
-      })
-      .catch((error) => {
-        alert(error);
-        console.log(error);
-      });
-  }
-});
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
@@ -76,7 +52,7 @@ export function signUserUp(displayName, email, password) {
 
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
-      firestoreDatabase.addUserToCollection(auth.currentUser.uid, displayName, email);
+      firestoreDatabase.addUserToCollection(auth.currentUser);
       updateProfile(auth.currentUser, {
         displayName: `${displayName}`,
       })
@@ -278,13 +254,13 @@ export async function googlePopup() {
   if (true) {
     signInWithPopup(auth, provider)
       .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        // The signed-in user info.
-        const user = result.user;
-        // IdP data available using getAdditionalUserInfo(result)
-        // ...
+        console.log(result);
+        alert("check if google account is new.");
+        firestoreDatabase.addUserToCollection(result.user);
+
+        updateProfile(auth.currentUser, {
+          emailVerified: true,
+        });
         window.location.hash = "";
       })
       .catch((error) => {

@@ -1,4 +1,4 @@
-import { getAuth } from "firebase/auth";
+import { getAuth, updateProfile } from "firebase/auth";
 
 import { db } from "./firebaseConfig";
 import { doc, collection, setDoc, addDoc, serverTimestamp } from "firebase/firestore";
@@ -15,12 +15,16 @@ export async function testWrite(userId) {
   console.log("hi");
 }
 
-export async function addUserToCollection(userId, displayName, email) {
+export async function addUserToCollection(currentUser) {
+  console.log(currentUser.providerData[0].providerId);
+
   try {
-    const classRef = await setDoc(doc(db, `users`, userId), {
-      userId: userId,
-      displayName: displayName,
-      email: email,
+    const classRef = await setDoc(doc(db, `users`, currentUser.uid), {
+      userId: currentUser.uid,
+      displayName: currentUser.displayName,
+      email: currentUser.email,
+      emailVerified: currentUser.emailVerified,
+      providerId: currentUser.providerData[0].providerId,
       icon: "none",
       settings: {},
     });

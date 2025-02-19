@@ -4,6 +4,7 @@
   "main": "index.js",
   "description": "A homework tracking and productivity app with a mushroom theme!",
   "scripts": {
+    "liveserver": "live-server dist",
     "emulators:start": "firebase emulators:start",
     "emulators:stop": "npx kill-port 4000 8080 8085",
     "sass": "sass src/sass/styles.scss dist/css/styles.css -w",
