@@ -15,6 +15,9 @@ body {
     color: themed("text");
     background-color: themed("accent");
   }
+  transition-property: background-color;
+  transition-duration: 0.2s;
+  transition-timing-function: linear;
 }
 h1,
 h2,
