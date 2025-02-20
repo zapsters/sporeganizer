@@ -12,6 +12,7 @@ aside.sb-expanded {
 
 aside {
   font-family: "Roboto";
+  font-family: monospace;
   --iconSize: 4.4rem;
   --fontSize: 1.5rem;
   --padding: 0.6rem;
@@ -42,6 +43,7 @@ aside {
       flex-direction: column;
       gap: var(--gap);
       img.logo {
+        image-rendering: pixelated;
         // filter: drop-shadow(2px 0px 0px black) drop-shadow(0px 2px 0px black);
         scale: 1;
       }
@@ -51,10 +53,17 @@ aside {
         font-size: 27px;
         transform: translateY(1px);
       }
+      li#nav-homeTab {
+        display: none;
+      }
       li {
         position: relative;
         box-sizing: content-box;
         cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+
         &:first-of-type {
           height: 100px;
           border-bottom: 2px solid white;
@@ -67,6 +76,7 @@ aside {
           }
         }
         i {
+          font-size: 60px !important;
           image-rendering: pixelated;
           min-width: var(--iconSize);
           display: flex;
@@ -75,10 +85,12 @@ aside {
           align-items: center;
           justify-content: space-evenly;
           font-style: normal;
+          height: 70px;
         }
         img,
         svg {
           width: var(--iconSize);
+          image-rendering: pixelated;
         }
         p {
           font-size: 22px;
@@ -107,7 +119,11 @@ aside {
             // visibility: hidden;
             margin-bottom: 0;
             transition: opacity 0.2s linear;
-            white-space: pre;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3;
+            word-break: break-all;
+            overflow: hidden;
           }
         }
       }
@@ -130,6 +146,7 @@ aside {
   aside {
     --sb-width: 100%;
     --fontSize: 18px;
+    height: 90px;
     nav {
       overflow-x: scroll;
       border-radius: 13px 13px 0 0;
@@ -141,6 +158,10 @@ aside {
         align-items: stretch;
         justify-content: space-evenly;
         min-height: 100px;
+        overflow-x: scroll !important;
+        li#nav-homeTab {
+          display: block;
+        }
         li {
           flex: 1;
           &:first-of-type {
@@ -150,26 +171,37 @@ aside {
           a,
           button {
             position: relative;
+            padding: 0px !important;
             span,
             p {
+              width: 100%;
               opacity: 1;
-              position: relative;
-              left: 50%;
-              transform: translate(-50%, 27px);
+              position: absolute;
+              top: 54px;
+              text-align: center;
+              font-size: 15px;
+              font-family: monospace;
+              -webkit-line-clamp: 2;
             }
             i {
               left: 50%;
               transform: translateX(-50%);
               position: absolute;
-              top: 13px;
+              top: 5px;
+              height: 50px;
+            }
+            .pixelArtIcon {
+              font-size: 45px !important;
             }
             img,
             svg {
               position: absolute;
-              top: 0;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
               scale: 1 !important;
               width: unset !important;
-              height: 45px;
+              height: 80%;
               transform-origin: bottom;
             }
           }

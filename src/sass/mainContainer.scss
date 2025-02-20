@@ -5,6 +5,9 @@
   flex: 1;
   border-radius: 12px;
   font-size: 25px;
+  transition-property: background-color;
+  transition-duration: 0.2s;
+  transition-timing-function: linear;
   section {
     padding-left: 5px;
   }
@@ -13,7 +16,7 @@
     background-color: themed("background");
     svg:not(.gsi-material-button svg),
     img {
-      width: 50px;
+      width: 30px;
       cursor: pointer;
       filter: themed("filterToBlack");
     }
@@ -23,10 +26,10 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-size: 45px;
+      font-size: 30px;
       font-weight: 500;
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      border-bottom: 2px solid themed("text");
+      border-bottom: 3px solid themed("text");
 
       button {
         display: flex;
@@ -34,7 +37,7 @@
         justify-content: space-evenly;
         svg:not(.gsi-material-button svg),
         img {
-          width: 50px;
+          width: 40px;
           cursor: pointer;
           filter: themed("filterToBlack");
         }
@@ -64,7 +67,7 @@
 .mainContainer-alt {
   @include themify($themes) {
     header {
-      font-size: 50px;
+      font-size: 40px;
       padding-bottom: 10px;
     }
     .content {

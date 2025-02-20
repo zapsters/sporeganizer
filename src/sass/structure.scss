@@ -59,6 +59,9 @@ button {
     flex-direction: column-reverse;
     gap: 10px;
     padding-bottom: 0;
+    #app {
+      flex-direction: column;
+    }
   }
 }
 

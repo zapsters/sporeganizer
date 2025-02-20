@@ -1960,6 +1960,7 @@
   display: flex;
   align-items: stretch;
   justify-content: left;
+  flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 10px;
 }
@@ -2042,6 +2043,12 @@ input,
   font-size: 20px;
   margin-bottom: 0;
 }
+.account span {
+  word-break: break-all;
+}
+.account .signoutBtn {
+  margin-top: 40px;
+}
 
 .options .content h4 {
   margin-bottom: 10px;
@@ -2089,7 +2096,7 @@ input,
 }
 .theme-light .modalContainer .modalBackground .modal {
   color: #110d09;
-  background-color: #e6f3ea;
+  background-color: #d9e9de;
 }
 .theme-dark .modalContainer .modalBackground .modal {
   color: #f6f2ee;
@@ -2318,6 +2325,9 @@ button {
     gap: 10px;
     padding-bottom: 0;
   }
+  #app-root #app {
+    flex-direction: column;
+  }
 }
 /* width */
 ::-webkit-scrollbar {
@@ -2362,6 +2372,7 @@ aside.sb-expanded nav a p {
 
 aside {
   font-family: "Roboto";
+  font-family: monospace;
   --iconSize: 4.4rem;
   --fontSize: 1.5rem;
   --padding: 0.6rem;
@@ -2392,6 +2403,7 @@ aside nav ul {
   gap: var(--gap);
 }
 aside nav ul img.logo {
+  image-rendering: pixelated;
   scale: 1;
 }
 aside nav ul span.logo {
@@ -2400,10 +2412,16 @@ aside nav ul span.logo {
   font-size: 27px;
   transform: translateY(1px);
 }
+aside nav ul li#nav-homeTab {
+  display: none;
+}
 aside nav ul li {
   position: relative;
   box-sizing: content-box;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
 }
 aside nav ul li:first-of-type {
   height: 100px;
@@ -2419,6 +2437,7 @@ aside nav ul li:first-of-type {
   background-color: rgba(0, 0, 0, 0.2);
 }
 aside nav ul li i {
+  font-size: 60px !important;
   image-rendering: pixelated;
   min-width: var(--iconSize);
   display: flex;
@@ -2427,10 +2446,12 @@ aside nav ul li i {
   align-items: center;
   justify-content: space-evenly;
   font-style: normal;
+  height: 70px;
 }
 aside nav ul li img,
 aside nav ul li svg {
   width: var(--iconSize);
+  image-rendering: pixelated;
 }
 aside nav ul li p {
   font-size: 22px;
@@ -2463,7 +2484,11 @@ aside nav ul li button p {
   opacity: 0;
   margin-bottom: 0;
   transition: opacity 0.2s linear;
-  white-space: pre;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  word-break: break-all;
+  overflow: hidden;
 }
 aside nav ul li:last-child {
   margin-top: auto;
@@ -2479,6 +2504,7 @@ aside nav ul li:last-child {
   aside {
     --sb-width: 100%;
     --fontSize: 18px;
+    height: 90px;
   }
   aside nav {
     overflow-x: scroll;
@@ -2492,6 +2518,10 @@ aside nav ul li:last-child {
     align-items: stretch;
     justify-content: space-evenly;
     min-height: 100px;
+    overflow-x: scroll !important;
+  }
+  aside nav ul li#nav-homeTab {
+    display: block;
   }
   aside nav ul li {
     flex: 1;
@@ -2503,32 +2533,44 @@ aside nav ul li:last-child {
   aside nav ul li a,
   aside nav ul li button {
     position: relative;
+    padding: 0px !important;
   }
   aside nav ul li a span,
   aside nav ul li a p,
   aside nav ul li button span,
   aside nav ul li button p {
+    width: 100%;
     opacity: 1;
-    position: relative;
-    left: 50%;
-    transform: translate(-50%, 27px);
+    position: absolute;
+    top: 54px;
+    text-align: center;
+    font-size: 15px;
+    font-family: monospace;
+    -webkit-line-clamp: 2;
   }
   aside nav ul li a i,
   aside nav ul li button i {
     left: 50%;
     transform: translateX(-50%);
     position: absolute;
-    top: 13px;
+    top: 5px;
+    height: 50px;
+  }
+  aside nav ul li a .pixelArtIcon,
+  aside nav ul li button .pixelArtIcon {
+    font-size: 45px !important;
   }
   aside nav ul li a img,
   aside nav ul li a svg,
   aside nav ul li button img,
   aside nav ul li button svg {
     position: absolute;
-    top: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     scale: 1 !important;
     width: unset !important;
-    height: 45px;
+    height: 80%;
     transform-origin: bottom;
   }
   aside nav ul li:last-child {
@@ -2595,7 +2637,7 @@ aside nav ul li:last-child {
   opacity: 0.2;
 }
 .theme-light .signIn .orBox span {
-  background-color: #e6f3ea !important;
+  background-color: #d9e9de !important;
   display: block;
   padding: 0;
   position: absolute;
@@ -2793,17 +2835,20 @@ aside nav ul li:last-child {
   flex: 1;
   border-radius: 12px;
   font-size: 25px;
+  transition-property: background-color;
+  transition-duration: 0.2s;
+  transition-timing-function: linear;
 }
 .mainContainer section {
   padding-left: 5px;
 }
 .theme-light .mainContainer {
   color: #110d09;
-  background-color: #e6f3ea;
+  background-color: #d9e9de;
 }
 .theme-light .mainContainer svg:not(.gsi-material-button svg),
 .theme-light .mainContainer img {
-  width: 50px;
+  width: 30px;
   cursor: pointer;
   filter: brightness(10%);
 }
@@ -2813,10 +2858,10 @@ aside nav ul li:last-child {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 45px;
+  font-size: 30px;
   font-weight: 500;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  border-bottom: 2px solid #110d09;
+  border-bottom: 3px solid #110d09;
 }
 .theme-light .mainContainer header button {
   display: flex;
@@ -2825,7 +2870,7 @@ aside nav ul li:last-child {
 }
 .theme-light .mainContainer header button svg:not(.gsi-material-button svg),
 .theme-light .mainContainer header button img {
-  width: 50px;
+  width: 40px;
   cursor: pointer;
   filter: brightness(10%);
 }
@@ -2852,7 +2897,7 @@ aside nav ul li:last-child {
 }
 .theme-dark .mainContainer svg:not(.gsi-material-button svg),
 .theme-dark .mainContainer img {
-  width: 50px;
+  width: 30px;
   cursor: pointer;
   filter: none;
 }
@@ -2862,10 +2907,10 @@ aside nav ul li:last-child {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 45px;
+  font-size: 30px;
   font-weight: 500;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  border-bottom: 2px solid #f6f2ee;
+  border-bottom: 3px solid #f6f2ee;
 }
 .theme-dark .mainContainer header button {
   display: flex;
@@ -2874,7 +2919,7 @@ aside nav ul li:last-child {
 }
 .theme-dark .mainContainer header button svg:not(.gsi-material-button svg),
 .theme-dark .mainContainer header button img {
-  width: 50px;
+  width: 40px;
   cursor: pointer;
   filter: none;
 }
@@ -2897,14 +2942,14 @@ aside nav ul li:last-child {
 }
 
 .theme-light .mainContainer-alt header {
-  font-size: 50px;
+  font-size: 40px;
   padding-bottom: 10px;
 }
 .theme-light .mainContainer-alt .content {
   padding: 20px;
 }
 .theme-dark .mainContainer-alt header {
-  font-size: 50px;
+  font-size: 40px;
   padding-bottom: 10px;
 }
 .theme-dark .mainContainer-alt .content {
@@ -2917,7 +2962,7 @@ aside nav ul li:last-child {
 }
 .theme-light .mainContainer-raw {
   color: #110d09;
-  background-color: #e6f3ea;
+  background-color: #d9e9de;
 }
 .theme-dark .mainContainer-raw {
   color: #f6f2ee;
