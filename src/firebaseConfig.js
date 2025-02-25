@@ -19,8 +19,8 @@ export const analytics = getAnalytics(app);
 export const provider = new GoogleAuthProvider();
 export const db = getFirestore(app);
 export const auth = getAuth();
-// if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
-//   console.log("FIRESTORE EMULATOR ACTIVE -- CALL ");
-//   connectFirestoreEmulator(db, "localhost", 8080);
-//   connectAuthEmulator(auth, "http://127.0.0.1:9099");
-// }
+if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
+  console.log("FIRESTORE EMULATOR ACTIVE -- CALL ");
+  connectFirestoreEmulator(db, "localhost", 8080);
+  connectAuthEmulator(auth, "http://127.0.0.1:9099");
+}

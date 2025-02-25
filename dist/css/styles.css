@@ -2304,10 +2304,12 @@ p {
 }
 #app-root #app {
   gap: 20px;
+  border-radius: 12px;
   flex: 1;
+  overflow: scroll;
   display: flex;
   align-items: stretch;
-  justify-content: center;
+  justify-content: flex-start;
   width: 100%;
 }
 
@@ -2332,6 +2334,10 @@ button {
     flex-direction: column;
   }
 }
+#app-root {
+  height: 100%;
+}
+
 /* width */
 ::-webkit-scrollbar {
   width: 10px;
@@ -2596,6 +2602,7 @@ aside nav ul li:last-child {
   font-size: 24px;
   margin-top: 10vh;
   font-family: "Roboto Condensed", Arial, Helvetica, sans-serif;
+  padding: 20px 0;
 }
 .signIn input {
   font-size: 18px;
@@ -2820,7 +2827,7 @@ aside nav ul li:last-child {
 
 @media (max-width: 900px) {
   .signIn {
-    margin: 65px auto 0 auto;
+    margin: 13px auto 0 auto;
   }
   .signIn h1 {
     font-size: 40px;
