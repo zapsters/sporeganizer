@@ -5,20 +5,19 @@ import {
   signUserIn,
   changeRoute,
   checkRequired,
-  getUserDisplayName,
   googlePopup,
-  getUserAuth,
   updateUserDisplayName,
-  getCurrentUser,
   reauthenticate,
   deleteCurrentUser,
   sanitizeHtmlFunc,
+  updateUserPassword,
+  updateUserEmail,
 } from "./model";
 
 import * as alertManager from "./alert.js";
 
 import sanitizeHtml from "sanitize-html";
-import { onAuthStateChanged, getAuth } from "firebase/auth";
+import { onAuthStateChanged, getAuth, EmailAuthProvider } from "firebase/auth";
 import * as cookieManager from "./cookieManager.min.js";
 import { checkDarkModePreference, setTheme, browserTheme } from "./browserTheme.js";
 import * as firestoreDatabase from "./firestoreDatabase.js";
@@ -55,11 +54,10 @@ function initURLListener() {
 }
 
 export function initListenersByPage(pageID) {
-  $(".displayName").html(getUserDisplayName());
   switch (pageID) {
     case "home":
       // Listen for the auth to update / load, then fill data
-      const homePageAuthStateChange = onAuthStateChanged(getUserAuth(), (user) => {
+      const homePageAuthStateChange = onAuthStateChanged(getAuth(), (user) => {
         if (user) {
           $("#classAddBtn").on("click", () => {
             firestoreDatabase.addClass(getAuth().currentUser.uid, "testLol");
@@ -107,11 +105,11 @@ export function initListenersByPage(pageID) {
         signUserOut();
         window.location = "#signin";
       });
-      // console.log(getUserAuth());
 
       // Listen for the auth to update / load, then fill data
-      const unsubscribe = onAuthStateChanged(getUserAuth(), (user) => {
+      const unsubscribe = onAuthStateChanged(getAuth(), (user) => {
         if (user) {
+          $(".displayName").html(user.displayName);
           $("#displayNameInput").val(user.displayName);
           $("#emailInput").val(user.email);
           $("#passwordInput").val("1234");
@@ -188,35 +186,128 @@ export function initListenersByPage(pageID) {
           header: "Change Password",
           bodyText: `For your security, confirm your login details.
             <div class="signIn" style="margin-top: 20px">
-              <form action="" id="signIn-form" autocomplete="off" data-np-autofill-form-type="login" data-np-checked="1" data-np-watching="1" class="">
+              <form action="" id="changePassword-form">
                 <div class="input-container">
-                  <input required="" type="password" id="changePassword-currentPassword" autocomplete="current-password" data-np-autofill-field-type="password" data-np-uid="24bad00c-c9bf-4240-87d9-fe2ac60fc0ed">
+                  <input required="" type="password" id="changePassword-currentPassword" autocomplete="current-password">
                   <label>Current Password</label>
                   <div class="toggleVisibility">
                     <img src="images/eye-open.svg" alt="" srcset="">
                   </div>
                 </div>
                 <div class="input-container">
-                  <input required="" type="password" id="changePassword-newPassword" autocomplete="current-password" data-np-autofill-field-type="password" data-np-uid="24bad00c-c9bf-4240-87d9-fe2ac60fc0ed">
+                  <input required="" type="password" id="changePassword-newPassword" autocomplete="current-password">
                   <label>New Password</label>
                   <div class="toggleVisibility">
                     <img src="images/eye-open.svg" alt="" srcset="">
                   </div>
                 </div>
                 <div class="input-container">
-                  <input required="" type="password" id="changePassword-newPasswordSecond" autocomplete="current-password" data-np-autofill-field-type="password" data-np-uid="24bad00c-c9bf-4240-87d9-fe2ac60fc0ed">
+                  <input required="" type="password" id="changePassword-newPasswordSecond" autocomplete="current-password" data-np-autofill-field-type="password">
                   <label>New Password</label>
                   <div class="toggleVisibility">
                     <img src="images/eye-open.svg" alt="" srcset="">
                   </div>
                 </div>
-                <span id="signIn-statusText"></span>
-                <div class="input-container">
-                  <input autocomplete="off" type="submit" id="signIn-submit" value="Sign In">
-                </div>
+                <span id="changePassword-statusText"></span>
               </form>
               </div>`,
-          buttons: [],
+          buttons: [
+            {
+              text: `Change Password`,
+              closeModalOnClick: false,
+              onClick: async () => {
+                try {
+                  var cred = EmailAuthProvider.credential(
+                    getAuth().currentUser.email,
+                    $("#changePassword-currentPassword").val()
+                  );
+                  await reauthenticate(cred);
+                  await updateUserPassword($("#changePassword-currentPassword").val());
+                  alertManager.generateModalAlert({
+                    icon: "check",
+                    header: "Password Changed!",
+                    subHeader: "",
+                    bodyText: "You may have to sign back in.",
+                  });
+                } catch (error) {
+                  $("#changePassword-statusText").html(error);
+                }
+              },
+              class: "secondary",
+            },
+          ],
+        });
+        initTogglePasswordVisibilityListeners();
+
+        // alertManager.generateModalAlert({
+        //   icon: "label",
+        //   header: "Change Password?",
+        //   bodyText: `Enter your current password`,
+        //   buttons: [
+        //     { text: "Cancel" },
+        //     {
+        //       text: "Change Password",
+        //       // closeModalOnClick: "false",
+        //       onClick: () => {
+        //         alert("logic unfinished");
+        //       },
+        //     },
+        //   ],
+        // });
+      });
+      $("#emailChangeButton").on("click", () => {
+        const auth = getAuth();
+        const user = auth.currentUser;
+        alertManager.generateModalAlert({
+          icon: "label",
+          header: "Change Email",
+          bodyText: `For your security, confirm your login details.
+            <div class="signIn" style="margin-top: 20px">
+              <form action="" id="changeEmail-form">
+                <div class="input-container">
+                  <input required="" type="text" id="changeEmail-currentEmail" autocomplete="current-email">
+                  <label>Current Email</label>
+                </div>
+                <div class="input-container">
+                  <input required="" type="password" id="changeEmail-currentPassword" autocomplete="current-password">
+                  <label>Current Password</label>
+                  <div class="toggleVisibility">
+                    <img src="images/eye-open.svg" alt="" srcset="">
+                  </div>
+                </div>
+                <div class="input-container">
+                  <input required="" type="text" id="changeEmail-newEmail" autocomplete="new-email" data-np-autofill-field-type="password">
+                  <label>New Email</label>
+                </div>
+                <span id="changeEmail-statusText"></span>
+              </form>
+              </div>`,
+          buttons: [
+            {
+              text: `Change Email`,
+              closeModalOnClick: false,
+              onClick: async () => {
+                try {
+                  var cred = EmailAuthProvider.credential(
+                    $("#changeEmail-currentEmail").val(),
+                    $("#changeEmail-currentPassword").val()
+                  );
+                  await reauthenticate(cred);
+                  await updateUserEmail($("#changeEmail-newEmail").val());
+                  $("#emailInput").val(getAuth().currentUser.email);
+                  alertManager.generateModalAlert({
+                    icon: "check",
+                    header: "Email Changed!",
+                    subHeader: "",
+                    bodyText: "You may have to log back in.",
+                  });
+                } catch (error) {
+                  $("#changeEmail-statusText").html(error);
+                }
+              },
+              class: "secondary",
+            },
+          ],
         });
         initTogglePasswordVisibilityListeners();
 

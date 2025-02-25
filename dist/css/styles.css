@@ -2014,7 +2014,7 @@ input,
   border-radius: 7px;
   min-width: 160px;
   font-family: "Helvetica", "Roboto", Courier, monospace;
-  padding: 7px 20px;
+  padding: 8px 20px;
   cursor: pointer;
   text-align: center;
   border: none;
@@ -2138,6 +2138,9 @@ input,
   width: 100%;
   align-items: center;
   justify-content: space-evenly;
+}
+.modalContainer .modalBackground .modal #modalMainButtons .button {
+  padding: 14px 20px;
 }
 .modalContainer .modalBackground .modal h2 {
   font-size: 40px;
