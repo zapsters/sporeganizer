@@ -12,6 +12,7 @@ import {
   reauthenticateWithCredential,
   deleteUser,
   updatePassword,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 
 import { initListenersByPage } from "./index.js";
@@ -126,6 +127,17 @@ export function signUserIn(siEmail, siPassword) {
       const errorCode = error.code;
       const errorMessage = error.message;
       $("#signIn-statusText").html(errorCode);
+    });
+}
+
+export async function sendResetPasswordEmail(email) {
+  return await sendPasswordResetEmail(getAuth(), email)
+    .then(() => {
+      // Password reset email sent!
+      return "<p>Password reset email sent</p>";
+    })
+    .catch((error) => {
+      return error.message;
     });
 }
 

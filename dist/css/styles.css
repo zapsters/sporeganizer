@@ -2479,7 +2479,7 @@ aside nav ul li button {
   align-items: center;
   gap: 0.7rem;
   padding: var(--padding);
-  line-height: 1;
+  white-space: pre;
   color: #fff;
   text-decoration: none;
 }
@@ -2684,6 +2684,12 @@ aside nav ul li:last-child {
 .theme-dark .signIn form span {
   color: rgb(247, 51, 51);
 }
+.signIn form a:not(.gsi-material-button) {
+  width: 100%;
+  font-size: 16px;
+  max-width: 380px;
+  margin-top: -14px !important;
+}
 .signIn form label {
   position: absolute;
   left: 5px;
@@ -2771,10 +2777,11 @@ aside nav ul li:last-child {
 }
 .theme-light .signIn form input[type=submit]:focus {
   background: #26a680;
-  border: 2px dashed black;
+  border: solid #00895e;
+  border-width: 0 0 4px 0;
 }
 .theme-light .signIn form input[type=submit]:active {
-  background: #009664;
+  background: #009664 !important;
   border: 1px solid black;
   border-width: 0 0 0px 0;
 }
@@ -2820,10 +2827,11 @@ aside nav ul li:last-child {
 }
 .theme-dark .signIn form input[type=submit]:focus {
   background: #26a680;
-  border: 2px dashed black;
+  border: solid #00895e;
+  border-width: 0 0 4px 0;
 }
 .theme-dark .signIn form input[type=submit]:active {
-  background: #009664;
+  background: #009664 !important;
   border: 1px solid black;
   border-width: 0 0 0px 0;
 }
@@ -2850,14 +2858,25 @@ aside nav ul li:last-child {
   font-size: 25px;
   transition-property: background-color;
   transition-duration: 0.2s;
+  overflow-y: auto !important;
   transition-timing-function: linear;
-}
-.mainContainer section {
-  padding-left: 5px;
 }
 .theme-light .mainContainer {
   color: #110d09;
   background-color: #d9e9de;
+}
+.theme-light .mainContainer a:not(.gsi-material-button) {
+  color: #32726c;
+  text-align: left;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+}
+.theme-light .mainContainer a:not(.gsi-material-button):hover {
+  text-decoration: underline;
+}
+.theme-light .mainContainer section {
+  padding-left: 5px;
 }
 .theme-light .mainContainer svg:not(.gsi-material-button svg),
 .theme-light .mainContainer img {
@@ -2907,6 +2926,19 @@ aside nav ul li:last-child {
 .theme-dark .mainContainer {
   color: #f6f2ee;
   background-color: #3e513d;
+}
+.theme-dark .mainContainer a:not(.gsi-material-button) {
+  color: #cfc0a5;
+  text-align: left;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+}
+.theme-dark .mainContainer a:not(.gsi-material-button):hover {
+  text-decoration: underline;
+}
+.theme-dark .mainContainer section {
+  padding-left: 5px;
 }
 .theme-dark .mainContainer svg:not(.gsi-material-button svg),
 .theme-dark .mainContainer img {

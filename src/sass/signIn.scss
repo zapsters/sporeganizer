@@ -75,6 +75,12 @@
         color: themed("alertRed");
       }
     }
+    a:not(.gsi-material-button) {
+      width: 100%;
+      font-size: 16px;
+      max-width: 380px;
+      margin-top: -14px !important;
+    }
     label {
       position: absolute;
       left: 5px;
@@ -163,11 +169,12 @@
       }
       input[type="submit"]:focus {
         background: #26a680;
-        border: 2px dashed black;
+        border: solid #00895e;
+        border-width: 0 0 4px 0;
       }
 
       input[type="submit"]:active {
-        background: #009664;
+        background: #009664 !important;
         border: 1px solid black;
         border-width: 0 0 0px 0;
       }

@@ -12,6 +12,7 @@ import {
   sanitizeHtmlFunc,
   updateUserPassword,
   updateUserEmail,
+  sendResetPasswordEmail,
 } from "./model";
 
 import * as alertManager from "./alert.js";
@@ -100,6 +101,22 @@ export function initListenersByPage(pageID) {
         }
       });
       break;
+    case "forgot":
+      $("#resetPassword-submit").on("click", async (e) => {
+        e.preventDefault();
+        try {
+          var checkRequiredResponse = checkRequired("resetPassword-form");
+          if (checkRequiredResponse[0]) {
+            const email = $("#resetPassword-email").val();
+            $("#resetPassword-statusText").html(await sendResetPasswordEmail(email));
+          } else {
+            $("#resetPassword-statusText").html(checkRequiredResponse[1]);
+          }
+        } catch (error) {
+          $("#resetPassword-statusText").html(error);
+        }
+      });
+      break;
     case "account":
       $(".signoutBtn").on("click", (e) => {
         signUserOut();
@@ -109,6 +126,8 @@ export function initListenersByPage(pageID) {
       // Listen for the auth to update / load, then fill data
       const unsubscribe = onAuthStateChanged(getAuth(), (user) => {
         if (user) {
+          console.log(user);
+
           $(".displayName").html(user.displayName);
           $("#displayNameInput").val(user.displayName);
           $("#emailInput").val(user.email);
@@ -179,12 +198,23 @@ export function initListenersByPage(pageID) {
         }
       });
       $("#passwordChangeButton").on("click", () => {
-        const auth = getAuth();
-        const user = auth.currentUser;
-        alertManager.generateModalAlert({
-          icon: "label",
-          header: "Change Password",
-          bodyText: `For your security, confirm your login details.
+        console.log(getAuth().currentUser.providerData);
+
+        switch (getAuth().currentUser.providerData[0].providerId) {
+          case "google.com":
+            alertManager.generateModalAlert({
+              icon: "error",
+              header: "Google Account",
+              subHeader: "Could not change password.",
+              bodyText: "Your account is associated with a google account.",
+            });
+            break;
+          case "password":
+          default:
+            alertManager.generateModalAlert({
+              icon: "label",
+              header: "Change Password",
+              bodyText: `For your security, confirm your login details.
             <div class="signIn" style="margin-top: 20px">
               <form action="" id="changePassword-form">
                 <div class="input-container">
@@ -211,33 +241,35 @@ export function initListenersByPage(pageID) {
                 <span id="changePassword-statusText"></span>
               </form>
               </div>`,
-          buttons: [
-            {
-              text: `Change Password`,
-              closeModalOnClick: false,
-              onClick: async () => {
-                try {
-                  var cred = EmailAuthProvider.credential(
-                    getAuth().currentUser.email,
-                    $("#changePassword-currentPassword").val()
-                  );
-                  await reauthenticate(cred);
-                  await updateUserPassword($("#changePassword-currentPassword").val());
-                  alertManager.generateModalAlert({
-                    icon: "check",
-                    header: "Password Changed!",
-                    subHeader: "",
-                    bodyText: "You may have to sign back in.",
-                  });
-                } catch (error) {
-                  $("#changePassword-statusText").html(error);
-                }
-              },
-              class: "secondary",
-            },
-          ],
-        });
-        initTogglePasswordVisibilityListeners();
+              buttons: [
+                {
+                  text: `Change Password`,
+                  closeModalOnClick: false,
+                  onClick: async () => {
+                    try {
+                      var cred = EmailAuthProvider.credential(
+                        getAuth().currentUser.email,
+                        $("#changePassword-currentPassword").val()
+                      );
+                      await reauthenticate(cred);
+                      await updateUserPassword($("#changePassword-currentPassword").val());
+                      alertManager.generateModalAlert({
+                        icon: "check",
+                        header: "Password Changed!",
+                        subHeader: "",
+                        bodyText: "You may have to sign back in.",
+                      });
+                    } catch (error) {
+                      $("#changePassword-statusText").html(error);
+                    }
+                  },
+                  class: "secondary",
+                },
+              ],
+            });
+            initTogglePasswordVisibilityListeners();
+            break;
+        }
 
         // alertManager.generateModalAlert({
         //   icon: "label",

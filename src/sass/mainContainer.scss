@@ -7,11 +7,22 @@
   font-size: 25px;
   transition-property: background-color;
   transition-duration: 0.2s;
+  overflow-y: auto !important;
   transition-timing-function: linear;
-  section {
-    padding-left: 5px;
-  }
   @include themify($themes) {
+    a:not(.gsi-material-button) {
+      color: themed("primary");
+      text-align: left;
+      cursor: pointer;
+      margin: 0;
+      padding: 0;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+    section {
+      padding-left: 5px;
+    }
     color: themed("text");
     background-color: themed("background");
     svg:not(.gsi-material-button svg),
