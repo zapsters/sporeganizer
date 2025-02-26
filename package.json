@@ -1,6 +1,6 @@
 {
   "name": "sporeganizer",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "main": "index.js",
   "description": "A homework tracking and productivity app with a mushroom theme!",
   "scripts": {
