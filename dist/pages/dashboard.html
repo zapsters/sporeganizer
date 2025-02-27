@@ -1,23 +1,41 @@
 <!DOCTYPE html>
 <html>
-  <div class="mainContainer" style="flex: 0.8">
+  <div class="mainContainer" style="flex: 0.8; min-width: 415px">
     <header>
       <h1>Class</h1>
-      <button id="classAddBtn">
+      <button id="classAddBtn" class="raw">
         <img src="images/plus.svg" alt="Add Class" srcset="" />
       </button>
     </header>
-    <div class="content">
-      <i class="pixelart-icons-font-cake"></i>
+    <div class="buttonContainer">
+      <button class="active">All</button>
+      <button>Today</button>
+      <button>Tomorrow</button>
+    </div>
+    <div class="mainContainer-content">
+      <div class="classElement">
+        <div class="icon"></div>
+        <div class="classElement-content">
+          <h3><a>Math</a></h3>
+          <ul>
+            <li>Mon</li>
+            <li class="selected">Tue</li>
+            <li>Wed</li>
+            <li class="selected">Thur</li>
+            <li>Fri</li>
+          </ul>
+          <span>8:30am - 10:00am</span>
+        </div>
+      </div>
     </div>
   </div>
   <div class="mainContainer">
     <header>
       <h1>Assignments</h1>
-      <button id="homeworkAddBtn">
+      <button id="homeworkAddBtn" class="raw">
         <img src="images/plus.svg" alt="Add Homework" srcset="" />
       </button>
     </header>
-    <div class="content"></div>
+    <div class="mainContainer-content"></div>
   </div>
 </html>

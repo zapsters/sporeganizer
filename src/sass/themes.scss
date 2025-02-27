@@ -3,25 +3,33 @@
 $themes: (
   light: (
     text: #110d09,
-    background: #d9e9de,
-    primary: #32726c,
+    background: #def1e7,
+    primary: #417457,
     secondary: #86c57f,
-    accent: #3d7851,
+    accent: #146d46,
     navHover: #ffffff33,
-    navText: #fff,
+    navText: #f1f9f7,
     filterToBlack: brightness(10%),
     alertRed: rgb(242, 8, 8),
+    primaryButton: (
+      #e9b857,
+      #e0a94284,
+    ),
   ),
   dark: (
     text: #f6f2ee,
-    background: #3e513d,
-    primary: #cfc0a5,
-    secondary: #75b88c,
-    accent: #1b2c19,
+    background: #134533,
+    primary: #cfbb95,
+    secondary: #146d46,
+    accent: #041e18,
     navHover: #00000033,
-    navText: #ffffff,
+    navText: #f6f2ee,
     filterToBlack: none,
     alertRed: rgb(247, 51, 51),
+    primaryButton: (
+      #cfbb95,
+      #cfbb9598,
+    ),
   ),
 );
 

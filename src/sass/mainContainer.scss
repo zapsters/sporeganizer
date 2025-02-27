@@ -27,17 +27,17 @@
     background-color: themed("background");
     svg:not(.gsi-material-button svg),
     img {
-      width: 30px;
+      width: 40px;
       cursor: pointer;
       filter: themed("filterToBlack");
     }
     header {
-      padding: 4px 16px 6px 16px;
+      padding: 4px 16px 8px 16px;
       min-height: 65px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-size: 30px;
+      font-size: 40px;
       font-weight: 500;
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       border-bottom: 3px solid themed("text");
@@ -65,7 +65,7 @@
         margin: 0;
       }
     }
-    .content {
+    .mainContainer-content {
       overflow: auto;
       padding: 10px 10px;
       input {
@@ -78,10 +78,11 @@
 .mainContainer-alt {
   @include themify($themes) {
     header {
-      font-size: 40px;
-      padding-bottom: 10px;
+      font-size: 47px;
+      padding: 13px;
+      padding-top: 5px;
     }
-    .content {
+    .mainContainer-content {
       padding: 20px;
     }
   }

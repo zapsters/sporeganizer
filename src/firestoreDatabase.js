@@ -1,24 +1,20 @@
 import { getAuth, updateProfile } from "firebase/auth";
 
 import { db } from "./firebaseConfig";
-import { doc, collection, setDoc, addDoc, serverTimestamp } from "firebase/firestore";
+import { doc, collection, setDoc, addDoc, serverTimestamp, query, where } from "firebase/firestore";
 
-export async function testWrite(userId) {
-  console.log("hi!");
-
-  await setDoc(collection(db, "accounts", userId), {
-    userId: userId,
-    displayName: currentUser.displayName,
-    email: currentUser.email,
-  });
-
-  console.log("hi");
-}
-
+const usersLocationRef = collection(db, "users");
 export async function addUserToCollection(currentUser) {
-  console.log(currentUser.providerData[0].providerId);
+  // Create a query checking for any other user in the database with the same email.
+  const q = query(usersLocationRef, where("email", "==", currentUser.email));
+  const querySnapshot = await getDocs(q);
 
   try {
+    querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      console.log(doc.id, " => ", doc.data());
+    });
+
     const classRef = await setDoc(doc(db, `users`, currentUser.uid), {
       userId: currentUser.uid,
       displayName: currentUser.displayName,
@@ -26,6 +22,7 @@ export async function addUserToCollection(currentUser) {
       emailVerified: currentUser.emailVerified,
       providerId: currentUser.providerData[0].providerId,
       icon: "none",
+      created: serverTimestamp(),
       settings: {},
     });
 

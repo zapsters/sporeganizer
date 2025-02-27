@@ -84,7 +84,6 @@ export function initListenersByPage(pageID) {
         }
       });
       break;
-
     case "signin":
       initTogglePasswordVisibilityListeners();
       initGoogleLoginBtn();
@@ -380,6 +379,12 @@ export function initListenersByPage(pageID) {
       $("#appearanceSelect span").html(
         browserTheme.charAt(0).toUpperCase() + browserTheme.slice(1) + " Mode"
       );
+      break;
+    case "dashboard":
+      $(".buttonContainer button").on("click", function () {
+        $(this).parent().find("button").removeClass("active");
+        $(this).addClass("active");
+      });
       break;
     default:
       break;

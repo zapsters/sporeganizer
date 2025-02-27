@@ -48,11 +48,16 @@ p {
     width: 100%;
   }
 }
-button {
-  background-color: unset;
-  border: unset;
-  color: inherit;
-  font-size: inherit;
+@media (max-width: $tabletBreakPoint) {
+  html,
+  body {
+    height: 100% !important;
+  }
+  #app-root {
+    #app {
+      flex-direction: column;
+    }
+  }
 }
 
 @media (max-width: $mobileBreakPoint) {
