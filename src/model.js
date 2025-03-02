@@ -29,7 +29,7 @@ const currentHost = window.location.host;
 
 // ROUTE HANDLING ========================================
 
-export function changeRoute(e) {
+export function changeRoute() {
   let hashTag = window.location.hash;
   let pageID = hashTag.replace(`#`, ``);
 
@@ -71,7 +71,6 @@ onAuthStateChanged(auth, (user) => {
   if (user) {
     // User is signed in, see docs for a list of available properties
     // https://firebase.google.com/docs/reference/js/auth.user
-    // console.log(user);
 
     uid = user.uid;
     $(".displayName").html(user.displayName);
@@ -87,7 +86,6 @@ onAuthStateChanged(auth, (user) => {
 });
 
 export function signUserUp(displayName, email, password) {
-  // console.log(`${firstName}, ${lastName}, ${email}, ${password}`);
   if (displayName.length > 30) return;
 
   createUserWithEmailAndPassword(auth, email, password)
@@ -106,11 +104,9 @@ export function signUserUp(displayName, email, password) {
           // ...
         });
       const user = userCredential.user;
-      console.log(user, "userCreated");
       window.location.hash = "";
     })
     .catch((error) => {
-      console.log(error);
       $("#signUp-statusText").html(error.message);
       console.error("Authentication error:", error.code, error.message);
     });
@@ -120,7 +116,6 @@ export function signUserIn(siEmail, siPassword) {
   signInWithEmailAndPassword(auth, siEmail, siPassword)
     .then((userCredential) => {
       // Signed in
-      // console.log(userCredential);
       window.location.hash = "";
     })
     .catch((error) => {
@@ -147,17 +142,11 @@ export async function googlePopup() {
   if (true) {
     signInWithPopup(auth, provider)
       .then((result) => {
-        console.log(result);
-        alert("check if google account is new.");
         firestoreDatabase.addUserToCollection(result.user);
-
-        updateProfile(auth.currentUser, {
-          emailVerified: true,
-        });
         window.location.hash = "";
       })
       .catch((error) => {
-        alert(error);
+        console.log(error);
       });
   } else {
     signInWithRedirect(auth, provider);
@@ -232,10 +221,8 @@ export function signUserOut() {
 }
 
 export function deleteCurrentUser() {
-  const user = auth.currentUser;
-  console.log(user.providerId);
-
-  deleteUser(user)
+  firestoreDatabase.deleteUserFromCollection(getAuth().currentUser.uid);
+  deleteUser(getAuth().currentUser)
     .then(() => {
       // User deleted.
       alertManager.generateModalAlert({ header: "Your account is now deleted." });
@@ -283,8 +270,6 @@ export function checkRequired(id) {
         if (!allAreFilled) reason = "Please enter a valid email.";
       }
       if (!i.value) {
-        console.log(i);
-
         allAreFilled = false;
         if (!allAreFilled) reason = "Please complete all required boxes.";
         return;

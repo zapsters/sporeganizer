@@ -75,6 +75,13 @@ p {
   }
 }
 
+hr:not(.raw) {
+  @include themify($themes) {
+    border-top: 2px solid themed("text");
+    margin-bottom: 18px;
+  }
+}
+
 #app-root {
   height: 100%;
 }

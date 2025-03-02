@@ -119,7 +119,7 @@
           filter: none;
           transform: translateY(2px);
           @include themify($themes) {
-            filter: themed("filterToBlack");
+            @include recolor(themed("text"), 1);
           }
         }
       }

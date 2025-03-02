@@ -29,7 +29,7 @@
     img {
       width: 40px;
       cursor: pointer;
-      filter: themed("filterToBlack");
+      @include recolor(themed("text"), 1);
     }
     header {
       padding: 4px 16px 8px 16px;

@@ -16,12 +16,13 @@ import {
 } from "./model";
 
 import * as alertManager from "./alert.js";
-
+import { mushroomBank } from "./mushroomBank.js";
 import sanitizeHtml from "sanitize-html";
 import { onAuthStateChanged, getAuth, EmailAuthProvider } from "firebase/auth";
 import * as cookieManager from "./cookieManager.min.js";
 import { checkDarkModePreference, setTheme, browserTheme } from "./browserTheme.js";
 import * as firestoreDatabase from "./firestoreDatabase.js";
+import firebase from "firebase/compat/app";
 
 var sidebarOpen = true;
 
@@ -57,16 +58,6 @@ function initURLListener() {
 export function initListenersByPage(pageID) {
   switch (pageID) {
     case "home":
-      // Listen for the auth to update / load, then fill data
-      const homePageAuthStateChange = onAuthStateChanged(getAuth(), (user) => {
-        if (user) {
-          $("#classAddBtn").on("click", () => {
-            firestoreDatabase.addClass(getAuth().currentUser.uid, "testLol");
-          });
-          homePageAuthStateChange();
-        }
-      });
-
       break;
     case "signup":
       initTogglePasswordVisibilityListeners();
@@ -125,7 +116,7 @@ export function initListenersByPage(pageID) {
       // Listen for the auth to update / load, then fill data
       const unsubscribe = onAuthStateChanged(getAuth(), (user) => {
         if (user) {
-          console.log(user);
+          firestoreDatabase.addUserToCollection(getAuth().currentUser);
 
           $(".displayName").html(user.displayName);
           $("#displayNameInput").val(user.displayName);
@@ -134,7 +125,6 @@ export function initListenersByPage(pageID) {
           unsubscribe();
           // User is signed in
         } else {
-          console.log("no user");
           window.location = "#signin";
           unsubscribe();
           // User is signed out
@@ -142,19 +132,23 @@ export function initListenersByPage(pageID) {
       });
 
       $("#deleteAccountBtn").on("click", () => {
-        // promptForCredentials();
         alertManager.generateModalAlert({
           icon: "downasaur",
           header: "Delete Account?",
           subHeader: `<span class="alert">This is un-reverseable.</span>`,
+          bodyText: `<span id="deleteAccountStatusText"></span>`,
           buttons: [
             { text: "Cancel" },
             {
               text: "Delete Account",
               class: "dangerous",
               closeModalOnClick: "false",
-              onClick: () => {
-                deleteCurrentUser();
+              onClick: async () => {
+                try {
+                  deleteCurrentUser();
+                } catch (error) {
+                  $("#deleteAccountStatusText").html(error);
+                }
               },
             },
           ],
@@ -168,9 +162,6 @@ export function initListenersByPage(pageID) {
       $("#displayNameChangeButton").on("click", () => {
         const auth = getAuth();
         const user = auth.currentUser;
-
-        console.log($("#displayNameInput").val());
-
         var newName = sanitizeHtmlFunc($("#displayNameInput").val());
 
         if ($("#displayNameInput").val() != user.displayName) {
@@ -197,8 +188,6 @@ export function initListenersByPage(pageID) {
         }
       });
       $("#passwordChangeButton").on("click", () => {
-        console.log(getAuth().currentUser.providerData);
-
         switch (getAuth().currentUser.providerData[0].providerId) {
           case "google.com":
             alertManager.generateModalAlert({
@@ -289,57 +278,69 @@ export function initListenersByPage(pageID) {
       $("#emailChangeButton").on("click", () => {
         const auth = getAuth();
         const user = auth.currentUser;
-        alertManager.generateModalAlert({
-          icon: "label",
-          header: "Change Email",
-          bodyText: `For your security, confirm your login details.
-            <div class="signIn" style="margin-top: 20px">
+        switch (getAuth().currentUser.providerData[0].providerId) {
+          case "google.com":
+            alertManager.generateModalAlert({
+              icon: "error",
+              header: "Google Account",
+              subHeader: "Could not change email.",
+              bodyText: "Your account is associated with a google account.",
+            });
+            break;
+          case "password":
+          default:
+            alertManager.generateModalAlert({
+              icon: "label",
+              header: "Change Email",
+              bodyText: `For your security, confirm your login details.
+              <div class="signIn" style="margin-top: 20px">
               <form action="" id="changeEmail-form">
                 <div class="input-container">
-                  <input required="" type="text" id="changeEmail-currentEmail" autocomplete="current-email">
-                  <label>Current Email</label>
+                <input required="" type="text" id="changeEmail-currentEmail" autocomplete="current-email">
+                <label>Current Email</label>
                 </div>
                 <div class="input-container">
-                  <input required="" type="password" id="changeEmail-currentPassword" autocomplete="current-password">
-                  <label>Current Password</label>
-                  <div class="toggleVisibility">
-                    <img src="images/eye-open.svg" alt="" srcset="">
-                  </div>
+                <input required="" type="password" id="changeEmail-currentPassword" autocomplete="current-password">
+                <label>Current Password</label>
+                <div class="toggleVisibility">
+                <img src="images/eye-open.svg" alt="" srcset="">
+                </div>
                 </div>
                 <div class="input-container">
-                  <input required="" type="text" id="changeEmail-newEmail" autocomplete="new-email" data-np-autofill-field-type="password">
+                <input required="" type="text" id="changeEmail-newEmail" autocomplete="new-email" data-np-autofill-field-type="password">
                   <label>New Email</label>
                 </div>
                 <span id="changeEmail-statusText"></span>
-              </form>
-              </div>`,
-          buttons: [
-            {
-              text: `Change Email`,
-              closeModalOnClick: false,
-              onClick: async () => {
-                try {
-                  var cred = EmailAuthProvider.credential(
-                    $("#changeEmail-currentEmail").val(),
-                    $("#changeEmail-currentPassword").val()
-                  );
-                  await reauthenticate(cred);
-                  await updateUserEmail($("#changeEmail-newEmail").val());
-                  $("#emailInput").val(getAuth().currentUser.email);
-                  alertManager.generateModalAlert({
-                    icon: "check",
-                    header: "Email Changed!",
-                    subHeader: "",
-                    bodyText: "You may have to log back in.",
-                  });
-                } catch (error) {
-                  $("#changeEmail-statusText").html(error);
-                }
-              },
-              class: "secondary",
-            },
-          ],
-        });
+                </form>
+                </div>`,
+              buttons: [
+                {
+                  text: `Change Email`,
+                  closeModalOnClick: false,
+                  onClick: async () => {
+                    try {
+                      var cred = EmailAuthProvider.credential(
+                        $("#changeEmail-currentEmail").val(),
+                        $("#changeEmail-currentPassword").val()
+                      );
+                      await reauthenticate(cred);
+                      await updateUserEmail($("#changeEmail-newEmail").val());
+                      $("#emailInput").val(getAuth().currentUser.email);
+                      alertManager.generateModalAlert({
+                        icon: "check",
+                        header: "Email Changed!",
+                        subHeader: "",
+                        bodyText: "You may have to log back in.",
+                      });
+                    } catch (error) {
+                      $("#changeEmail-statusText").html(error);
+                    }
+                  },
+                  class: "secondary",
+                },
+              ],
+            });
+        }
         initTogglePasswordVisibilityListeners();
 
         // alertManager.generateModalAlert({
@@ -381,14 +382,449 @@ export function initListenersByPage(pageID) {
       );
       break;
     case "dashboard":
+      // Redirect user to the login page if we are not logged in.
+      // Give it a second to allow firebase to auto-login on page visit.
+      const unsubscribeDashboard = onAuthStateChanged(getAuth(), (user) => {
+        if (user) {
+          firestoreDatabase.getAllUserMadeClasses().then((data) => {
+            data.forEach((classEntry) => {
+              dashboardAddClassElement(classEntry);
+            });
+          });
+          unsubscribeDashboard();
+          // User is signed in
+        } else {
+          window.location.href = "#signin";
+          alertManager.generateModalAlert({
+            header: "Requires an Account",
+            subHeader: `This page requires an active user.`,
+            bodyText: `Ready to see what Sporeganizer has to offer? Create an account to get started!`,
+          });
+          unsubscribeDashboard();
+          // User is signed out
+        }
+      });
       $(".buttonContainer button").on("click", function () {
         $(this).parent().find("button").removeClass("active");
         $(this).addClass("active");
+      });
+      $("#classAddBtn").on("click", () => {
+        callClassModal("create");
       });
       break;
     default:
       break;
   }
+}
+
+// Opens a create OR edit class modal.
+function callClassModal(type) {
+  // Get mushroom elements and format them for the dropdown menu
+  function getMushroomElementsForDropdown() {
+    var dropdownContent = "";
+    mushroomBank.forEach((mushroomElement, index) => {
+      dropdownContent += `
+        <li><label><div style="background-image: url(${mushroomElement.icon}); background-size: ${mushroomElement.scale}" class="classElementIcon"></div><span>${mushroomElement.title}</span></label>
+            <input type="radio" checked name="classIconSelect" value="${mushroomElement.title}"></li>`;
+    });
+    return dropdownContent;
+  }
+
+  var classTimeArray = {};
+  const daySelectIds = [
+    "#classModal-daySelectMon",
+    "#classModal-daySelectTue",
+    "#classModal-daySelectWed",
+    "#classModal-daySelectThu",
+    "#classModal-daySelectFri",
+  ];
+
+  var alertBody = `
+    <hr>
+    <div class="inputContainer centered">
+      <div class="classElementIcon center large" id="classModalIconPreview"></div>
+      <div class="dropdown">
+          <button class="dropbtn">
+              Icons
+          </button>
+          
+          <ul class="dropdown-content" id="classIconDropdown">
+            ${getMushroomElementsForDropdown()}
+        </ul>
+      </div>
+    </div>
+    <div class="inputContainer centered">
+      <label>Class Name</label>
+      <input id="classModal-className" type='text'/>
+    </div>
+    <div class="inputContainer centered">
+      <label>Professor</label>
+      <input id="classModal-professor" type='text'/>
+    </div>
+    <div class="inputContainer centered">
+      <label>Date & Time</label>
+      <ul class="classDatesContainer">
+        <li>Mon <input id="classModal-daySelectMon" type="checkbox"></li>
+        <li>Tue <input id="classModal-daySelectTue" type="checkbox"></li>
+        <li>Wed <input id="classModal-daySelectWed" type="checkbox"></li>
+        <li>Thu <input id="classModal-daySelectThu" type="checkbox"></li>
+        <li>Fri <input id="classModal-daySelectFri" type="checkbox"></li>
+      </ul>
+    </div>
+    <div class="inputContainer centered">
+        <label>Time Settings</label>
+        <select id="classModal-timeSettings">
+          <option value='default'>Same time each day</option>
+          <option value='uniqueDaily'>Different time every day</option>
+        </select>
+      </div>
+    <div class="inputContainer centered flex" id="defaultFromAndToInputs">
+      <div class="inputContainer">
+        <label>From</label>
+        <input id="classModal-timeFrom-all" type="time" />
+      </div>
+      <div class="inputContainer">
+        <label>To</label>
+        <input id="classModal-timeTo-all" type="time" />
+      </div>
+    </div>
+
+    <div id="uniqueDailyTimeSelect" style="display: none">
+      <div class="inputContainer centered flex spanLabel" style="display: none" id="uniqueDailyTimeSelectMon">
+        <span class="primary">Monday</span>
+        <div class="inputContainer">
+          <label>From</label>
+          <input id="classModal-timeFrom-Mon" type="time" />
+        </div>
+        <div class="inputContainer">
+          <label>To</label>
+          <input id="classModal-timeTo-Mon" type="time" />
+        </div>
+      </div>
+      <div class="inputContainer centered flex spanLabel" style="display: none" id="uniqueDailyTimeSelectTue">
+        <span class="primary">Tuesday</span>
+        <div class="inputContainer">
+          <label>From</label>
+          <input id="classModal-timeFrom-Tue" type="time" />
+        </div>
+        <div class="inputContainer">
+          <label>To</label>
+          <input id="classModal-timeTo-Tue" type="time" />
+        </div>
+      </div>
+      <div class="inputContainer centered flex spanLabel" style="display: none" id="uniqueDailyTimeSelectWed">
+        <span class="primary">Wednesday</span>
+        <div class="inputContainer">
+          <label>From</label>
+          <input id="classModal-timeFrom-Wed" type="time" />
+        </div>
+        <div class="inputContainer">
+          <label>To</label>
+          <input id="classModal-timeTo-Wed" type="time" />
+        </div>
+      </div>
+      <div class="inputContainer centered flex spanLabel" style="display: none" id="uniqueDailyTimeSelectThu">
+        <span class="primary">Thursday</span>
+        <div class="inputContainer">
+          <label>From</label>
+          <input id="classModal-timeFrom-Thu" type="time" />
+        </div>
+        <div class="inputContainer">
+          <label>To</label>
+          <input id="classModal-timeTo-Thu" type="time" />
+        </div>
+      </div>
+      <div class="inputContainer centered flex spanLabel" style="display: none" id="uniqueDailyTimeSelectFri">
+        <span class="primary">Friday</span>
+        <div class="inputContainer">
+          <label>From</label>
+          <input id="classModal-timeFrom-Fri" type="time" />
+        </div>
+        <div class="inputContainer">
+          <label>To</label>
+          <input id="classModal-timeTo-Fri" type="time" />
+        </div>
+      </div>
+    </div>
+    <span id="classModalStatusText"></span>
+  `;
+
+  function formatClassJsonObject() {
+    var classJson = {};
+    classJson.name = $("#classModal-className").val();
+    classJson.icon = $('input[name="classIconSelect"]:checked').val();
+    classJson.professor = $("#classModal-professor").val();
+
+    // Construct time array
+    // Check each of the day select fields to get days where class is in session.
+    daySelectIds.forEach((checkboxId) => {
+      if (document.getElementById(checkboxId.replace("#", "")).checked) {
+        var day = checkboxId.replace("#classModal-daySelect", "");
+        var timeSettings = $("#classModal-timeSettings").val();
+        switch (timeSettings) {
+          case "uniqueDaily":
+            switch (day) {
+              case "Mon":
+                classTimeArray[day] = [
+                  $("#classModal-timeFrom-Mon").val(),
+                  $("#classModal-timeTo-Mon").val(),
+                ];
+                break;
+              case "Tue":
+                classTimeArray[day] = [
+                  $("#classModal-timeFrom-Tue").val(),
+                  $("#classModal-timeTo-Tue").val(),
+                ];
+                break;
+              case "Wed":
+                classTimeArray[day] = [
+                  $("#classModal-timeFrom-Wed").val(),
+                  $("#classModal-timeTo-Wed").val(),
+                ];
+                break;
+              case "Thu":
+                classTimeArray[day] = [
+                  $("#classModal-timeFrom-Thu").val(),
+                  $("#classModal-timeTo-Thu").val(),
+                ];
+                break;
+              case "Fri":
+                classTimeArray[day] = [
+                  $("#classModal-timeFrom-Fri").val(),
+                  $("#classModal-timeTo-Fri").val(),
+                ];
+                break;
+
+              default:
+                break;
+            }
+            break;
+          case "default":
+          default:
+            classTimeArray[day] = [
+              $("#classModal-timeFrom-all").val(),
+              $("#classModal-timeTo-all").val(),
+            ];
+            break;
+        }
+      }
+    });
+
+    classJson.time = classTimeArray;
+    return classJson;
+  }
+
+  // Generate Class Modal
+  switch (type) {
+    case "edit":
+      alertManager.generateModalAlert({
+        icon: "text-add",
+        header: `Edit Class`,
+        subHeader: "",
+        bodyText: alertBody,
+        buttons: [
+          { text: "Cancel" },
+          {
+            text: "Delete Class",
+            class: "dangerous",
+            closeModalOnClick: "false",
+            onClick: async () => {
+              try {
+                alert("logic needed");
+              } catch (error) {
+                $("#classModalStatusText").html(error);
+              }
+            },
+          },
+          {
+            text: "Confirm",
+            closeModalOnClick: "false",
+            onClick: async () => {
+              try {
+                var classResultJson = formatClassJsonObject();
+                alert("logic needed");
+              } catch (error) {
+                $("#classModalStatusText").html(error);
+              }
+            },
+          },
+        ],
+      });
+      break;
+    case "create":
+      alertManager.generateModalAlert({
+        icon: "text-add",
+        header: `Create Class`,
+        subHeader: "",
+        bodyText: alertBody,
+        buttons: [
+          { text: "Cancel" },
+          {
+            text: "Create",
+            closeModalOnClick: "false",
+            onClick: async () => {
+              try {
+                var classResultJson = formatClassJsonObject();
+                firestoreDatabase
+                  .addClassToDatabase(classResultJson)
+                  .then(() => {
+                    dashboardAddClassElement(classResultJson);
+                    alertManager.generateModalAlert({
+                      icon: "mood-happy",
+                      subHeader: "Class Added!",
+                      buttons: [{}],
+                    });
+                  })
+                  .catch((error) => {
+                    alertManager.generateModalAlert({
+                      icon: "mood-sad",
+                      header: "",
+                      subHeader: "Error creating class",
+                      bodyText: error,
+                      buttons: [{}],
+                    });
+                  });
+              } catch (error) {
+                $("#classModalStatusText").html(error);
+              }
+            },
+          },
+        ],
+      });
+      break;
+    default:
+      alert("error unrecognized class modal type.");
+      break;
+  }
+
+  // Add logic to the modal ==============================
+  //   On Icon select, update the preview.
+  $("#classIconDropdown li input").on("click", (elem) => {
+    $("#classModalIconPreview").css(
+      "background-image",
+      `url("${getMushroomIconFromName(elem.target.getAttribute("value"))}")`
+    );
+  });
+  //   Then, click the first icon in the list for the default icon!
+  $("#classIconDropdown li input")[0].click();
+
+  // Listen to the timeSettings dropdown.
+  $("#classModal-timeSettings").on("change", function () {
+    switch ($(this).val()) {
+      case "uniqueDaily":
+        $("#uniqueDailyTimeSelect").css("display", "block");
+        $("#defaultFromAndToInputs").css("display", "none");
+        break;
+      case "default":
+      default:
+        $("#defaultFromAndToInputs").css("display", "flex");
+        $("#uniqueDailyTimeSelect").css("display", "none");
+        break;
+    }
+  });
+
+  // Handle creating input fields for unique daily time settings.
+  daySelectIds.forEach((checkboxId) => {
+    $(checkboxId).on("click", function () {
+      var day = checkboxId.replace("#classModal-daySelect", "");
+      var elemId = `#uniqueDailyTimeSelect${day}`;
+      if (this.checked) {
+        $(elemId).css("display", "flex");
+      } else {
+        $(elemId).css("display", "none");
+      }
+    });
+  });
+}
+
+function classJsonToElement(classData) {
+  console.log(classData);
+  function ifDayIsSelected(dayAbbreviation) {
+    if (classData.time[dayAbbreviation] != null) return "class='selected'";
+    return "";
+  }
+  function getTimes() {
+    var resultingTimeTable = "";
+
+    //Check if no times are listed, in which case, no times are needed.
+    if ($.isEmptyObject(classData.time)) {
+      return "";
+    } else if (areAllEntriesEqual(classData.time)) {
+      console.log("caught!");
+
+      // If all times are the same for each day, only print one set.
+      var value = Object.values(classData.time)[0];
+
+      if (value[0] != "" && value[1] != "") {
+        resultingTimeTable = `
+        <tr>
+        <td>${value[0]} - ${value[1]}</td>
+        </tr>`;
+      }
+    } else {
+      // If each day has different value, print each separately
+      for (const [key, value] of Object.entries(classData.time)) {
+        // console.log(`${key}: ${value}`);
+        if (value[0] != "" && value[1] != "") {
+          resultingTimeTable += `
+            <tr>
+            <td>${key}</td>
+            <td>${value[0]} - ${value[1]}</td>
+            </tr>`;
+        }
+      }
+    }
+    return resultingTimeTable;
+  }
+  return `
+  <div class="classElement">
+    <div class="icon" style="background-image: url(${getMushroomIconFromName(
+      classData.icon
+    )})"></div>
+    <div class="classElement-content">
+      <h3>
+        <a>${classData.name}</a>
+      </h3>
+      <h6>${classData.professor}</h6>
+      <ul class="classDatesContainer">
+        <li ${ifDayIsSelected("Mon")}>Mon</li>
+        <li ${ifDayIsSelected("Tue")}>Tue</li>
+        <li ${ifDayIsSelected("Wed")}>Wed</li>
+        <li ${ifDayIsSelected("Thu")}>Thu</li>
+        <li ${ifDayIsSelected("Fri")}>Fri</li>
+      </ul>
+      <table>
+        ${getTimes()}
+      </table>
+    </div>
+  </div>`;
+}
+
+// HELPER FUNCTIONS ============================================
+export function dashboardAddClassElement(classData) {
+  $("#classEntryContainer").append(classJsonToElement(classData));
+}
+
+function convertTo12Hour(time24) {
+  const [hours, minutes] = time24.split(":").map(Number);
+  const period = hours < 12 || hours === 24 ? "AM" : "PM";
+  const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
+  const formattedMinutes = minutes.toString().padStart(2, "0");
+  return `${formattedHours}:${formattedMinutes} ${period}`;
+}
+
+function getMushroomIconFromName(name) {
+  const thisMushroomBankJson = mushroomBank.filter(function (data) {
+    return data.title == name;
+  })[0];
+  if (thisMushroomBankJson == undefined) return null;
+  return thisMushroomBankJson.icon;
+}
+
+function areAllEntriesEqual(schedule) {
+  const timeEntries = Object.values(schedule).map((times) => JSON.stringify(times));
+
+  return timeEntries.every((entry) => entry === timeEntries[0]);
 }
 
 function initTogglePasswordVisibilityListeners() {
@@ -409,7 +845,6 @@ function initTogglePasswordVisibilityListeners() {
 function initGoogleLoginBtn() {
   $(".googleSignIn").on("click", function () {
     console.log("Attempting pop up");
-
     googlePopup();
   });
 }
@@ -419,45 +854,4 @@ function setStatusText(id, text, time = 5) {
   setTimeout(() => {
     $(id).html("");
   }, time * 1000);
-}
-
-function promptForCredentials() {
-  alertManager.generateModalAlert({
-    header: "Confirm your Credentials",
-    bodyText: `For your security, confirm your login details.
-    <div class="signIn" style="margin-top: 20px">
-      <form action="" id="signIn-form" autocomplete="off" data-np-autofill-form-type="login" data-np-checked="1" data-np-watching="1" class="">
-        <div class="input-container">
-          <input required="" type="text" id="signIn-email" autocomplete="email" data-np-autofill-field-type="username" data-np-uid="787df108-3938-4481-93a3-f87348a4b9d3">
-          <label>Email</label>
-        <nordpass-icon data-np-uid="787df108-3938-4481-93a3-f87348a4b9d3" style="all: initial !important;"></nordpass-icon></div>
-        <div class="input-container">
-          <input required="" type="password" id="signIn-password" autocomplete="current-password" data-np-autofill-field-type="password" data-np-uid="24bad00c-c9bf-4240-87d9-fe2ac60fc0ed">
-          <label>Password</label>
-          <button class="toggleVisibility">
-            <img src="images/eye-open.svg" alt="" srcset="">
-          </button>
-        <nordpass-icon data-np-uid="24bad00c-c9bf-4240-87d9-fe2ac60fc0ed" style="all: initial !important;"></nordpass-icon></div>
-        <span id="signIn-statusText"></span>
-        <div class="input-container">
-          <input autocomplete="off" type="submit" id="signIn-submit" value="Sign In">
-        </div>
-      </form>
-      </div>`,
-    buttons: [],
-  });
-  initTogglePasswordVisibilityListeners();
-  // $("#signIn-submit").on("click", (e) => {
-  //   e.preventDefault();
-  //   var checkRequiredResponse = checkRequired("signIn-form");
-  //   if (checkRequiredResponse[0]) {
-  //     const email = $("#signIn-email").val();
-  //     const password = $("#signIn-password").val();
-  //     reauthenticate(email, password)
-  //       .then((res) => console.log(res))
-  //       .catch((error) => console.log(error));
-  //   } else {
-  //     $("#signIn-statusText").html(checkRequiredResponse[1]);
-  //   }
-  // });
 }

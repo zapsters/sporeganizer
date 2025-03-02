@@ -1960,18 +1960,28 @@
   padding: 8px;
   font-size: 18px;
   font-weight: 600;
-  border: 3px solid #e9b857;
-  color: #e9b857;
+  border: 3px solid #ba8e36;
+  color: #ba8e36;
   background-color: transparent;
 }
 .theme-light button:not(.raw):hover {
-  background-color: rgba(224, 169, 66, 0.5176470588);
-  color: #def1e7;
+  background-color: rgba(186, 142, 54, 0.3843137255);
+  color: #e7f0eb;
   cursor: pointer;
 }
 .theme-light button:not(.raw).active {
-  background-color: #e9b857;
-  color: #def1e7;
+  background-color: #ba8e36;
+  color: #e7f0eb;
+}
+.theme-light button:not(.raw).dangerous {
+  transition-property: background-color, color;
+  transition-duration: 0.1s;
+  transition-timing-function: linear;
+  background-color: rgba(255, 0, 0, 0.418);
+}
+.theme-light button:not(.raw).dangerous:hover, .theme-light button:not(.raw).dangerous:focus {
+  background-color: rgb(36, 17, 17);
+  color: red;
 }
 .theme-dark button:not(.raw) {
   padding: 8px;
@@ -1990,6 +2000,91 @@
   background-color: #cfbb95;
   color: #134533;
 }
+.theme-dark button:not(.raw).dangerous {
+  transition-property: background-color, color;
+  transition-duration: 0.1s;
+  transition-timing-function: linear;
+  background-color: rgba(255, 0, 0, 0.418);
+}
+.theme-dark button:not(.raw).dangerous:hover, .theme-dark button:not(.raw).dangerous:focus {
+  background-color: rgb(36, 17, 17);
+  color: red;
+}
+
+.inputContainer {
+  max-width: 300px;
+  text-align: left;
+  --marginBottom: 20px;
+  margin-bottom: var(--marginBottom);
+}
+.theme-light .inputContainer .primary {
+  color: #ba8e36;
+  font-weight: 600;
+}
+.theme-dark .inputContainer .primary {
+  color: #cfbb95;
+  font-weight: 600;
+}
+.inputContainer.spanLabel:has(span) {
+  padding-top: 1.3em;
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 18px;
+  position: relative;
+}
+.inputContainer.spanLabel:has(span) span {
+  top: 0;
+  position: absolute;
+}
+.inputContainer.centered {
+  margin: var(--marginBottom) auto;
+}
+.inputContainer.flex {
+  display: flex;
+  gap: 30px;
+}
+.inputContainer.flex .inputContainer {
+  flex: 1;
+}
+.inputContainer label {
+  margin-bottom: 2px;
+  display: block;
+  font-size: 18px;
+  font-weight: 700;
+}
+.inputContainer input {
+  width: 100% !important;
+}
+
+.theme-light input,
+.theme-light select {
+  border: 0;
+  border-bottom: 3px solid #ba8e36;
+  background-color: transparent;
+  color: #110d09;
+}
+.theme-dark input,
+.theme-dark select {
+  border: 0;
+  border-bottom: 3px solid #cfbb95;
+  background-color: transparent;
+  color: #f6f2ee;
+}
+
+select {
+  width: 100%;
+}
+
+.theme-light input[type=time]::-webkit-calendar-picker-indicator {
+  filter: saturate(0%) brightness(0%) invert(47.0588235294%) opacity(1);
+  filter: url('data:image/svg+xml;utf8,    <svg xmlns="http://www.w3.org/2000/svg">      <filter id="recolor" color-interpolation-filters="sRGB">        <feColorMatrix type="matrix" values="          0 0 0 0 0.7294117647          0 0 0 0 0.5568627451          0 0 0 0 0.2117647059          0 0 0 1 0        "/>      </filter>    </svg>    #recolor');
+  cursor: pointer;
+}
+.theme-dark input[type=time]::-webkit-calendar-picker-indicator {
+  filter: saturate(0%) brightness(0%) invert(69.8039215686%) opacity(1);
+  filter: url('data:image/svg+xml;utf8,    <svg xmlns="http://www.w3.org/2000/svg">      <filter id="recolor" color-interpolation-filters="sRGB">        <feColorMatrix type="matrix" values="          0 0 0 0 0.8117647059          0 0 0 0 0.7333333333          0 0 0 0 0.5843137255          0 0 0 1 0        "/>      </filter>    </svg>    #recolor');
+  cursor: pointer;
+}
 
 .inline {
   display: flex;
@@ -2003,7 +2098,10 @@
 .inline .button {
   display: inline;
   margin: 0;
-  border-radius: 7px;
+}
+.inline input {
+  width: 100%;
+  max-width: 250px;
 }
 .theme-light .inline .alert {
   color: rgb(242, 8, 8);
@@ -2023,23 +2121,27 @@
   color: grey;
 }
 
-.button.dangerous {
-  transition-property: background-color, color;
-  transition-duration: 0.1s;
-  transition-timing-function: linear;
-}
-.button.dangerous:hover, .button.dangerous:focus {
-  background-color: rgb(36, 17, 17);
-  color: red;
-}
-
 input,
-.button {
+.button,
+select {
   border: 3px solid #313131;
   padding: 3px 6px;
   background-color: white;
-  font-size: 20px;
-  font-family: "Roboto", "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-size: 18px;
+  font-family: "Helvetica", "Roboto", Courier, monospace;
+}
+
+select {
+  padding-left: 1px;
+  margin-top: 1px;
+}
+.theme-light select option {
+  color: #ba8e36;
+  background-color: #146d46;
+}
+.theme-dark select option {
+  color: #cfbb95;
+  background-color: #041e18;
 }
 
 button.raw {
@@ -2047,33 +2149,137 @@ button.raw {
   border: unset;
 }
 
-.button {
-  color: white;
-  background-color: #222;
-  font-weight: 300;
-  border-radius: 7px;
-  min-width: 160px;
-  font-family: "Helvetica", "Roboto", Courier, monospace;
-  padding: 8px 20px;
+.dropbtn {
+  width: 100%;
   cursor: pointer;
-  text-align: center;
-  border: none;
-  display: block;
+}
+
+.dropdown {
+  width: 100%;
+  position: relative;
+  display: inline-block;
+  margin-top: 7px;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  align-items: stretch;
+  justify-content: flex-start;
+  padding: 6px 4px;
+  width: 100%;
+  gap: 5px;
+  flex-wrap: wrap;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  list-style: none;
+}
+.theme-light .dropdown-content {
+  background-color: #86c57f;
+}
+.theme-dark .dropdown-content {
+  background-color: #146d46;
+}
+.dropdown-content li {
+  position: relative;
+  margin: 0;
+  max-width: 90px;
+  width: 100%;
+  padding: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-evenly;
+}
+.theme-light .dropdown-content li:has(input:checked) label div {
+  border-color: white;
+}
+.theme-dark .dropdown-content li:has(input:checked) label div {
+  border-color: white;
+}
+.dropdown-content li label {
+  width: 100%;
   align-items: center;
   justify-content: space-evenly;
 }
-
-.button:hover {
-  background-color: #313131;
+.dropdown-content li label span {
+  margin-top: 2px;
+  word-wrap: break-word;
+  text-align: center;
+  display: block;
+  font-size: 15px;
+  font-weight: 500;
+  max-width: 90px !important;
+}
+.dropdown-content li input {
+  cursor: pointer !important;
+  opacity: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
 }
 
-.button svg {
-  display: inline;
-  width: 1.3rem;
-  background-color: red;
-  height: 1.3rem;
-  margin-right: 0.75rem;
-  color: white;
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 53px;
+  border-radius: 5px;
+  overflow: hidden;
+  height: 27px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.square .slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  height: 100%;
+}
+
+.square .slider:before {
+  position: absolute;
+  content: "";
+  height: 80%;
+  aspect-ratio: 1/1;
+  bottom: 0%;
+  background-color: white;
+  transition: 0.4s;
+  top: 50%;
+  border-radius: 3px;
+  transform: translate(100%, -50%);
+  right: calc(100% - 3px);
+}
+
+.theme-light .square input:checked + .slider {
+  background-color: #ba8e36;
+}
+.theme-dark .square input:checked + .slider {
+  background-color: #cfbb95;
+}
+
+.square input:checked + .slider:before {
+  transform: translate(0, -50%) !important;
+  right: 3px;
 }
 
 .classElement {
@@ -2085,105 +2291,201 @@ button.raw {
 }
 .theme-light .classElement {
   border-bottom: 2px solid #110d09;
-  padding: 16px 5px;
+  padding: 16px 5px 16px 0px;
   gap: 12px;
-}
-.theme-light .classElement .icon {
-  background-color: #417457;
-  flex: 1;
-  max-width: 100px;
-  aspect-ratio: 1/1;
-  border-radius: 50%;
-  padding: 10px;
-  background-image: url("../images/shaggyinkcap.png");
-  background-size: contain;
-  background-position: center;
-  background-origin: content-box;
-  background-repeat: no-repeat;
 }
 .theme-light .classElement .classElement-content {
   padding: 4px 0px;
   flex: 1;
   position: relative;
 }
-.theme-light .classElement .classElement-content h3 {
-  margin-bottom: 5px;
+.theme-light .classElement .classElement-content h3,
+.theme-light .classElement .classElement-content a {
+  color: #ba8e36;
+  margin-bottom: 0px;
+  font-size: 29px;
   width: fit-content;
+  font-weight: 600;
 }
-.theme-light .classElement .classElement-content span {
+.theme-light .classElement .classElement-content h6 {
+  margin-bottom: 5px;
+}
+.theme-light .classElement .classElement-content table {
+  left: 0;
+  float: left;
   font-size: 14px;
+  margin-top: 4px;
+  width: 100%;
 }
-.theme-light .classElement .classElement-content ul {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  gap: 0.4em;
+.theme-light .classElement .classElement-content table tr td:nth-child(1) {
+  width: 45px;
+  background-color: red;
 }
-.theme-light .classElement .classElement-content ul li {
-  background-color: #def1e7;
-  border: 2px solid rgba(224, 169, 66, 0.5176470588);
-  border-radius: 5px;
-  padding: 3px 5px;
-  min-width: 46px;
-  font-size: 14px;
-  text-align: center;
-  list-style: none;
-}
-.theme-light .classElement .classElement-content ul li.selected {
-  background-color: #e9b857;
-  color: #def1e7;
+.theme-light .classElement .classElement-content table tr td:nth-child(2) {
+  background-color: rebeccapurple;
 }
 .theme-dark .classElement {
   border-bottom: 2px solid #f6f2ee;
-  padding: 16px 5px;
+  padding: 16px 5px 16px 0px;
   gap: 12px;
-}
-.theme-dark .classElement .icon {
-  background-color: #cfbb95;
-  flex: 1;
-  max-width: 100px;
-  aspect-ratio: 1/1;
-  border-radius: 50%;
-  padding: 10px;
-  background-image: url("../images/shaggyinkcap.png");
-  background-size: contain;
-  background-position: center;
-  background-origin: content-box;
-  background-repeat: no-repeat;
 }
 .theme-dark .classElement .classElement-content {
   padding: 4px 0px;
   flex: 1;
   position: relative;
 }
-.theme-dark .classElement .classElement-content h3 {
-  margin-bottom: 5px;
+.theme-dark .classElement .classElement-content h3,
+.theme-dark .classElement .classElement-content a {
+  color: #cfbb95;
+  margin-bottom: 0px;
+  font-size: 29px;
   width: fit-content;
+  font-weight: 600;
 }
-.theme-dark .classElement .classElement-content span {
+.theme-dark .classElement .classElement-content h6 {
+  margin-bottom: 5px;
+}
+.theme-dark .classElement .classElement-content table {
+  left: 0;
+  float: left;
   font-size: 14px;
+  margin-top: 4px;
+  width: 100%;
 }
-.theme-dark .classElement .classElement-content ul {
+.theme-dark .classElement .classElement-content table tr td:nth-child(1) {
+  width: 45px;
+  background-color: red;
+}
+.theme-dark .classElement .classElement-content table tr td:nth-child(2) {
+  background-color: rebeccapurple;
+}
+
+.theme-light .classElement .icon,
+.theme-light .classElementIcon {
+  border: 4px solid black;
+  background-color: #ba8e36;
+  flex: 1;
+  max-width: 100px;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  padding: 10px;
+  background-size: contain;
+  background-position: center;
+  background-origin: content-box;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+}
+.theme-light .classElement .icon.center,
+.theme-light .classElementIcon.center {
+  margin: 0 auto;
+}
+.theme-light .classElement .icon.large,
+.theme-light .classElementIcon.large {
+  max-width: 123px;
+}
+.theme-dark .classElement .icon,
+.theme-dark .classElementIcon {
+  border: 4px solid black;
+  background-color: #cfbb95;
+  flex: 1;
+  max-width: 100px;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  padding: 10px;
+  background-size: contain;
+  background-position: center;
+  background-origin: content-box;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+}
+.theme-dark .classElement .icon.center,
+.theme-dark .classElementIcon.center {
+  margin: 0 auto;
+}
+.theme-dark .classElement .icon.large,
+.theme-dark .classElementIcon.large {
+  max-width: 123px;
+}
+
+.theme-light .classDatesContainer {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   justify-content: flex-start;
   gap: 0.4em;
+  margin-top: 3px;
 }
-.theme-dark .classElement .classElement-content ul li {
-  background-color: #134533;
-  border: 2px solid rgba(207, 187, 149, 0.5960784314);
+.theme-light .classDatesContainer li {
+  background-color: #e7f0eb;
+  border: 2px solid rgba(186, 142, 54, 0.3843137255);
   border-radius: 5px;
-  padding: 3px 5px;
+  padding: 4px 5px;
   min-width: 46px;
   font-size: 14px;
   text-align: center;
   list-style: none;
+  position: relative;
 }
-.theme-dark .classElement .classElement-content ul li.selected {
+.theme-light .classDatesContainer li input {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.theme-light .classDatesContainer li:has(input:focus) {
+  border: 2px solid #ba8e36;
+}
+.theme-light .classDatesContainer li:has(input:checked),
+.theme-light .classDatesContainer li.selected {
+  background-color: #ba8e36;
+  color: #e7f0eb;
+}
+.theme-light .classDatesContainer li:has(input:checked):has(input:focus-visible),
+.theme-light .classDatesContainer li.selected:has(input:focus-visible) {
+  background-color: rgba(186, 142, 54, 0.3843137255);
+}
+.theme-dark .classDatesContainer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 0.4em;
+  margin-top: 3px;
+}
+.theme-dark .classDatesContainer li {
+  background-color: #134533;
+  border: 2px solid rgba(207, 187, 149, 0.5960784314);
+  border-radius: 5px;
+  padding: 4px 5px;
+  min-width: 46px;
+  font-size: 14px;
+  text-align: center;
+  list-style: none;
+  position: relative;
+}
+.theme-dark .classDatesContainer li input {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.theme-dark .classDatesContainer li:has(input:focus) {
+  border: 2px solid #cfbb95;
+}
+.theme-dark .classDatesContainer li:has(input:checked),
+.theme-dark .classDatesContainer li.selected {
   background-color: #cfbb95;
   color: #134533;
+}
+.theme-dark .classDatesContainer li:has(input:checked):has(input:focus-visible),
+.theme-dark .classDatesContainer li.selected:has(input:focus-visible) {
+  background-color: rgba(207, 187, 149, 0.5960784314);
 }
 
 .buttonContainer {
@@ -2194,12 +2496,6 @@ button.raw {
   gap: 10px;
   --buttonBorderRadius: 12px;
 }
-.theme-light .buttonContainer {
-  border-bottom: 3px solid #110d09;
-}
-.theme-dark .buttonContainer {
-  border-bottom: 3px solid #f6f2ee;
-}
 .buttonContainer button:nth-of-type(1) {
   border-radius: var(--buttonBorderRadius) 0 0 var(--buttonBorderRadius);
 }
@@ -2208,7 +2504,6 @@ button.raw {
 }
 .buttonContainer button {
   flex: 1;
-  background-color: red;
 }
 
 .account h2 {
@@ -2247,6 +2542,7 @@ button.raw {
   position: fixed;
   display: table;
   height: 100%;
+  overflow: hidden;
   width: 100%;
   top: 0;
   left: 0;
@@ -2257,8 +2553,12 @@ button.raw {
   display: table-cell;
   text-align: center;
   vertical-align: middle;
+  max-height: 50px;
 }
 .modalContainer .modalBackground .modal {
+  max-height: 100%;
+  max-height: 73vh;
+  overflow-y: auto;
   z-index: 10;
   border: 4px solid black;
   padding: 20px;
@@ -2271,20 +2571,22 @@ button.raw {
 }
 .theme-light .modalContainer .modalBackground .modal {
   color: #110d09;
-  background-color: #def1e7;
+  background-color: #e7f0eb;
 }
 .theme-dark .modalContainer .modalBackground .modal {
   color: #f6f2ee;
   background-color: #134533;
 }
 .modalContainer .modalBackground .modal icon {
-  font-size: 80px !important;
+  font-size: 70px !important;
 }
 .theme-light .modalContainer .modalBackground .modal icon {
-  filter: brightness(10%);
+  filter: saturate(0%) brightness(0%) invert(47.0588235294%) opacity(1);
+  filter: url('data:image/svg+xml;utf8,    <svg xmlns="http://www.w3.org/2000/svg">      <filter id="recolor" color-interpolation-filters="sRGB">        <feColorMatrix type="matrix" values="          0 0 0 0 0.7294117647          0 0 0 0 0.5568627451          0 0 0 0 0.2117647059          0 0 0 1 0        "/>      </filter>    </svg>    #recolor');
 }
 .theme-dark .modalContainer .modalBackground .modal icon {
-  filter: none;
+  filter: saturate(0%) brightness(0%) invert(69.8039215686%) opacity(1);
+  filter: url('data:image/svg+xml;utf8,    <svg xmlns="http://www.w3.org/2000/svg">      <filter id="recolor" color-interpolation-filters="sRGB">        <feColorMatrix type="matrix" values="          0 0 0 0 0.8117647059          0 0 0 0 0.7333333333          0 0 0 0 0.5843137255          0 0 0 1 0        "/>      </filter>    </svg>    #recolor');
 }
 .modalContainer .modalBackground .modal .closeBtn {
   position: absolute;
@@ -2299,10 +2601,10 @@ button.raw {
   opacity: 0.7;
 }
 .theme-light .modalContainer .modalBackground .modal .closeBtn {
-  filter: brightness(10%);
+  color: #ba8e36;
 }
 .theme-dark .modalContainer .modalBackground .modal .closeBtn {
-  filter: none;
+  color: #cfbb95;
 }
 .modalContainer .modalBackground .modal .closeBtn:hover {
   opacity: 1;
@@ -2315,21 +2617,16 @@ button.raw {
   justify-content: space-evenly;
 }
 .modalContainer .modalBackground .modal #modalMainButtons .button {
-  padding: 14px 20px;
+  padding: 10px 8px;
 }
-.modalContainer .modalBackground .modal h2 {
-  font-size: 40px;
+.modalContainer .modalBackground .modal .modalHeader {
+  font-size: 35px;
   margin-bottom: 10px;
 }
-.modalContainer .modalBackground .modal h3 {
+.modalContainer .modalBackground .modal .modalSubheader {
   font-size: 32px;
   margin-bottom: 13px;
   font-weight: 300;
-}
-.modalContainer .modalBackground .modal p {
-  font-size: 18px;
-  line-height: 22px;
-  font-weight: 500;
 }
 .modalContainer .modalBackground .modal .modal-svg {
   position: absolute;
@@ -2491,7 +2788,7 @@ p {
   width: 100%;
 }
 
-@media (max-width: 1150px) {
+@media (max-width: 1000px) {
   html,
   body {
     height: 100% !important;
@@ -2514,6 +2811,15 @@ p {
     flex-direction: column;
   }
 }
+.theme-light hr:not(.raw) {
+  border-top: 2px solid #110d09;
+  margin-bottom: 18px;
+}
+.theme-dark hr:not(.raw) {
+  border-top: 2px solid #f6f2ee;
+  margin-bottom: 18px;
+}
+
 #app-root {
   height: 100%;
 }
@@ -2803,7 +3109,7 @@ aside nav ul li:last-child {
   margin-bottom: 19px;
 }
 .theme-light .signIn h2 {
-  color: #417457;
+  color: #ba8e36;
 }
 .theme-dark .signIn h2 {
   color: #cfbb95;
@@ -2819,7 +3125,7 @@ aside nav ul li:last-child {
   position: relative;
 }
 .theme-light .signIn .orBox hr {
-  border: 1px solid #417457;
+  border: 1px solid #ba8e36;
   width: 100%;
   opacity: 0.2;
 }
@@ -2829,14 +3135,14 @@ aside nav ul li:last-child {
   opacity: 0.2;
 }
 .theme-light .signIn .orBox span {
-  background-color: #def1e7 !important;
+  background-color: #e7f0eb !important;
   display: block;
   padding: 0;
   position: absolute;
   font-size: 24px;
   z-index: 10;
   padding: 4px 15px;
-  color: #417457;
+  color: #ba8e36;
 }
 .theme-dark .signIn .orBox span {
   background-color: #134533 !important;
@@ -2909,10 +3215,12 @@ aside nav ul li:last-child {
   transform: translateY(2px);
 }
 .theme-light .signIn form .input-container .toggleVisibility img {
-  filter: brightness(10%);
+  filter: saturate(0%) brightness(0%) invert(5.0980392157%) opacity(1);
+  filter: url('data:image/svg+xml;utf8,    <svg xmlns="http://www.w3.org/2000/svg">      <filter id="recolor" color-interpolation-filters="sRGB">        <feColorMatrix type="matrix" values="          0 0 0 0 0.0666666667          0 0 0 0 0.0509803922          0 0 0 0 0.0352941176          0 0 0 1 0        "/>      </filter>    </svg>    #recolor');
 }
 .theme-dark .signIn form .input-container .toggleVisibility img {
-  filter: none;
+  filter: saturate(0%) brightness(0%) invert(94.9019607843%) opacity(1);
+  filter: url('data:image/svg+xml;utf8,    <svg xmlns="http://www.w3.org/2000/svg">      <filter id="recolor" color-interpolation-filters="sRGB">        <feColorMatrix type="matrix" values="          0 0 0 0 0.9647058824          0 0 0 0 0.9490196078          0 0 0 0 0.9333333333          0 0 0 1 0        "/>      </filter>    </svg>    #recolor');
 }
 .theme-light .signIn form {
   color: #110d09;
@@ -3042,10 +3350,10 @@ aside nav ul li:last-child {
 }
 .theme-light .mainContainer {
   color: #110d09;
-  background-color: #def1e7;
+  background-color: #e7f0eb;
 }
 .theme-light .mainContainer a:not(.gsi-material-button) {
-  color: #417457;
+  color: #ba8e36;
   text-align: left;
   cursor: pointer;
   margin: 0;
@@ -3061,7 +3369,8 @@ aside nav ul li:last-child {
 .theme-light .mainContainer img {
   width: 40px;
   cursor: pointer;
-  filter: brightness(10%);
+  filter: saturate(0%) brightness(0%) invert(5.0980392157%) opacity(1);
+  filter: url('data:image/svg+xml;utf8,    <svg xmlns="http://www.w3.org/2000/svg">      <filter id="recolor" color-interpolation-filters="sRGB">        <feColorMatrix type="matrix" values="          0 0 0 0 0.0666666667          0 0 0 0 0.0509803922          0 0 0 0 0.0352941176          0 0 0 1 0        "/>      </filter>    </svg>    #recolor');
 }
 .theme-light .mainContainer header {
   padding: 4px 16px 8px 16px;
@@ -3083,7 +3392,6 @@ aside nav ul li:last-child {
 .theme-light .mainContainer header button img {
   width: 40px;
   cursor: pointer;
-  filter: brightness(10%);
 }
 .theme-light .mainContainer header h1,
 .theme-light .mainContainer header h2,
@@ -3123,7 +3431,8 @@ aside nav ul li:last-child {
 .theme-dark .mainContainer img {
   width: 40px;
   cursor: pointer;
-  filter: none;
+  filter: saturate(0%) brightness(0%) invert(94.9019607843%) opacity(1);
+  filter: url('data:image/svg+xml;utf8,    <svg xmlns="http://www.w3.org/2000/svg">      <filter id="recolor" color-interpolation-filters="sRGB">        <feColorMatrix type="matrix" values="          0 0 0 0 0.9647058824          0 0 0 0 0.9490196078          0 0 0 0 0.9333333333          0 0 0 1 0        "/>      </filter>    </svg>    #recolor');
 }
 .theme-dark .mainContainer header {
   padding: 4px 16px 8px 16px;
@@ -3145,7 +3454,6 @@ aside nav ul li:last-child {
 .theme-dark .mainContainer header button img {
   width: 40px;
   cursor: pointer;
-  filter: none;
 }
 .theme-dark .mainContainer header h1,
 .theme-dark .mainContainer header h2,
@@ -3188,7 +3496,7 @@ aside nav ul li:last-child {
 }
 .theme-light .mainContainer-raw {
   color: #110d09;
-  background-color: #def1e7;
+  background-color: #e7f0eb;
 }
 .theme-dark .mainContainer-raw {
   color: #f6f2ee;

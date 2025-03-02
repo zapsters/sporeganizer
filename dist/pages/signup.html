@@ -16,16 +16,16 @@
         <div class="input-container">
           <input required autocomplete="off" type="password" id="signUp-password" />
           <label>Password</label>
-          <button class="toggleVisibility">
+          <div tabindex="0" class="toggleVisibility">
             <img src="../images/eye-open.svg" alt="" srcset="" />
-          </button>
+          </div>
         </div>
         <div class="input-container">
           <input required type="password" />
           <label>Re-enter Password</label>
-          <button class="toggleVisibility">
+          <div tabindex="0" class="toggleVisibility">
             <img src="../images/eye-open.svg" alt="" srcset="" />
-          </button>
+          </div>
         </div>
         <span id="signUp-statusText"></span>
         <div class="input-container">
@@ -34,7 +34,7 @@
       </form>
       <div class="orBox">
         <span>OR</span>
-        <hr />
+        <hr class="raw" />
       </div>
       <a href="#signin" class="gsi-material-button">
         <div class="gsi-material-button-state"></div>
@@ -42,7 +42,7 @@
           <span class="gsi-material-button-contents">Login to your Account</span>
         </div>
       </a>
-      <button class="gsi-material-button googleSignIn" id="googleSignIn">
+      <div tabindex="0" class="gsi-material-button googleSignIn" id="googleSignIn">
         <div class="gsi-material-button-state"></div>
         <div class="gsi-material-button-content-wrapper">
           <div class="gsi-material-button-icon">
@@ -70,7 +70,7 @@
           <span class="gsi-material-button-contents">Sign in with Google</span>
           <span style="display: none">Sign in with Google</span>
         </div>
-      </button>
+      </div>
     </div>
   </div>
 </html>

@@ -3,6 +3,7 @@
   position: fixed;
   display: table;
   height: 100%;
+  overflow: hidden;
   width: 100%;
   top: 0;
   left: 0;
@@ -12,7 +13,11 @@
     display: table-cell;
     text-align: center;
     vertical-align: middle;
+    max-height: 50px;
     .modal {
+      max-height: 100%;
+      max-height: 73vh;
+      overflow-y: auto;
       z-index: 10;
       @include themify($themes) {
         color: themed("text");
@@ -27,9 +32,9 @@
       max-width: 650px;
       width: 86%;
       icon {
-        font-size: 80px !important;
+        font-size: 70px !important;
         @include themify($themes) {
-          filter: themed("filterToBlack");
+          @include recolor(themed("primary"), 1);
         }
       }
       .closeBtn {
@@ -42,7 +47,7 @@
         justify-content: space-evenly;
         top: 7px;
         @include themify($themes) {
-          filter: themed("filterToBlack");
+          color: themed("primary");
         }
         cursor: pointer;
         opacity: 0.7;
@@ -57,22 +62,17 @@
         align-items: center;
         justify-content: space-evenly;
         .button {
-          padding: 14px 20px;
+          padding: 10px 8px;
         }
       }
-      h2 {
-        font-size: 40px;
+      .modalHeader {
+        font-size: 35px;
         margin-bottom: 10px;
       }
-      h3 {
+      .modalSubheader {
         font-size: 32px;
         margin-bottom: 13px;
         font-weight: 300;
-      }
-      p {
-        font-size: 18px;
-        line-height: 22px;
-        font-weight: 500;
       }
       .modal-svg {
         position: absolute;

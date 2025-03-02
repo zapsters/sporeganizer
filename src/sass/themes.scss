@@ -3,17 +3,16 @@
 $themes: (
   light: (
     text: #110d09,
-    background: #def1e7,
-    primary: #417457,
+    background: #e7f0eb,
+    primary: #ba8e36,
     secondary: #86c57f,
     accent: #146d46,
     navHover: #ffffff33,
     navText: #f1f9f7,
-    filterToBlack: brightness(10%),
     alertRed: rgb(242, 8, 8),
     primaryButton: (
-      #e9b857,
-      #e0a94284,
+      #ba8e36,
+      #ba8e3662,
     ),
   ),
   dark: (
@@ -24,7 +23,6 @@ $themes: (
     accent: #041e18,
     navHover: #00000033,
     navText: #f6f2ee,
-    filterToBlack: none,
     alertRed: rgb(247, 51, 51),
     primaryButton: (
       #cfbb95,
@@ -55,4 +53,30 @@ $themes: (
 
 @function themed($key) {
   @return map.get($theme-map, $key);
+}
+
+@mixin recolor($color: #000, $opacity: 1) {
+  $r: red($color) / 255;
+  $g: green($color) / 255;
+  $b: blue($color) / 255;
+  $a: $opacity;
+
+  // grayscale fallback if SVG from data url is not supported
+  $lightness: lightness($color);
+  filter: saturate(0%) brightness(0%) invert($lightness) opacity($opacity);
+
+  // color filter
+  $svg-filter-id: "recolor";
+  filter: url('data:image/svg+xml;utf8,\
+    <svg xmlns="http://www.w3.org/2000/svg">\
+      <filter id="#{$svg-filter-id}" color-interpolation-filters="sRGB">\
+        <feColorMatrix type="matrix" values="\
+          0 0 0 0 #{$r}\
+          0 0 0 0 #{$g}\
+          0 0 0 0 #{$b}\
+          0 0 0 #{$a} 0\
+        "/>\
+      </filter>\
+    </svg>\
+    ##{$svg-filter-id}');
 }

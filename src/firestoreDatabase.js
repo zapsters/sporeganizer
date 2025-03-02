@@ -1,21 +1,22 @@
 import { getAuth, updateProfile } from "firebase/auth";
 
 import { db } from "./firebaseConfig";
-import { doc, collection, setDoc, addDoc, serverTimestamp, query, where } from "firebase/firestore";
+import {
+  doc,
+  collection,
+  addDoc,
+  setDoc,
+  deleteDoc,
+  getDocs,
+  serverTimestamp,
+  query,
+  where,
+} from "firebase/firestore";
 
-const usersLocationRef = collection(db, "users");
 export async function addUserToCollection(currentUser) {
-  // Create a query checking for any other user in the database with the same email.
-  const q = query(usersLocationRef, where("email", "==", currentUser.email));
-  const querySnapshot = await getDocs(q);
-
+  if (currentUser == undefined) return;
   try {
-    querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, " => ", doc.data());
-    });
-
-    const classRef = await setDoc(doc(db, `users`, currentUser.uid), {
+    await setDoc(doc(db, `users`, currentUser.uid), {
       userId: currentUser.uid,
       displayName: currentUser.displayName,
       email: currentUser.email,
@@ -25,24 +26,63 @@ export async function addUserToCollection(currentUser) {
       created: serverTimestamp(),
       settings: {},
     });
-
-    console.log("Account document updated.");
   } catch (error) {
     console.error("Error creating account document:", error);
   }
 }
 
-export async function addClass(userId, className) {
+export async function deleteUserFromCollection(uid) {
+  await deleteDoc(doc(db, "users", uid));
+}
+
+export async function addClassToDatabase(classJson) {
+  console.log(classJson);
+
   try {
     const classRef = await addDoc(collection(db, "classes"), {
-      userId: userId,
-      name: "Tokyo",
-      country: "Japan",
+      icon: classJson.icon,
+      name: classJson.name,
+      professor: classJson.professor,
+      time: classJson.time,
+      userId: getAuth().currentUser.uid,
+      createdAt: serverTimestamp(),
     });
-
     console.log("Class added with ID:", classRef.id);
     return classRef.id;
   } catch (error) {
     console.error("Error adding class:", error);
+    throw error;
   }
+}
+
+// Create a reference to the classes collection
+const classesRef = collection(db, "classes");
+export async function getAllUserMadeClasses() {
+  // Create a query against the classes collection.
+  const q = query(classesRef, where("userId", "==", getAuth().currentUser.uid));
+
+  var querySnapshotResults = [];
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+    querySnapshotResults.push(doc.data());
+  });
+
+  return querySnapshotResults;
+} // Create a reference to the classes collection
+
+const assignmentsRef = collection(db, "assignments");
+export async function getAllUserMadeAssignments() {
+  // Create a query against the classes collection.
+  const q = query(classesRef, where("userId", "==", getAuth().currentUser.uid));
+
+  var querySnapshotResults = [];
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+    querySnapshotResults.push(doc.data());
+  });
+  console.log(querySnapshotResults);
+
+  return querySnapshotResults;
 }

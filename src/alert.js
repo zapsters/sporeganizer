@@ -39,13 +39,13 @@ function createModalElement() {
     $("body").append(
       `<div id="modalContainer" class="modalContainer">
         <div class="modalBackground" id="modalContainer-bg">
-          <div class="modal" id="modalContainer-modal}">
-            <button class="closeBtn pixelart-icons-font-close-box" id="modalCloseBtn"></button>
+          <div class="modal" id="modalContainer-modal">
+            <button class="raw closeBtn pixelart-icons-font-close-box" id="modalCloseBtn"></button>
             <div id="modalMainContent">
               <icon id="modalIcon"></icon>
-              <h2>Header</h2>
-              <h3>Subheader</h3>
-              <p>bodyText</p>
+              <h2 class="modalHeader">Header</h2>
+              <h3 class="modalSubheader">Subheader</h3>
+              <p class="modalBody">bodyText</p>
               <div id="modalMainButtons">
                 <button type="button" class="button dismissBtn">Dismiss</button>
               </div>
