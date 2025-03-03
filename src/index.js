@@ -15,18 +15,22 @@ import {
   sendResetPasswordEmail,
 } from "./model";
 
+import { syncSettings, settings } from "./userdata.js";
 import * as alertManager from "./alert.js";
 import { mushroomBank } from "./mushroomBank.js";
 import sanitizeHtml from "sanitize-html";
 import { onAuthStateChanged, getAuth, EmailAuthProvider } from "firebase/auth";
-import * as cookieManager from "./cookieManager.min.js";
 import { checkDarkModePreference, setTheme, browserTheme } from "./browserTheme.js";
+import * as cookieManager from "./cookieManager.min.js";
 import * as firestoreDatabase from "./firestoreDatabase.js";
 import firebase from "firebase/compat/app";
 
 var sidebarOpen = true;
 
-$(document).ready(function () {
+// Call loadSettingsPage when the page loads
+$(document).ready(async function () {
+  await syncSettings();
+
   initURLListener();
   checkDarkModePreference();
 
@@ -116,8 +120,6 @@ export function initListenersByPage(pageID) {
       // Listen for the auth to update / load, then fill data
       const unsubscribe = onAuthStateChanged(getAuth(), (user) => {
         if (user) {
-          firestoreDatabase.addUserToCollection(getAuth().currentUser);
-
           $(".displayName").html(user.displayName);
           $("#displayNameInput").val(user.displayName);
           $("#emailInput").val(user.email);
@@ -361,25 +363,77 @@ export function initListenersByPage(pageID) {
       });
       break;
     case "options":
-      $("#appearanceSelect img").on("click", function () {
-        $("#appearanceSelect img").each(function () {
+      const unsubscribeOptions = onAuthStateChanged(getAuth(), (user) => {
+        if (user) {
+          // Do logic
+          $("#24hrTimeInput").prop("checked", settings.do24HrTime);
+          unsubscribeOptions();
+        } else {
+          redirectPageRequiresAccount();
+          unsubscribeOptions();
+        }
+      });
+
+      $("#24hrTimeInput").change(function () {
+        if ($(this).is(":checked")) {
+          firestoreDatabase.updateUserSettings("24hrTime", true);
+          settings.do24HrTime = true;
+        } else {
+          firestoreDatabase.updateUserSettings("24hrTime", false);
+          settings.do24HrTime = false;
+        }
+      });
+
+      $("#appearanceSelect i").on("click", function () {
+        $("#appearanceSelect i").each(function () {
           $(this).removeClass("active");
         });
         $(this).addClass("active");
         var data = $(this).data("appearance");
-        cookieManager.setCookie("themePreference", data);
+
         setTheme(data);
+        $("#appearanceSelectCurrentText").html(
+          data.charAt(0).toUpperCase() + data.slice(1) + " Mode"
+        );
+        updateAppearanceUI();
+        switch (data) {
+          case "dark":
+            cookieManager.setCookie("themePreference", "dark");
+            cookieManager.getCookie("themePreference");
+            break;
+          case "light":
+            cookieManager.setCookie("themePreference", "light");
+            break;
+          default:
+            cookieManager.clearCookie("themePreference");
+            break;
+        }
       });
-      if (browserTheme == "dark") {
-        $("#darkModeBtn").addClass("active");
-        $("#lightModeBtn").removeClass("active");
-      } else {
-        $("#darkModeBtn").removeClass("active");
-        $("#lightModeBtn").addClass("active");
+      updateAppearanceUI();
+      function updateAppearanceUI() {
+        switch (browserTheme) {
+          case "dark":
+            $("#darkModeBtn").addClass("active");
+            $("#lightModeBtn").removeClass("active");
+            $("#autoModeBtn").removeClass("active");
+            break;
+          case "light":
+            $("#darkModeBtn").removeClass("active");
+            $("#lightModeBtn").addClass("active");
+            $("#autoModeBtn").removeClass("active");
+            break;
+          case "auto":
+          default:
+            $("#darkModeBtn").removeClass("active");
+            $("#lightModeBtn").removeClass("active");
+            $("#autoModeBtn").addClass("active");
+            break;
+        }
       }
-      $("#appearanceSelect span").html(
+      $("#appearanceSelectCurrentText").html(
         browserTheme.charAt(0).toUpperCase() + browserTheme.slice(1) + " Mode"
       );
+
       break;
     case "dashboard":
       // Redirect user to the login page if we are not logged in.
@@ -394,12 +448,7 @@ export function initListenersByPage(pageID) {
           unsubscribeDashboard();
           // User is signed in
         } else {
-          window.location.href = "#signin";
-          alertManager.generateModalAlert({
-            header: "Requires an Account",
-            subHeader: `This page requires an active user.`,
-            bodyText: `Ready to see what Sporeganizer has to offer? Create an account to get started!`,
-          });
+          redirectPageRequiresAccount();
           unsubscribeDashboard();
           // User is signed out
         }
@@ -758,7 +807,7 @@ function classJsonToElement(classData) {
       if (value[0] != "" && value[1] != "") {
         resultingTimeTable = `
         <tr>
-        <td>${value[0]} - ${value[1]}</td>
+        <td>${convertTo12Hour(value[0])} - ${convertTo12Hour(value[1])}</td>
         </tr>`;
       }
     } else {
@@ -769,7 +818,7 @@ function classJsonToElement(classData) {
           resultingTimeTable += `
             <tr>
             <td>${key}</td>
-            <td>${value[0]} - ${value[1]}</td>
+            <td>${convertTo12Hour(value[0])} - ${convertTo12Hour(value[1])}</td>
             </tr>`;
         }
       }
@@ -800,12 +849,22 @@ function classJsonToElement(classData) {
   </div>`;
 }
 
+function redirectPageRequiresAccount() {
+  window.location.href = "#signin";
+  alertManager.generateModalAlert({
+    header: "Requires an Account",
+    subHeader: `This page requires an active user.`,
+    bodyText: `Ready to see what Sporeganizer has to offer? Create an account to get started!`,
+  });
+}
+
 // HELPER FUNCTIONS ============================================
 export function dashboardAddClassElement(classData) {
   $("#classEntryContainer").append(classJsonToElement(classData));
 }
 
 function convertTo12Hour(time24) {
+  if (settings.do24HrTime) return time24;
   const [hours, minutes] = time24.split(":").map(Number);
   const period = hours < 12 || hours === 24 ? "AM" : "PM";
   const formattedHours = hours % 12 === 0 ? 12 : hours % 12;

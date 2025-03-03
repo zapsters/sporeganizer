@@ -6,12 +6,52 @@ import {
   collection,
   addDoc,
   setDoc,
+  updateDoc,
+  getDoc,
   deleteDoc,
   getDocs,
   serverTimestamp,
   query,
   where,
 } from "firebase/firestore";
+
+export async function getUserSettings() {
+  const user = getAuth().currentUser;
+  if (!user) {
+    console.log("No user is logged in.");
+    return null;
+  }
+
+  const userRef = doc(db, "users", user.uid);
+
+  try {
+    const userSnap = await getDoc(userRef);
+    if (userSnap.exists()) {
+      const settings = userSnap.data().settings || {};
+
+      return settings;
+    } else {
+      console.log("User not found");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching setting:", error);
+    return null;
+  }
+}
+
+export async function updateUserSettings(key, value) {
+  const userRef = doc(db, "users", getAuth().currentUser.uid);
+
+  try {
+    await updateDoc(userRef, {
+      [`settings.${key}`]: value, // Firestore dot notation
+    });
+    console.log(`Updated ${key} to ${value}`);
+  } catch (error) {
+    console.error("Error updating setting:", error);
+  }
+}
 
 export async function addUserToCollection(currentUser) {
   if (currentUser == undefined) return;

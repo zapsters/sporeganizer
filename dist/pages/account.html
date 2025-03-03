@@ -25,13 +25,20 @@
           <span id="displayNameChangeStatusText"></span>
         </div>
         <h3>Password</h3>
-        <div class="inline">
-          <input class="readOnly" type="password" readonly id="passwordInput" />
-          <button type="button" class="button changePasswordBtn" id="passwordChangeButton">
-            Change Password
-          </button>
-          <span id="passwordStatusText"></span>
-        </div>
+        <form>
+          <div class="inline">
+            <input
+              class="readOnly"
+              attribute="password"
+              type="password"
+              readonly
+              id="passwordInput" />
+            <button type="button" class="button changePasswordBtn" id="passwordChangeButton">
+              Change Password
+            </button>
+            <span id="passwordStatusText"></span>
+          </div>
+        </form>
         <h3>Email</h3>
         <div class="inline">
           <input class="readOnly" type="email" readonly id="emailInput" />

@@ -2063,12 +2063,22 @@
   background-color: transparent;
   color: #110d09;
 }
+.theme-light input:disabled, .theme-light input:read-only,
+.theme-light select:disabled,
+.theme-light select:read-only {
+  cursor: not-allowed;
+}
 .theme-dark input,
 .theme-dark select {
   border: 0;
   border-bottom: 3px solid #cfbb95;
   background-color: transparent;
   color: #f6f2ee;
+}
+.theme-dark input:disabled, .theme-dark input:read-only,
+.theme-dark select:disabled,
+.theme-dark select:read-only {
+  cursor: not-allowed;
 }
 
 select {
@@ -2528,13 +2538,18 @@ button.raw {
   margin-bottom: 4px;
   display: block;
 }
-.options .mainContainer-content img {
+.options .mainContainer-content img,
+.options .mainContainer-content i {
   border-bottom: 3.5px solid transparent;
+  cursor: pointer;
+  font-size: 40px;
 }
-.theme-light .options .mainContainer-content img.active {
+.theme-light .options .mainContainer-content img.active,
+.theme-light .options .mainContainer-content i.active {
   border-bottom: 3.5px solid #110d09;
 }
-.theme-dark .options .mainContainer-content img.active {
+.theme-dark .options .mainContainer-content img.active,
+.theme-dark .options .mainContainer-content i.active {
   border-bottom: 3.5px solid #f6f2ee;
 }
 

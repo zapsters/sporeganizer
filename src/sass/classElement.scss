@@ -107,7 +107,7 @@
       background-color: list.nth(themed("primaryButton"), 1);
       color: themed("background");
       &:has(input:focus-visible) {
-        background-color: list.nth(themed("primaryButton"), 2s);
+        background-color: list.nth(themed("primaryButton"), 2);
       }
     }
   }

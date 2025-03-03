@@ -1,4 +1,5 @@
 @use "sass:map";
+@use "sass:color";
 
 $themes: (
   light: (
@@ -56,13 +57,13 @@ $themes: (
 }
 
 @mixin recolor($color: #000, $opacity: 1) {
-  $r: red($color) / 255;
-  $g: green($color) / 255;
-  $b: blue($color) / 255;
+  $r: calc(color.channel($color, "red", $space: rgb) / 255);
+  $g: calc(color.channel($color, "green", $space: rgb) / 255);
+  $b: calc(color.channel($color, "blue", $space: rgb) / 255);
   $a: $opacity;
 
   // grayscale fallback if SVG from data url is not supported
-  $lightness: lightness($color);
+  $lightness: color.channel($color, "lightness", $space: hsl);
   filter: saturate(0%) brightness(0%) invert($lightness) opacity($opacity);
 
   // color filter

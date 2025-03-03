@@ -10,10 +10,14 @@
       margin-bottom: 4px;
       display: block;
     }
-    img {
+    img,
+    i {
       border-bottom: 3.5px solid transparent;
+      cursor: pointer;
+      font-size: 40px;
     }
-    img.active {
+    img.active,
+    i.active {
       @include themify($themes) {
         border-bottom: 3.5px solid themed("text");
       }
