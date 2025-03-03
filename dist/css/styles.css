@@ -3381,7 +3381,7 @@ aside nav ul li:last-child {
   padding-left: 5px;
 }
 .theme-light .mainContainer svg:not(.gsi-material-button svg),
-.theme-light .mainContainer img {
+.theme-light .mainContainer img:not(.raw) {
   width: 40px;
   cursor: pointer;
   filter: saturate(0%) brightness(0%) invert(5.0980392157%) opacity(1);
@@ -3443,7 +3443,7 @@ aside nav ul li:last-child {
   padding-left: 5px;
 }
 .theme-dark .mainContainer svg:not(.gsi-material-button svg),
-.theme-dark .mainContainer img {
+.theme-dark .mainContainer img:not(.raw) {
   width: 40px;
   cursor: pointer;
   filter: saturate(0%) brightness(0%) invert(94.9019607843%) opacity(1);

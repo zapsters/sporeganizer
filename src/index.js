@@ -853,8 +853,13 @@ function redirectPageRequiresAccount() {
   window.location.href = "#signin";
   alertManager.generateModalAlert({
     header: "Requires an Account",
-    subHeader: `This page requires an active user.`,
+    subHeader: `This page requires an account.`,
     bodyText: `Ready to see what Sporeganizer has to offer? Create an account to get started!`,
+    buttons: [
+      {
+        text: "Login",
+      },
+    ],
   });
 }
 
@@ -892,10 +897,10 @@ function initTogglePasswordVisibilityListeners() {
     e.preventDefault();
     $(this).toggleClass("visibility");
     if ($(this).hasClass("visibility")) {
-      $(this).find("img").attr("src", "images/eye-closed.svg");
+      $(this).find("img").attr("src", "images/ui/eye-closed.svg");
       $(this).parent().find("input").attr("type", "text");
     } else {
-      $(this).find("img").attr("src", "images/eye-open.svg");
+      $(this).find("img").attr("src", "images/ui/eye-open.svg");
       $(this).parent().find("input").attr("type", "password");
     }
   });
