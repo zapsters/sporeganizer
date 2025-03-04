@@ -14,6 +14,8 @@ import {
   query,
   where,
 } from "firebase/firestore";
+import sanitizeHtml from "sanitize-html";
+const sanitizeHtmlSettings = { allowedTags: [], allowedAttributes: {} };
 
 export async function getUserSettings() {
   const user = getAuth().currentUser;
@@ -53,13 +55,14 @@ export async function updateUserSettings(key, value) {
   }
 }
 
+// sanitizeHtml(, sanitizeHtmlSettings);
 export async function addUserToCollection(currentUser) {
   if (currentUser == undefined) return;
   try {
     await setDoc(doc(db, `users`, currentUser.uid), {
       userId: currentUser.uid,
-      displayName: currentUser.displayName,
-      email: currentUser.email,
+      displayName: sanitizeHtml(currentUser.displayName, sanitizeHtmlSettings),
+      email: sanitizeHtml(currentUser.email, sanitizeHtmlSettings),
       emailVerified: currentUser.emailVerified,
       providerId: currentUser.providerData[0].providerId,
       icon: "none",
@@ -81,8 +84,8 @@ export async function addClassToDatabase(classJson) {
   try {
     const classRef = await addDoc(collection(db, "classes"), {
       icon: classJson.icon,
-      name: classJson.name,
-      professor: classJson.professor,
+      name: sanitizeHtml(classJson.name, sanitizeHtmlSettings),
+      professor: sanitizeHtml(classJson.professor, sanitizeHtmlSettings),
       time: classJson.time,
       userId: getAuth().currentUser.uid,
       createdAt: serverTimestamp(),

@@ -747,6 +747,10 @@ function callClassModal(type) {
   }
 
   // Add logic to the modal ==============================
+  //   Sterilize all html
+  $("input[type=text]").on("change", function () {
+    $(this).val(sanitizeHtml($(this).val(), { allowedTags: [], allowedAttributes: {} }));
+  });
   //   On Icon select, update the preview.
   $("#classIconDropdown li input").on("click", (elem) => {
     $("#classModalIconPreview").css(

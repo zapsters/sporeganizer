@@ -9,7 +9,7 @@
 }
 html,
 body {
-  font-family: Helvetica, sans-serif;
+  font-family: sans-serif;
   height: 100dvh !important;
   @include themify($themes) {
     color: themed("text");
@@ -118,4 +118,22 @@ hr:not(.raw) {
 
 ::-webkit-scrollbar-thumb:horizontal {
   display: none;
+}
+
+// Adjust Firebase Emulator warning
+.firebase-emulator-warning {
+  opacity: 1;
+  top: 0 !important;
+  left: unset !important;
+  right: 0;
+  bottom: unset !important;
+  width: fit-content !important;
+}
+
+.loadingIcon {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-evenly;
+  width: 100%;
 }
