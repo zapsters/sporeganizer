@@ -2329,10 +2329,6 @@ button.raw {
 }
 .theme-light .classElement .classElement-content table tr td:nth-child(1) {
   width: 45px;
-  background-color: red;
-}
-.theme-light .classElement .classElement-content table tr td:nth-child(2) {
-  background-color: rebeccapurple;
 }
 .theme-dark .classElement {
   border-bottom: 2px solid #f6f2ee;
@@ -2364,10 +2360,6 @@ button.raw {
 }
 .theme-dark .classElement .classElement-content table tr td:nth-child(1) {
   width: 45px;
-  background-color: red;
-}
-.theme-dark .classElement .classElement-content table tr td:nth-child(2) {
-  background-color: rebeccapurple;
 }
 
 .theme-light .classElement .icon,
