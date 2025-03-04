@@ -26,7 +26,7 @@
     color: themed("text");
     background-color: themed("background");
     svg:not(.gsi-material-button svg),
-    img:not(.raw) {
+    img.recolor {
       width: 40px;
       cursor: pointer;
       @include recolor(themed("text"), 1);

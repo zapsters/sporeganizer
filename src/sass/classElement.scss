@@ -10,7 +10,7 @@
   flex-shrink: 0;
   @include themify($themes) {
     border-bottom: 2px solid themed("text");
-    padding: 16px 5px 16px 0px;
+    padding: 9px 0px;
     gap: 12px;
     .classElement-content {
       padding: 4px 0px;
