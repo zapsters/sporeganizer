@@ -491,6 +491,7 @@ export function initListenersByPage(pageID) {
       const unsubscribeDashboard = onAuthStateChanged(getAuth(), (user) => {
         if (user) {
           getAllUserMadeClasses().then((data) => {
+            $("#classEntryContainer").html("");
             data.forEach((classEntry) => {
               dashboardAddClassElement(classEntry);
             });
@@ -507,9 +508,42 @@ export function initListenersByPage(pageID) {
       document.getElementById("dashboardAssignmentTab").addEventListener("change", () => {
         resizeSelect("dashboardAssignmentTab");
       });
-      $(".buttonContainer button").on("click", function () {
+      $("#classSectionFilters button").on("click", function () {
         $(this).parent().find("button").removeClass("active");
         $(this).addClass("active");
+        $("#classEntryContainer").html("");
+        switch ($(this).data("filter")) {
+          case "all":
+            getAllUserMadeClasses().then((data) => {
+              data.forEach((classEntry) => {
+                dashboardAddClassElement(classEntry);
+              });
+            });
+            break;
+          case "today":
+            let today = getDayOfTheWeekAbbr(new Date());
+            getAllUserMadeClasses().then((data) => {
+              data.forEach((classEntry) => {
+                if (classEntry.time[today] != undefined) {
+                  dashboardAddClassElement(classEntry);
+                }
+              });
+            });
+            break;
+          case "tomorrow":
+            let tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow = getDayOfTheWeekAbbr(tomorrow);
+
+            getAllUserMadeClasses().then((data) => {
+              data.forEach((classEntry) => {
+                if (classEntry.time[tomorrow] != undefined) {
+                  dashboardAddClassElement(classEntry);
+                }
+              });
+            });
+            break;
+        }
       });
       $("#classAddBtn").on("click", () => {
         callClassModal("create");
@@ -1008,6 +1042,12 @@ export function dashboardAddClassElement(classData) {
   let classElement = classJsonToElement(classData);
   let newElement = $("#classEntryContainer").append(classElement);
   addEventListenerToClassElement(newElement[0].lastChild);
+}
+
+function getDayOfTheWeekAbbr(date) {
+  const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const dayIndex = date.getDay();
+  return daysOfWeek[dayIndex];
 }
 
 function addEventListenerToClassElement(elem) {
