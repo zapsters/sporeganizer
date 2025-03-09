@@ -22,7 +22,6 @@ import { updateClassQueryCache, getClassQueryCache, updateClassInCache } from ".
 export async function getUserSettings() {
   const user = getAuth().currentUser;
   if (!user) {
-    console.log("No user is logged in.");
     return null;
   }
 
@@ -35,11 +34,9 @@ export async function getUserSettings() {
 
       return settings;
     } else {
-      console.log("User not found");
       return null;
     }
   } catch (error) {
-    console.error("Error fetching setting:", error);
     return null;
   }
 }
@@ -47,33 +44,24 @@ export async function getUserSettings() {
 export async function updateUserSettings(key, value) {
   const userRef = doc(db, "users", getAuth().currentUser.uid);
 
-  try {
-    await updateDoc(userRef, {
-      [`settings.${key}`]: value, // Firestore dot notation
-    });
-    console.log(`Updated ${key} to ${value}`);
-  } catch (error) {
-    console.error("Error updating setting:", error);
-  }
+  await updateDoc(userRef, {
+    [`settings.${key}`]: value, // Firestore dot notation
+  });
 }
 
 // sanitizeHtml(, sanitizeHtmlSettings);
 export async function addUserToCollection(currentUser) {
   if (currentUser == undefined) return;
-  try {
-    await setDoc(doc(db, `users`, currentUser.uid), {
-      userId: currentUser.uid,
-      displayName: sanitizeHtml(currentUser.displayName, sanitizeHtmlSettings),
-      email: sanitizeHtml(currentUser.email, sanitizeHtmlSettings),
-      emailVerified: currentUser.emailVerified,
-      providerId: currentUser.providerData[0].providerId,
-      icon: "none",
-      created: serverTimestamp(),
-      settings: {},
-    });
-  } catch (error) {
-    console.error("Error creating account document:", error);
-  }
+  await setDoc(doc(db, `users`, currentUser.uid), {
+    userId: currentUser.uid,
+    displayName: sanitizeHtml(currentUser.displayName, sanitizeHtmlSettings),
+    email: sanitizeHtml(currentUser.email, sanitizeHtmlSettings),
+    emailVerified: currentUser.emailVerified,
+    providerId: currentUser.providerData[0].providerId,
+    icon: "none",
+    created: serverTimestamp(),
+    settings: {},
+  });
 }
 
 export async function deleteUserFromCollection(uid) {
@@ -96,16 +84,12 @@ export async function addClassToDatabase(classJson) {
       createdAt: serverTimestamp(),
     });
     syncClassQueryCacheWithDatabase();
-    console.log("Class added with ID:", classRef.id);
     return classRef.id;
   } catch (error) {
-    console.error("Error adding class:", error);
     throw error;
   }
 }
 export async function addAssignmentToDatabase(assignmentJson) {
-  console.log(assignmentJson);
-
   try {
     const assignmentRef = await addDoc(collection(db, "assignments"), {
       icon: assignmentJson.icon,
@@ -117,10 +101,8 @@ export async function addAssignmentToDatabase(assignmentJson) {
       createdAt: serverTimestamp(),
     });
     // syncAssignmentQueryCacheWithDatabase();
-    console.log("Assignment added with ID:", assignmentRef.id);
     return assignmentRef.id;
   } catch (error) {
-    console.error("Error adding assignment:", error);
     throw error;
   }
 }
@@ -145,8 +127,6 @@ const classesRef = collection(db, "classes");
 export async function getAllUserMadeClasses() {
   let queryCheck = await getClassQueryCache();
   if (queryCheck != null) {
-    console.log("Loaded Class Data from Cache");
-
     return queryCheck;
   }
 

@@ -763,7 +763,7 @@ async function callClassModal(type, classData = {}) {
                   bodyText: error,
                   buttons: [{}],
                 });
-                console.log(error);
+                throw error;
               }
             },
           },
@@ -778,7 +778,6 @@ async function callClassModal(type, classData = {}) {
                   .then(async () => {
                     const newElem = classJsonToElement(classResultJson);
                     $(`#classElem-${classId}`).replaceWith(newElem);
-                    console.log(newElem);
 
                     addEventListenerToClassElement($(`#classElem-${classId}`));
 
@@ -922,7 +921,6 @@ async function callClassModal(type, classData = {}) {
     } else {
       $(`#classModal-timeSettings`).val("uniqueDaily").change();
       for (const [key, value] of Object.entries(classData.time)) {
-        // console.log(`${key}: ${value}`);
         $(`#classModal-timeFrom-${key}`).val(value[0]);
         $(`#classModal-timeTo-${key}`).val(value[1]);
       }
@@ -931,7 +929,7 @@ async function callClassModal(type, classData = {}) {
 }
 
 function classJsonToElement(classData) {
-  if (classData["classId"] == undefined) console.error("NO CLASSID WAS PASSED");
+  if (classData["classId"] == undefined) throw "NO CLASSID WAS PASSED";
 
   function ifDayIsSelected(dayAbbreviation) {
     if (classData.time[dayAbbreviation] != null) return "class='selected'";
@@ -956,7 +954,6 @@ function classJsonToElement(classData) {
     } else {
       // If each day has different value, print each separately
       for (const [key, value] of Object.entries(classData.time)) {
-        // console.log(`${key}: ${value}`);
         if (value[0] != "" && value[1] != "") {
           resultingTimeTable += `
             <tr>
@@ -1014,8 +1011,6 @@ export function dashboardAddClassElement(classData) {
 }
 
 function addEventListenerToClassElement(elem) {
-  console.log($(elem).find(".classElement-content h3 a"));
-
   $(elem)
     .find(".classElement-content h3 a")
     .on("click", async function () {

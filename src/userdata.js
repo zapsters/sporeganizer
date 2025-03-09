@@ -33,11 +33,9 @@ const queryCache = {};
 // Function to update cache (mutates existing array)
 export async function updateClassQueryCache(newCache) {
   queryCache["classes"] = newCache; // Add new data
-  console.warn("DEV: Updated Cache", newCache);
 }
 export async function updateClassInCache(classId, classJson) {
   const index = queryCache["classes"].findIndex((item) => item.classId === classId);
-  console.log(queryCache["classes"]);
 
   if (index == -1) throw new Error("Class not found.");
 
@@ -51,7 +49,6 @@ export async function updateClassInCache(classId, classJson) {
       ...classJson,
     };
   }
-  console.log("cache updated", queryCache["classes"]);
 }
 
 export async function getClassQueryCache() {

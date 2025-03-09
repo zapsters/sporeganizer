@@ -146,7 +146,7 @@ export async function googlePopup() {
         window.location.hash = "";
       })
       .catch((error) => {
-        console.log(error);
+        throw error;
       });
   } else {
     signInWithRedirect(auth, provider);
@@ -212,11 +212,10 @@ export function updateUserDisplayName(displayName, responseElement) {
 export function signUserOut() {
   signOut(auth)
     .then(() => {
-      console.log("signout!");
       changeRoute("home");
     })
     .catch((error) => {
-      console.log("Error" + error);
+      throw error;
     });
 }
 
