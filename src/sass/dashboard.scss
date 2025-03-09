@@ -17,22 +17,27 @@
     border-bottom: 2px solid themed("text");
     padding: 8px 8px;
     padding-bottom: 6px;
-    gap: 12px;
+    position: relative;
+    &:has(.classElement-content h3:hover) .infoBox,
+    &:has(.infoBox textarea:focus) .infoBox,
+    .infoBox:hover {
+      display: block;
+    }
     .icon {
       flex: none;
       width: 100px;
     }
     .classElement-content {
-      padding: 4px 0px;
+      padding: 4px 0px 4px 12px;
       flex: 1;
-      position: relative;
       overflow: hidden;
       h3,
       a {
+        display: block;
+        max-width: fit-content;
         color: themed("primary");
         margin-bottom: 0px;
         font-size: 29px;
-        white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         font-weight: 500;
@@ -53,6 +58,40 @@
         width: 100%;
         tr td:nth-child(1) {
           width: 45px;
+        }
+      }
+    }
+    .infoBox {
+      display: none;
+      position: absolute;
+      z-index: 100;
+      left: 120px;
+      top: 1.8em;
+      padding: 2px;
+      overflow: visible;
+      border: 2px solid themed("primary");
+      background-color: themed("secondary");
+      textarea {
+        padding: 4px;
+        margin: 0 0 -6px 0;
+        background-color: transparent;
+        min-height: 35.5px;
+        color: themed("text");
+        border: none;
+        &::placeholder {
+          font-weight: bold;
+          opacity: 0.5;
+          color: themed("text");
+        }
+        &::-webkit-resizer {
+          background-image: url("../images/ui/pixelarticons-scale.svg");
+          @include themify($themes) {
+            @include recolor(themed("primary"), 2);
+          }
+          background-size: cover;
+          filter: drop-shadow(16px 16px 20px blue);
+          background-position: center;
+          background-repeat: no-repeat;
         }
       }
     }
@@ -139,13 +178,17 @@ hr {
 }
 .actionBtns {
   // height: 100%;
+  gap: 4px;
   display: flex;
-  align-items: center;
-  justify-content: space-evenly;
+  align-items: flex-start;
   .actionButton {
+    @include themify($themes) {
+      color: themed("primary");
+    }
+    font-size: 30px;
     position: relative;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-evenly;
     flex: 1;
 

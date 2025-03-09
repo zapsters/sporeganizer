@@ -10,8 +10,10 @@
   transition-duration: 0.2s;
   overflow-y: auto !important;
   transition-timing-function: linear;
+  display: table;
+  overflow: hidden !important;
   @include themify($themes) {
-    a:not(.gsi-material-button) {
+    a.primary {
       color: themed("primary");
       text-align: left;
       cursor: pointer;
@@ -20,6 +22,13 @@
       &:hover {
         text-decoration: underline;
       }
+    }
+    a:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    a.borderHover:hover {
+      border-bottom: 3px solid themed("primary");
     }
     section {
       padding-left: 5px;
@@ -33,7 +42,7 @@
       @include recolor(themed("text"), 1);
     }
     header {
-      padding: 6px 9px;
+      padding: 8px 9px 3px 9px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -45,7 +54,9 @@
       select {
         font-family: inherit;
         // padding-right: 1.1em;
-        margin-bottom: -4px !important;
+        margin-bottom: -3px !important;
+        margin-top: -6px !important;
+        background-color: red;
         height: 100%;
         border: 0;
         font-size: inherit;
@@ -84,6 +95,9 @@
       }
     }
     .mainContainer-content {
+      min-height: calc(100%);
+      display: table-row;
+      height: 100%;
       overflow: auto;
       padding: 10px 10px;
       input {

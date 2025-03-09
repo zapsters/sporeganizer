@@ -6,7 +6,6 @@
 [class^=pixelart-icons-font-],
 [class*=" pixelart-icons-font-"] {
   font-family: "pixelart-icons-font" !important;
-  font-size: 24px;
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -2303,14 +2302,14 @@ button.raw {
 }
 
 .landingPage {
-  padding: 70px;
+  padding: 30px;
 }
 .landingPage ul {
   padding-left: 24px;
 }
 .landingPage .content {
   color: #f6f2ee !important;
-  margin-bottom: 60px;
+  margin-bottom: 46px;
   border-radius: 10px;
   width: 100%;
   background-image: url("../images/IMG_5938.jpg");
@@ -2320,14 +2319,14 @@ button.raw {
   height: 60vh;
   min-height: fit-content;
   padding: 10px 20px 10px 0;
-  padding-left: 1vw;
+  padding-left: 13px;
 }
 .landingPage .content .banner {
-  margin-top: 3vw;
+  margin-top: 30px;
   background-image: url("../images/bannerHomepage.png");
-  padding: 1vw 1vw 1vw 1.3vw;
+  padding: 24px 0 0px 17px;
   background-origin: border-box;
-  height: 9vw;
+  height: 160px;
   background-size: contain;
   background-position: left top;
   background-repeat: no-repeat;
@@ -2337,9 +2336,9 @@ button.raw {
   justify-content: flex-start;
 }
 .landingPage .content .banner h1 {
-  margin-top: 0.6vw;
-  font-size: 3vw;
-  margin-bottom: 0.1vw;
+  margin-top: 3px;
+  font-size: 55px;
+  margin-bottom: 3px;
   display: flex;
   align-items: center;
   justify-content: left;
@@ -2348,7 +2347,8 @@ button.raw {
 .landingPage .content .banner h3 {
   font-family: "Doppio One";
   font-weight: 300;
-  font-size: 1.4vw;
+  font-size: 27px;
+  white-space: pre;
 }
 .theme-light .landingPage .content .banner h3 {
   color: #ba8e36;
@@ -2357,10 +2357,10 @@ button.raw {
   color: #cfbb95;
 }
 .landingPage .content .contentAlt {
-  padding: 0 1.3vw;
+  padding: 0 22px;
   max-width: 620px;
   font-family: "Doppio One";
-  font-size: max(1vw, 16px);
+  font-size: 20px;
   max-width: 28.4em;
 }
 .landingPage .content .contentAlt .inputContainer {
@@ -2372,8 +2372,8 @@ button.raw {
   max-width: unset;
 }
 .landingPage .content .contentAlt button {
-  padding: 0.7vw 1vw;
-  font-size: 1vw;
+  padding: 10px 16 px;
+  font-size: 20px;
   text-align: center;
 }
 .theme-light .landingPage .content .contentAlt button {
@@ -2393,9 +2393,9 @@ button.raw {
 .slideshow-container {
   position: relative;
   border-radius: 14px;
-  height: 500px;
   aspect-ratio: 1536/1232;
   overflow: hidden;
+  max-width: 800px;
   /* Hide the images by default */
   /* Next & previous buttons */
   /* Position the "next button" to the right */
@@ -2415,9 +2415,7 @@ button.raw {
   position: absolute;
   top: 50%;
   width: auto;
-  margin-top: -22px;
-  padding: 16px;
-  color: white;
+  padding: 10px;
   font-weight: bold;
   font-size: 38px;
   border-radius: 0 3px 3px 0;
@@ -2425,6 +2423,14 @@ button.raw {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
+}
+.theme-light .slideshow-container .prev,
+.theme-light .slideshow-container .next {
+  color: #ba8e36;
+}
+.theme-dark .slideshow-container .prev,
+.theme-dark .slideshow-container .next {
+  color: #cfbb95;
 }
 .slideshow-container .next {
   right: 0;
@@ -2487,6 +2493,64 @@ button.raw {
   }
 }
 
+@media (max-width: 1100px) {
+  .landingPage .content .banner {
+    margin-left: -12px;
+    margin-right: -12px;
+  }
+  .landingPage .content .banner h1 {
+    margin-top: 0px;
+    font-size: 55px;
+  }
+  .landingPage .content .banner h3 {
+    font-size: 20px;
+  }
+}
+@media (max-width: 900px) {
+  .landingPage {
+    padding: 10px;
+  }
+  .landingPage h2 {
+    font-size: 22px;
+    margin-bottom: 0px;
+  }
+  .landingPage li {
+    font-size: 14px;
+  }
+  .landingPage .content {
+    max-width: 100% !important;
+  }
+  .landingPage .content .banner {
+    margin-top: 20px;
+    padding-top: 12px;
+    height: unset;
+    padding-left: 20px;
+  }
+  .landingPage .content .banner h1 {
+    margin-top: 0px;
+    font-size: 33px;
+    margin-bottom: -2px;
+  }
+  .landingPage .content .banner h3 {
+    font-size: 13px;
+  }
+  .landingPage .content .contentAlt {
+    max-width: 340px;
+  }
+  .landingPage .content .contentAlt p {
+    font-size: 12px;
+  }
+  .landingPage .content .contentAlt button {
+    font-size: 15px;
+  }
+  .slideshow-container {
+    /* Next & previous buttons */
+  }
+  .slideshow-container .prev,
+  .slideshow-container .next {
+    font-size: 27px;
+  }
+}
 .classElement {
   image-rendering: pixelated;
   display: flex;
@@ -2504,24 +2568,28 @@ button.raw {
   border-bottom: 2px solid #110d09;
   padding: 8px 8px;
   padding-bottom: 6px;
-  gap: 12px;
+  position: relative;
+}
+.theme-light .classElement:has(.classElement-content h3:hover) .infoBox, .theme-light .classElement:has(.infoBox textarea:focus) .infoBox,
+.theme-light .classElement .infoBox:hover {
+  display: block;
 }
 .theme-light .classElement .icon {
   flex: none;
   width: 100px;
 }
 .theme-light .classElement .classElement-content {
-  padding: 4px 0px;
+  padding: 4px 0px 4px 12px;
   flex: 1;
-  position: relative;
   overflow: hidden;
 }
 .theme-light .classElement .classElement-content h3,
 .theme-light .classElement .classElement-content a {
+  display: block;
+  max-width: fit-content;
   color: #ba8e36;
   margin-bottom: 0px;
   font-size: 29px;
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   font-weight: 500;
@@ -2544,28 +2612,71 @@ button.raw {
 .theme-light .classElement .classElement-content table tr td:nth-child(1) {
   width: 45px;
 }
+.theme-light .classElement .infoBox {
+  display: none;
+  position: absolute;
+  z-index: 100;
+  left: 120px;
+  top: 1.8em;
+  padding: 2px;
+  overflow: visible;
+  border: 2px solid #ba8e36;
+  background-color: #146d46;
+}
+.theme-light .classElement .infoBox textarea {
+  padding: 4px;
+  margin: 0 0 -6px 0;
+  background-color: transparent;
+  min-height: 35.5px;
+  color: #110d09;
+  border: none;
+}
+.theme-light .classElement .infoBox textarea::placeholder {
+  font-weight: bold;
+  opacity: 0.5;
+  color: #110d09;
+}
+.theme-light .classElement .infoBox textarea::-webkit-resizer {
+  background-image: url("../images/ui/pixelarticons-scale.svg");
+  background-size: cover;
+  filter: drop-shadow(16px 16px 20px blue);
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.theme-light .theme-light .classElement .infoBox textarea::-webkit-resizer {
+  filter: saturate(0%) brightness(0%) invert(47.0588235294%) opacity(2);
+  filter: url('data:image/svg+xml;utf8,    <svg xmlns="http://www.w3.org/2000/svg">      <filter id="recolor" color-interpolation-filters="sRGB">        <feColorMatrix type="matrix" values="          0 0 0 0 0.7294117647          0 0 0 0 0.5568627451          0 0 0 0 0.2117647059          0 0 0 2 0        "/>      </filter>    </svg>    #recolor');
+}
+.theme-dark .theme-light .classElement .infoBox textarea::-webkit-resizer {
+  filter: saturate(0%) brightness(0%) invert(69.8039215686%) opacity(2);
+  filter: url('data:image/svg+xml;utf8,    <svg xmlns="http://www.w3.org/2000/svg">      <filter id="recolor" color-interpolation-filters="sRGB">        <feColorMatrix type="matrix" values="          0 0 0 0 0.8117647059          0 0 0 0 0.7333333333          0 0 0 0 0.5843137255          0 0 0 2 0        "/>      </filter>    </svg>    #recolor');
+}
 .theme-dark .classElement {
   border-bottom: 2px solid #f6f2ee;
   padding: 8px 8px;
   padding-bottom: 6px;
-  gap: 12px;
+  position: relative;
+}
+.theme-dark .classElement:has(.classElement-content h3:hover) .infoBox, .theme-dark .classElement:has(.infoBox textarea:focus) .infoBox,
+.theme-dark .classElement .infoBox:hover {
+  display: block;
 }
 .theme-dark .classElement .icon {
   flex: none;
   width: 100px;
 }
 .theme-dark .classElement .classElement-content {
-  padding: 4px 0px;
+  padding: 4px 0px 4px 12px;
   flex: 1;
-  position: relative;
   overflow: hidden;
 }
 .theme-dark .classElement .classElement-content h3,
 .theme-dark .classElement .classElement-content a {
+  display: block;
+  max-width: fit-content;
   color: #cfbb95;
   margin-bottom: 0px;
   font-size: 29px;
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   font-weight: 500;
@@ -2587,6 +2698,45 @@ button.raw {
 }
 .theme-dark .classElement .classElement-content table tr td:nth-child(1) {
   width: 45px;
+}
+.theme-dark .classElement .infoBox {
+  display: none;
+  position: absolute;
+  z-index: 100;
+  left: 120px;
+  top: 1.8em;
+  padding: 2px;
+  overflow: visible;
+  border: 2px solid #cfbb95;
+  background-color: #146d46;
+}
+.theme-dark .classElement .infoBox textarea {
+  padding: 4px;
+  margin: 0 0 -6px 0;
+  background-color: transparent;
+  min-height: 35.5px;
+  color: #f6f2ee;
+  border: none;
+}
+.theme-dark .classElement .infoBox textarea::placeholder {
+  font-weight: bold;
+  opacity: 0.5;
+  color: #f6f2ee;
+}
+.theme-dark .classElement .infoBox textarea::-webkit-resizer {
+  background-image: url("../images/ui/pixelarticons-scale.svg");
+  background-size: cover;
+  filter: drop-shadow(16px 16px 20px blue);
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.theme-light .theme-dark .classElement .infoBox textarea::-webkit-resizer {
+  filter: saturate(0%) brightness(0%) invert(47.0588235294%) opacity(2);
+  filter: url('data:image/svg+xml;utf8,    <svg xmlns="http://www.w3.org/2000/svg">      <filter id="recolor" color-interpolation-filters="sRGB">        <feColorMatrix type="matrix" values="          0 0 0 0 0.7294117647          0 0 0 0 0.5568627451          0 0 0 0 0.2117647059          0 0 0 2 0        "/>      </filter>    </svg>    #recolor');
+}
+.theme-dark .theme-dark .classElement .infoBox textarea::-webkit-resizer {
+  filter: saturate(0%) brightness(0%) invert(69.8039215686%) opacity(2);
+  filter: url('data:image/svg+xml;utf8,    <svg xmlns="http://www.w3.org/2000/svg">      <filter id="recolor" color-interpolation-filters="sRGB">        <feColorMatrix type="matrix" values="          0 0 0 0 0.8117647059          0 0 0 0 0.7333333333          0 0 0 0 0.5843137255          0 0 0 2 0        "/>      </filter>    </svg>    #recolor');
 }
 
 .theme-light .classElement .icon,
@@ -2729,16 +2879,23 @@ hr {
 }
 
 .actionBtns {
+  gap: 4px;
   display: flex;
-  align-items: center;
-  justify-content: space-evenly;
+  align-items: flex-start;
 }
 .actionBtns .actionButton {
+  font-size: 30px;
   position: relative;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-evenly;
   flex: 1;
+}
+.theme-light .actionBtns .actionButton {
+  color: #ba8e36;
+}
+.theme-dark .actionBtns .actionButton {
+  color: #cfbb95;
 }
 .actionBtns .actionButton i {
   background-image: url("../images/ui/checkbox.svg");
@@ -3120,7 +3277,7 @@ p {
   width: 100%;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1100px) {
   html,
   body {
     height: 100% !important;
@@ -3198,6 +3355,7 @@ p {
   right: 0;
   bottom: unset !important;
   width: fit-content !important;
+  text-align: right !important;
 }
 
 .loadingIcon {
@@ -3209,7 +3367,7 @@ p {
 }
 
 aside.sb-expanded {
-  --sb-width: 20rem;
+  --sb-width: 18rem;
 }
 aside.sb-expanded nav a span,
 aside.sb-expanded nav a p {
@@ -3218,11 +3376,12 @@ aside.sb-expanded nav a p {
 
 aside {
   font-family: "Domine", "Times New Roman", Times, serif;
-  --iconSize: 60px;
+  --iconSize: 62px;
   --fontSize: 27px;
   --fontSizeLogo: 28px;
   --padding: 18px;
-  --paddingLogo: 24px;
+  --paddingLogo: 19px;
+  --logoScale: 1.4;
   --gap: 8px;
   --sb-width: calc(var(--iconSize) + var(--padding) * 2);
   font-size: var(--fontSize);
@@ -3251,7 +3410,7 @@ aside nav ul {
 }
 aside nav ul img.logo {
   image-rendering: pixelated;
-  scale: 1.2;
+  scale: var(--logoScale);
 }
 aside nav ul span.logo {
   position: relative;
@@ -3272,8 +3431,8 @@ aside nav ul li {
   justify-content: space-evenly;
 }
 aside nav ul li:first-of-type {
-  padding: 20px 0;
   border-bottom: 2px solid white;
+  padding: var(--paddingLogo) 0;
 }
 .theme-light aside nav ul li:hover {
   color: #110d09;
@@ -3321,13 +3480,13 @@ aside nav ul li button {
 aside nav ul li a i,
 aside nav ul li button i {
   box-sizing: content-box;
+  min-width: var(--iconSize);
 }
 aside nav ul li a img,
 aside nav ul li a svg,
 aside nav ul li button img,
 aside nav ul li button svg {
   position: relative;
-  min-width: var(--iconSize);
 }
 aside nav ul li a span,
 aside nav ul li a p,
@@ -3346,9 +3505,9 @@ aside nav ul li:last-child {
   margin-top: auto;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1100px) {
   aside.sb-expanded {
-    --sb-width: 15.2rem;
+    --sb-width: 16.9rem;
   }
   aside {
     --iconSize: 3rem;
@@ -3409,7 +3568,7 @@ aside nav ul li:last-child {
     position: absolute;
     top: 58px;
     text-align: center;
-    font-size: 23px;
+    font-size: 13px;
     line-clamp: 2;
     -webkit-line-clamp: 2;
   }
@@ -3419,7 +3578,7 @@ aside nav ul li:last-child {
     transform: translateX(-50%);
     position: absolute;
     top: 5px;
-    height: 50px;
+    height: 53px;
   }
   aside nav ul li a .pixelArtIcon,
   aside nav ul li button .pixelArtIcon {
@@ -3715,20 +3874,29 @@ aside nav ul li:last-child {
   transition-duration: 0.2s;
   overflow-y: auto !important;
   transition-timing-function: linear;
+  display: table;
+  overflow: hidden !important;
 }
 .theme-light .mainContainer {
   color: #110d09;
   background-color: #c2c2ca;
 }
-.theme-light .mainContainer a:not(.gsi-material-button) {
+.theme-light .mainContainer a.primary {
   color: #ba8e36;
   text-align: left;
   cursor: pointer;
   margin: 0;
   padding: 0;
 }
-.theme-light .mainContainer a:not(.gsi-material-button):hover {
+.theme-light .mainContainer a.primary:hover {
   text-decoration: underline;
+}
+.theme-light .mainContainer a:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+.theme-light .mainContainer a.borderHover:hover {
+  border-bottom: 3px solid #ba8e36;
 }
 .theme-light .mainContainer section {
   padding-left: 5px;
@@ -3741,7 +3909,7 @@ aside nav ul li:last-child {
   filter: url('data:image/svg+xml;utf8,    <svg xmlns="http://www.w3.org/2000/svg">      <filter id="recolor" color-interpolation-filters="sRGB">        <feColorMatrix type="matrix" values="          0 0 0 0 0.0666666667          0 0 0 0 0.0509803922          0 0 0 0 0.0352941176          0 0 0 1 0        "/>      </filter>    </svg>    #recolor');
 }
 .theme-light .mainContainer header {
-  padding: 6px 9px;
+  padding: 8px 9px 3px 9px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -3752,7 +3920,9 @@ aside nav ul li:last-child {
 }
 .theme-light .mainContainer header select {
   font-family: inherit;
-  margin-bottom: -4px !important;
+  margin-bottom: -3px !important;
+  margin-top: -6px !important;
+  background-color: red;
   height: 100%;
   border: 0;
   font-size: inherit;
@@ -3789,6 +3959,9 @@ aside nav ul li:last-child {
   margin: -3px 0 0 0;
 }
 .theme-light .mainContainer .mainContainer-content {
+  min-height: 100%;
+  display: table-row;
+  height: 100%;
   overflow: auto;
   padding: 10px 10px;
 }
@@ -3799,15 +3972,22 @@ aside nav ul li:last-child {
   color: #f6f2ee;
   background-color: #134533;
 }
-.theme-dark .mainContainer a:not(.gsi-material-button) {
+.theme-dark .mainContainer a.primary {
   color: #cfbb95;
   text-align: left;
   cursor: pointer;
   margin: 0;
   padding: 0;
 }
-.theme-dark .mainContainer a:not(.gsi-material-button):hover {
+.theme-dark .mainContainer a.primary:hover {
   text-decoration: underline;
+}
+.theme-dark .mainContainer a:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+.theme-dark .mainContainer a.borderHover:hover {
+  border-bottom: 3px solid #cfbb95;
 }
 .theme-dark .mainContainer section {
   padding-left: 5px;
@@ -3820,7 +4000,7 @@ aside nav ul li:last-child {
   filter: url('data:image/svg+xml;utf8,    <svg xmlns="http://www.w3.org/2000/svg">      <filter id="recolor" color-interpolation-filters="sRGB">        <feColorMatrix type="matrix" values="          0 0 0 0 0.9647058824          0 0 0 0 0.9490196078          0 0 0 0 0.9333333333          0 0 0 1 0        "/>      </filter>    </svg>    #recolor');
 }
 .theme-dark .mainContainer header {
-  padding: 6px 9px;
+  padding: 8px 9px 3px 9px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -3831,7 +4011,9 @@ aside nav ul li:last-child {
 }
 .theme-dark .mainContainer header select {
   font-family: inherit;
-  margin-bottom: -4px !important;
+  margin-bottom: -3px !important;
+  margin-top: -6px !important;
+  background-color: red;
   height: 100%;
   border: 0;
   font-size: inherit;
@@ -3868,6 +4050,9 @@ aside nav ul li:last-child {
   margin: -3px 0 0 0;
 }
 .theme-dark .mainContainer .mainContainer-content {
+  min-height: 100%;
+  display: table-row;
+  height: 100%;
   overflow: auto;
   padding: 10px 10px;
 }

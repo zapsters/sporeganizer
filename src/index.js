@@ -1006,7 +1006,7 @@ function classJsonToElement(classData) {
     )})"></div>
     <div class="classElement-content">
       <h3>
-        <a>${classData.name}</a>
+        ${classData.name}
       </h3>
       <h6>${classData.professor}</h6>
       <ul class="classDatesContainer">
@@ -1019,6 +1019,14 @@ function classJsonToElement(classData) {
       <table>
         ${getTimes()}
       </table>
+    </div>
+    <div class="infoBox">
+      <textarea placeholder="Notes..." name="infoBox" id="infoBox">${classData.info}</textarea>
+    </div>
+    <div class="actionBtns">
+      <div class="actionButton">
+        <a class="editOnClick pixelart-icons-font-edit"></a>
+      </div>
     </div>
   </div>`;
 }
@@ -1052,7 +1060,7 @@ function getDayOfTheWeekAbbr(date) {
 
 function addEventListenerToClassElement(elem) {
   $(elem)
-    .find(".classElement-content h3 a")
+    .find(".editOnClick")
     .on("click", async function () {
       var thisClassId = $(this).closest(".classElement").data("classid");
       callClassModal("edit", await getClassById(thisClassId));

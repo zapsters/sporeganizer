@@ -2,7 +2,7 @@
 @use "variables.scss" as *;
 
 aside.sb-expanded {
-  --sb-width: 20rem;
+  --sb-width: 18rem;
   nav a span,
   nav a p {
     opacity: 1;
@@ -12,11 +12,12 @@ aside.sb-expanded {
 
 aside {
   font-family: "Domine", "Times New Roman", Times, serif;
-  --iconSize: 60px;
+  --iconSize: 62px;
   --fontSize: 27px;
   --fontSizeLogo: 28px;
   --padding: 18px;
-  --paddingLogo: 24px;
+  --paddingLogo: 19px;
+  --logoScale: 1.4;
   --gap: 8px;
   --sb-width: calc(var(--iconSize) + var(--padding) * 2);
   font-size: var(--fontSize);
@@ -45,8 +46,7 @@ aside {
       gap: var(--gap);
       img.logo {
         image-rendering: pixelated;
-        // filter: drop-shadow(2px 0px 0px black) drop-shadow(0px 2px 0px black);
-        scale: 1.2;
+        scale: var(--logoScale);
       }
       span.logo {
         position: relative;
@@ -66,8 +66,8 @@ aside {
         align-items: center;
         justify-content: space-evenly;
         &:first-of-type {
-          padding: 20px 0;
           border-bottom: 2px solid white;
+          padding: var(--paddingLogo) 0;
         }
         &:hover {
           @include themify($themes) {
@@ -112,11 +112,11 @@ aside {
           i {
             // padding: var(--padding);
             box-sizing: content-box;
+            min-width: var(--iconSize);
           }
           img,
           svg {
             position: relative;
-            min-width: var(--iconSize);
           }
           span,
           p {
@@ -141,7 +141,7 @@ aside {
 
 @media (max-width: $tabletBreakPoint) {
   aside.sb-expanded {
-    --sb-width: 15.2rem;
+    --sb-width: 16.9rem;
   }
   aside {
     --iconSize: 3rem;
@@ -201,7 +201,7 @@ aside {
               position: absolute;
               top: 58px;
               text-align: center;
-              font-size: 23px;
+              font-size: 13px;
               line-clamp: 2;
               -webkit-line-clamp: 2;
             }
@@ -210,7 +210,7 @@ aside {
               transform: translateX(-50%);
               position: absolute;
               top: 5px;
-              height: 50px;
+              height: 53px;
             }
             .pixelArtIcon {
               font-size: 45px !important;
