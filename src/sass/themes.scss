@@ -4,7 +4,8 @@
 $themes: (
   light: (
     text: #110d09,
-    background: #f0f0f4,
+    background: #c2c2ca,
+    backgroundAlt: #f0f0f4,
     primary: #ba8e36,
     secondary: #146d46,
     accent: #146d46,
@@ -19,6 +20,7 @@ $themes: (
   dark: (
     text: #f6f2ee,
     background: #134533,
+    backgroundAlt: #0c3526,
     primary: #cfbb95,
     secondary: #146d46,
     accent: #041e18,

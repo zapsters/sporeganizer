@@ -1966,12 +1966,12 @@
 }
 .theme-light button:not(.raw):hover {
   background-color: rgba(186, 142, 54, 0.3843137255);
-  color: #f0f0f4;
+  color: #c2c2ca;
   cursor: pointer;
 }
 .theme-light button:not(.raw).active {
   background-color: #ba8e36;
-  color: #f0f0f4;
+  color: #c2c2ca;
 }
 .theme-light button:not(.raw).dangerous {
   transition-property: background-color, color;
@@ -2056,6 +2056,10 @@
   width: 100% !important;
 }
 
+input[type=checkbox] {
+  cursor: pointer;
+}
+
 .theme-light input,
 .theme-light select {
   border: 0;
@@ -2063,9 +2067,8 @@
   background-color: transparent;
   color: #110d09;
 }
-.theme-light input:disabled, .theme-light input:read-only,
-.theme-light select:disabled,
-.theme-light select:read-only {
+.theme-light input:disabled,
+.theme-light select:disabled {
   cursor: not-allowed;
 }
 .theme-dark input,
@@ -2075,14 +2078,14 @@
   background-color: transparent;
   color: #f6f2ee;
 }
-.theme-dark input:disabled, .theme-dark input:read-only,
-.theme-dark select:disabled,
-.theme-dark select:read-only {
+.theme-dark input:disabled,
+.theme-dark select:disabled {
   cursor: not-allowed;
 }
 
 select {
   width: 100%;
+  cursor: pointer;
 }
 
 .theme-light input[type=time]::-webkit-calendar-picker-indicator {
@@ -2248,6 +2251,13 @@ button.raw {
   height: 27px;
 }
 
+.theme-light .toggle-switch:has(input:focus-visible) {
+  outline: 5px outset #146d46;
+}
+.theme-dark .toggle-switch:has(input:focus-visible) {
+  outline: 5px outset #041e18;
+}
+
 .toggle-switch input {
   opacity: 0;
   width: 0;
@@ -2301,7 +2311,6 @@ button.raw {
 .landingPage .content {
   color: #f6f2ee !important;
   margin-bottom: 60px;
-  overflow-y: auto;
   border-radius: 10px;
   width: 100%;
   background-image: url("../images/IMG_5938.jpg");
@@ -2309,6 +2318,8 @@ button.raw {
   background-position: right;
   background-repeat: no-repeat;
   height: 60vh;
+  min-height: fit-content;
+  padding: 10px 20px 10px 0;
   padding-left: 1vw;
 }
 .landingPage .content .banner {
@@ -2326,14 +2337,13 @@ button.raw {
   justify-content: flex-start;
 }
 .landingPage .content .banner h1 {
-  margin-top: 1.3vw;
-  font-size: 4vw;
-  max-height: 0.7em;
-  margin-bottom: -5px;
+  margin-top: 0.6vw;
+  font-size: 3vw;
+  margin-bottom: 0.1vw;
   display: flex;
   align-items: center;
   justify-content: left;
-  font-family: "Dongle";
+  font-family: "Domine", "Times New Roman", Times, serif;
 }
 .landingPage .content .banner h3 {
   font-family: "Doppio One";
@@ -2379,33 +2389,13 @@ button.raw {
   background-color: #cfbb95;
 }
 
-@media (max-width: 1000px) {
-  .landingPage .content .banner {
-    margin-top: 20px;
-    height: 90px;
-  }
-  .landingPage .content .banner h1 {
-    margin-top: 13px;
-    font-size: 50px;
-  }
-  .landingPage .content .banner h3 {
-    font-size: 15px;
-  }
-  .landingPage .content .contentAlt {
-    max-width: 340px;
-  }
-  .landingPage .content .contentAlt p {
-    font-size: 15px;
-  }
-  .landingPage .content .contentAlt button {
-    font-size: 15px;
-  }
-}
 /* Slideshow container */
 .slideshow-container {
-  max-width: 1000px;
   position: relative;
-  margin: auto;
+  border-radius: 14px;
+  height: 500px;
+  aspect-ratio: 1536/1232;
+  overflow: hidden;
   /* Hide the images by default */
   /* Next & previous buttons */
   /* Position the "next button" to the right */
@@ -2417,6 +2407,7 @@ button.raw {
 }
 .slideshow-container .mySlides {
   display: none;
+  height: 100%;
 }
 .slideshow-container .prev,
 .slideshow-container .next {
@@ -2456,9 +2447,9 @@ button.raw {
 .slideshow-container .numbertext {
   color: #f2f2f2;
   font-size: 12px;
-  padding: 8px 12px;
+  padding: 0px;
   position: absolute;
-  top: 0;
+  top: -20px;
 }
 .slideshow-container .dotContainer {
   width: 100%;
@@ -2499,36 +2490,55 @@ button.raw {
 .classElement {
   image-rendering: pixelated;
   display: flex;
-  align-items: flex-start;
+  align-items: stretch;
   justify-content: space-evenly;
   flex-shrink: 0;
 }
+.theme-light .classElement:hover {
+  background-color: #f0f0f4;
+}
+.theme-dark .classElement:hover {
+  background-color: #0c3526;
+}
 .theme-light .classElement {
   border-bottom: 2px solid #110d09;
-  padding: 9px 0px;
+  padding: 8px 8px;
+  padding-bottom: 6px;
   gap: 12px;
+}
+.theme-light .classElement .icon {
+  flex: none;
+  width: 100px;
 }
 .theme-light .classElement .classElement-content {
   padding: 4px 0px;
   flex: 1;
   position: relative;
+  overflow: hidden;
 }
 .theme-light .classElement .classElement-content h3,
 .theme-light .classElement .classElement-content a {
   color: #ba8e36;
   margin-bottom: 0px;
   font-size: 29px;
-  width: fit-content;
-  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
 }
 .theme-light .classElement .classElement-content h6 {
-  margin-bottom: 5px;
+  margin-bottom: 3px;
+  font-weight: 100;
+}
+.theme-light .classElement .classElement-content p {
+  font-size: 14px;
+  margin-bottom: 9px;
 }
 .theme-light .classElement .classElement-content table {
+  font-size: 14px;
   left: 0;
   float: left;
-  font-size: 14px;
-  margin-top: 4px;
+  margin-top: 2px;
   width: 100%;
 }
 .theme-light .classElement .classElement-content table tr td:nth-child(1) {
@@ -2536,30 +2546,43 @@ button.raw {
 }
 .theme-dark .classElement {
   border-bottom: 2px solid #f6f2ee;
-  padding: 9px 0px;
+  padding: 8px 8px;
+  padding-bottom: 6px;
   gap: 12px;
+}
+.theme-dark .classElement .icon {
+  flex: none;
+  width: 100px;
 }
 .theme-dark .classElement .classElement-content {
   padding: 4px 0px;
   flex: 1;
   position: relative;
+  overflow: hidden;
 }
 .theme-dark .classElement .classElement-content h3,
 .theme-dark .classElement .classElement-content a {
   color: #cfbb95;
   margin-bottom: 0px;
   font-size: 29px;
-  width: fit-content;
-  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
 }
 .theme-dark .classElement .classElement-content h6 {
-  margin-bottom: 5px;
+  margin-bottom: 3px;
+  font-weight: 100;
+}
+.theme-dark .classElement .classElement-content p {
+  font-size: 14px;
+  margin-bottom: 9px;
 }
 .theme-dark .classElement .classElement-content table {
+  font-size: 14px;
   left: 0;
   float: left;
-  font-size: 14px;
-  margin-top: 4px;
+  margin-top: 2px;
   width: 100%;
 }
 .theme-dark .classElement .classElement-content table tr td:nth-child(1) {
@@ -2570,11 +2593,11 @@ button.raw {
 .theme-light .classElementIcon {
   border: 4px solid black;
   background-color: #ba8e36;
-  flex: 1;
-  max-width: 100px;
+  align-self: flex-start;
   aspect-ratio: 1/1;
   border-radius: 50%;
   padding: 10px;
+  background-image: url("../images/mushrooms/flyAgaric.png");
   background-size: contain;
   background-position: center;
   background-origin: content-box;
@@ -2593,11 +2616,11 @@ button.raw {
 .theme-dark .classElementIcon {
   border: 4px solid black;
   background-color: #cfbb95;
-  flex: 1;
-  max-width: 100px;
+  align-self: flex-start;
   aspect-ratio: 1/1;
   border-radius: 50%;
   padding: 10px;
+  background-image: url("../images/mushrooms/flyAgaric.png");
   background-size: contain;
   background-position: center;
   background-origin: content-box;
@@ -2622,7 +2645,7 @@ button.raw {
   margin-top: 3px;
 }
 .theme-light .classDatesContainer li {
-  background-color: #f0f0f4;
+  background-color: #c2c2ca;
   border: 2px solid rgba(186, 142, 54, 0.3843137255);
   border-radius: 5px;
   padding: 4px 5px;
@@ -2647,7 +2670,7 @@ button.raw {
 .theme-light .classDatesContainer li:has(input:checked),
 .theme-light .classDatesContainer li.selected {
   background-color: #ba8e36;
-  color: #f0f0f4;
+  color: #c2c2ca;
 }
 .theme-light .classDatesContainer li:has(input:checked):has(input:focus-visible),
 .theme-light .classDatesContainer li.selected:has(input:focus-visible) {
@@ -2694,6 +2717,66 @@ button.raw {
   background-color: rgba(207, 187, 149, 0.5960784314);
 }
 
+.assignmentElement {
+  border-bottom: 0 !important;
+}
+.assignmentElement:has(input:checked) h3 {
+  text-decoration: line-through;
+}
+
+hr {
+  margin: 3px 0 6px 0 !important;
+}
+
+.actionBtns {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.actionBtns .actionButton {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  flex: 1;
+}
+.actionBtns .actionButton i {
+  background-image: url("../images/ui/checkbox.svg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 35px;
+  aspect-ratio: 1/1;
+  pointer-events: none;
+}
+.theme-light .actionBtns .actionButton i {
+  filter: saturate(0%) brightness(0%) invert(47.0588235294%) opacity(1);
+  filter: url('data:image/svg+xml;utf8,    <svg xmlns="http://www.w3.org/2000/svg">      <filter id="recolor" color-interpolation-filters="sRGB">        <feColorMatrix type="matrix" values="          0 0 0 0 0.7294117647          0 0 0 0 0.5568627451          0 0 0 0 0.2117647059          0 0 0 1 0        "/>      </filter>    </svg>    #recolor');
+}
+.theme-dark .actionBtns .actionButton i {
+  filter: saturate(0%) brightness(0%) invert(69.8039215686%) opacity(1);
+  filter: url('data:image/svg+xml;utf8,    <svg xmlns="http://www.w3.org/2000/svg">      <filter id="recolor" color-interpolation-filters="sRGB">        <feColorMatrix type="matrix" values="          0 0 0 0 0.8117647059          0 0 0 0 0.7333333333          0 0 0 0 0.5843137255          0 0 0 1 0        "/>      </filter>    </svg>    #recolor');
+}
+.theme-light .actionBtns .actionButton:has(input:focus-visible) i {
+  filter: saturate(0%) brightness(0%) invert(47.0588235294%) opacity(2);
+  filter: url('data:image/svg+xml;utf8,    <svg xmlns="http://www.w3.org/2000/svg">      <filter id="recolor" color-interpolation-filters="sRGB">        <feColorMatrix type="matrix" values="          0 0 0 0 0.7294117647          0 0 0 0 0.5568627451          0 0 0 0 0.2117647059          0 0 0 2 0        "/>      </filter>    </svg>    #recolor');
+  outline: 2px solid;
+}
+.theme-dark .actionBtns .actionButton:has(input:focus-visible) i {
+  filter: saturate(0%) brightness(0%) invert(69.8039215686%) opacity(2);
+  filter: url('data:image/svg+xml;utf8,    <svg xmlns="http://www.w3.org/2000/svg">      <filter id="recolor" color-interpolation-filters="sRGB">        <feColorMatrix type="matrix" values="          0 0 0 0 0.8117647059          0 0 0 0 0.7333333333          0 0 0 0 0.5843137255          0 0 0 2 0        "/>      </filter>    </svg>    #recolor');
+  outline: 2px solid;
+}
+.actionBtns .actionButton:has(input:checked) i {
+  background-image: url("../images/ui/checkbox-on.svg");
+}
+.actionBtns .actionButton input {
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+
 .buttonContainer {
   display: flex;
   align-items: stretch;
@@ -2710,6 +2793,22 @@ button.raw {
 }
 .buttonContainer button {
   flex: 1;
+}
+
+#assignmentEntryContainer,
+#classEntryContainer {
+  padding: 0;
+}
+#assignmentEntryContainer h4,
+#classEntryContainer h4 {
+  padding: 0 10px;
+  font-weight: 100;
+  margin-top: 17px;
+  margin-bottom: 4px;
+}
+#assignmentEntryContainer h4:first-of-type,
+#classEntryContainer h4:first-of-type {
+  margin-top: 8px;
 }
 
 .account h2 {
@@ -2740,10 +2839,22 @@ button.raw {
   cursor: pointer;
   font-size: 40px;
 }
+.theme-light .options .mainContainer-content img,
+.theme-light .options .mainContainer-content i {
+  filter: saturate(0%) brightness(0%) invert(5.0980392157%) opacity(1);
+  filter: url('data:image/svg+xml;utf8,    <svg xmlns="http://www.w3.org/2000/svg">      <filter id="recolor" color-interpolation-filters="sRGB">        <feColorMatrix type="matrix" values="          0 0 0 0 0.0666666667          0 0 0 0 0.0509803922          0 0 0 0 0.0352941176          0 0 0 1 0        "/>      </filter>    </svg>    #recolor');
+}
+.theme-dark .options .mainContainer-content img,
+.theme-dark .options .mainContainer-content i {
+  filter: saturate(0%) brightness(0%) invert(94.9019607843%) opacity(1);
+  filter: url('data:image/svg+xml;utf8,    <svg xmlns="http://www.w3.org/2000/svg">      <filter id="recolor" color-interpolation-filters="sRGB">        <feColorMatrix type="matrix" values="          0 0 0 0 0.9647058824          0 0 0 0 0.9490196078          0 0 0 0 0.9333333333          0 0 0 1 0        "/>      </filter>    </svg>    #recolor');
+}
+.theme-light .options .mainContainer-content button.active,
 .theme-light .options .mainContainer-content img.active,
 .theme-light .options .mainContainer-content i.active {
   border-bottom: 3.5px solid #110d09;
 }
+.theme-dark .options .mainContainer-content button.active,
 .theme-dark .options .mainContainer-content img.active,
 .theme-dark .options .mainContainer-content i.active {
   border-bottom: 3.5px solid #f6f2ee;
@@ -2782,7 +2893,7 @@ button.raw {
 }
 .theme-light .modalContainer .modalBackground .modal {
   color: #110d09;
-  background-color: #f0f0f4;
+  background-color: #c2c2ca;
 }
 .theme-dark .modalContainer .modalBackground .modal {
   color: #f6f2ee;
@@ -2979,20 +3090,30 @@ p {
   margin-bottom: 16px;
 }
 
+h3,
+h4,
+h5,
+h6,
+p {
+  font-weight: 400;
+}
+
 /* End of Reset */
 #app-root {
-  padding: 15px;
+  --gap: 16px;
+  padding: var(--gap);
   display: flex;
   align-items: stretch;
-  justify-content: space-between;
+  justify-content: flex-start;
   height: 100%;
-  gap: 20px;
+  width: 100%;
+  gap: var(--gap);
 }
 #app-root #app {
-  gap: 20px;
+  gap: var(--gap);
+  overflow: hidden;
   border-radius: 12px;
   flex: 1;
-  overflow: scroll;
   display: flex;
   align-items: stretch;
   justify-content: flex-start;
@@ -3023,10 +3144,12 @@ p {
   }
 }
 .theme-light hr:not(.raw) {
+  border: 0;
   border-top: 2px solid #110d09;
   margin-bottom: 18px;
 }
 .theme-dark hr:not(.raw) {
+  border: 0;
   border-top: 2px solid #f6f2ee;
   margin-bottom: 18px;
 }
@@ -3086,7 +3209,7 @@ p {
 }
 
 aside.sb-expanded {
-  --sb-width: 15.7rem;
+  --sb-width: 20rem;
 }
 aside.sb-expanded nav a span,
 aside.sb-expanded nav a p {
@@ -3094,11 +3217,13 @@ aside.sb-expanded nav a p {
 }
 
 aside {
-  font-family: "Dongle";
-  --iconSize: 56px;
-  --fontSize: 2.5rem;
-  --padding: 13px;
-  --gap: 0rem;
+  font-family: "Domine", "Times New Roman", Times, serif;
+  --iconSize: 60px;
+  --fontSize: 27px;
+  --fontSizeLogo: 28px;
+  --padding: 18px;
+  --paddingLogo: 24px;
+  --gap: 8px;
   --sb-width: calc(var(--iconSize) + var(--padding) * 2);
   font-size: var(--fontSize);
   transition: width 0.2s ease-in-out;
@@ -3129,10 +3254,10 @@ aside nav ul img.logo {
   scale: 1.2;
 }
 aside nav ul span.logo {
+  position: relative;
   width: unset;
-  font-family: "Dongle";
-  font-size: 44px;
-  transform: translateY(1px);
+  font-size: var(--fontSizeLogo);
+  font-weight: 900;
 }
 aside nav ul li#nav-homeTab {
   display: none;
@@ -3147,7 +3272,7 @@ aside nav ul li {
   justify-content: space-evenly;
 }
 aside nav ul li:first-of-type {
-  padding: 14px 0;
+  padding: 20px 0;
   border-bottom: 2px solid white;
 }
 .theme-light aside nav ul li:hover {
@@ -3188,6 +3313,7 @@ aside nav ul li button {
   display: flex;
   align-items: center;
   gap: 9px;
+  font-weight: 500;
   white-space: pre;
   color: #fff;
   text-decoration: none;
@@ -3211,18 +3337,10 @@ aside nav ul li button p {
   margin-bottom: 0;
   transition: opacity 0.2s linear;
   -webkit-box-orient: vertical;
-  line-height: 1em;
-  transform: translateY(3px);
   -webkit-line-clamp: 1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-aside nav ul li a span.logo,
-aside nav ul li a p.logo,
-aside nav ul li button span.logo,
-aside nav ul li button p.logo {
-  transform: translateY(5px);
 }
 aside nav ul li:last-child {
   margin-top: auto;
@@ -3281,7 +3399,6 @@ aside nav ul li:last-child {
   aside nav ul li button {
     position: relative;
     padding: 0px !important;
-    line-height: 0.8em;
   }
   aside nav ul li a span,
   aside nav ul li a p,
@@ -3291,7 +3408,6 @@ aside nav ul li:last-child {
     opacity: 1;
     position: absolute;
     top: 58px;
-    background-color: red;
     text-align: center;
     font-size: 23px;
     line-clamp: 2;
@@ -3387,7 +3503,7 @@ aside nav ul li:last-child {
   opacity: 0.2;
 }
 .theme-light .signIn .orBox span {
-  background-color: #f0f0f4 !important;
+  background-color: #c2c2ca !important;
   display: block;
   padding: 0;
   position: absolute;
@@ -3602,7 +3718,7 @@ aside nav ul li:last-child {
 }
 .theme-light .mainContainer {
   color: #110d09;
-  background-color: #f0f0f4;
+  background-color: #c2c2ca;
 }
 .theme-light .mainContainer a:not(.gsi-material-button) {
   color: #ba8e36;
@@ -3625,35 +3741,52 @@ aside nav ul li:last-child {
   filter: url('data:image/svg+xml;utf8,    <svg xmlns="http://www.w3.org/2000/svg">      <filter id="recolor" color-interpolation-filters="sRGB">        <feColorMatrix type="matrix" values="          0 0 0 0 0.0666666667          0 0 0 0 0.0509803922          0 0 0 0 0.0352941176          0 0 0 1 0        "/>      </filter>    </svg>    #recolor');
 }
 .theme-light .mainContainer header {
-  padding: 4px 16px 8px 16px;
-  min-height: 65px;
+  padding: 6px 9px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 40px;
+  font-size: 33px;
   font-weight: 500;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Roboto", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   border-bottom: 3px solid #110d09;
+}
+.theme-light .mainContainer header select {
+  font-family: inherit;
+  margin-bottom: -4px !important;
+  height: 100%;
+  border: 0;
+  font-size: inherit;
+  width: 100%;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: url("../images/ui/chevron-down.svg") 100%/34px no-repeat;
+}
+.theme-light .mainContainer header select option {
+  font-size: 24px;
 }
 .theme-light .mainContainer header button {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
+  filter: saturate(0%) brightness(0%) invert(5.0980392157%) opacity(1);
+  filter: url('data:image/svg+xml;utf8,    <svg xmlns="http://www.w3.org/2000/svg">      <filter id="recolor" color-interpolation-filters="sRGB">        <feColorMatrix type="matrix" values="          0 0 0 0 0.0666666667          0 0 0 0 0.0509803922          0 0 0 0 0.0352941176          0 0 0 1 0        "/>      </filter>    </svg>    #recolor');
+  cursor: pointer;
 }
 .theme-light .mainContainer header button svg:not(.gsi-material-button svg),
 .theme-light .mainContainer header button img {
-  width: 40px;
+  height: 32px;
   cursor: pointer;
 }
 .theme-light .mainContainer header h1,
 .theme-light .mainContainer header h2,
 .theme-light .mainContainer header h3,
 .theme-light .mainContainer header h4,
-.theme-light .mainContainer header p {
-  transform: translateY(1px);
+.theme-light .mainContainer header p,
+.theme-light .mainContainer header select {
   font-size: inherit;
   font-weight: inherit;
-  margin: 0;
+  margin: -3px 0 0 0;
 }
 .theme-light .mainContainer .mainContainer-content {
   overflow: auto;
@@ -3687,35 +3820,52 @@ aside nav ul li:last-child {
   filter: url('data:image/svg+xml;utf8,    <svg xmlns="http://www.w3.org/2000/svg">      <filter id="recolor" color-interpolation-filters="sRGB">        <feColorMatrix type="matrix" values="          0 0 0 0 0.9647058824          0 0 0 0 0.9490196078          0 0 0 0 0.9333333333          0 0 0 1 0        "/>      </filter>    </svg>    #recolor');
 }
 .theme-dark .mainContainer header {
-  padding: 4px 16px 8px 16px;
-  min-height: 65px;
+  padding: 6px 9px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 40px;
+  font-size: 33px;
   font-weight: 500;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Roboto", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   border-bottom: 3px solid #f6f2ee;
+}
+.theme-dark .mainContainer header select {
+  font-family: inherit;
+  margin-bottom: -4px !important;
+  height: 100%;
+  border: 0;
+  font-size: inherit;
+  width: 100%;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: url("../images/ui/chevron-down.svg") 100%/34px no-repeat;
+}
+.theme-dark .mainContainer header select option {
+  font-size: 24px;
 }
 .theme-dark .mainContainer header button {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
+  filter: saturate(0%) brightness(0%) invert(94.9019607843%) opacity(1);
+  filter: url('data:image/svg+xml;utf8,    <svg xmlns="http://www.w3.org/2000/svg">      <filter id="recolor" color-interpolation-filters="sRGB">        <feColorMatrix type="matrix" values="          0 0 0 0 0.9647058824          0 0 0 0 0.9490196078          0 0 0 0 0.9333333333          0 0 0 1 0        "/>      </filter>    </svg>    #recolor');
+  cursor: pointer;
 }
 .theme-dark .mainContainer header button svg:not(.gsi-material-button svg),
 .theme-dark .mainContainer header button img {
-  width: 40px;
+  height: 32px;
   cursor: pointer;
 }
 .theme-dark .mainContainer header h1,
 .theme-dark .mainContainer header h2,
 .theme-dark .mainContainer header h3,
 .theme-dark .mainContainer header h4,
-.theme-dark .mainContainer header p {
-  transform: translateY(1px);
+.theme-dark .mainContainer header p,
+.theme-dark .mainContainer header select {
   font-size: inherit;
   font-weight: inherit;
-  margin: 0;
+  margin: -3px 0 0 0;
 }
 .theme-dark .mainContainer .mainContainer-content {
   overflow: auto;
@@ -3748,7 +3898,7 @@ aside nav ul li:last-child {
 }
 .theme-light .mainContainer-raw {
   color: #110d09;
-  background-color: #f0f0f4;
+  background-color: #c2c2ca;
 }
 .theme-dark .mainContainer-raw {
   color: #f6f2ee;

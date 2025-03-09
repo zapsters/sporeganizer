@@ -8,28 +8,29 @@
       <h2>Hi <span class="displayName">###</span>,</h2>
       <section>
         <h3>Display Name</h3>
-        <div class="inline">
-          <input
-            type="text"
-            maxlength="30"
-            autocomplete="none"
-            id="displayNameInput"
-            data-np-autofill-field-type="newEmailUsername" />
-          <button
-            type="button"
-            class="button changeDisplayName"
-            id="displayNameChangeButton"
-            autocomplete="nickname">
-            Change Display Name
-          </button>
-          <span id="displayNameChangeStatusText"></span>
-        </div>
-        <h3>Password</h3>
         <form>
+          <div class="inline">
+            <input
+              type="text"
+              maxlength="30"
+              autocomplete="none"
+              id="displayNameInput"
+              data-np-autofill-field-type="newEmailUsername" />
+            <button
+              type="button"
+              class="button changeDisplayName"
+              id="displayNameChangeButton"
+              autocomplete="nickname">
+              Change Display Name
+            </button>
+            <span id="displayNameChangeStatusText"></span>
+          </div>
+          <h3>Password</h3>
           <div class="inline">
             <input
               class="readOnly"
               attribute="password"
+              autocomplete="current-password"
               type="password"
               readonly
               id="passwordInput" />

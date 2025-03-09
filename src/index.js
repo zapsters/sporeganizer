@@ -15,15 +15,22 @@ import {
   sendResetPasswordEmail,
 } from "./model";
 
-import { syncSettings, settings } from "./userdata.js";
+import { syncSettings, settings } from "./userData.js";
 import * as alertManager from "./alert.js";
 import { mushroomBank } from "./mushroomBank.js";
 import sanitizeHtml from "sanitize-html";
 import { onAuthStateChanged, getAuth, EmailAuthProvider } from "firebase/auth";
 import { checkDarkModePreference, setTheme, browserTheme } from "./browserTheme.js";
 import * as cookieManager from "./cookieManager.min.js";
-import * as firestoreDatabase from "./firestoreDatabase.js";
-import firebase from "firebase/compat/app";
+import {
+  updateUserSettings,
+  addClassToDatabase,
+  getAllUserMadeClasses,
+  getAllUserMadeAssignments,
+  deleteClassFromDatabase,
+  getClassById,
+  updateClassInDatabase,
+} from "./firestoreDatabase.js";
 
 var sidebarOpen = true;
 
@@ -62,6 +69,49 @@ function initURLListener() {
 export function initListenersByPage(pageID) {
   switch (pageID) {
     case "home":
+      let slideIndex = 1;
+      showSlides(slideIndex);
+
+      $(".dot").on("click", function () {
+        currentSlide($(this).attr("id")[3]);
+      });
+
+      $(".prev").on("click", () => {
+        plusSlides(-1);
+      });
+      $(".next").on("click", () => {
+        plusSlides(1);
+      });
+
+      // Next/previous controls
+      function plusSlides(n) {
+        showSlides((slideIndex += n));
+      }
+
+      // Thumbnail image controls
+      function currentSlide(n) {
+        showSlides((slideIndex = n));
+      }
+
+      function showSlides(n) {
+        let i;
+        let slides = document.getElementsByClassName("mySlides");
+        let dots = document.getElementsByClassName("dot");
+        if (n > slides.length) {
+          slideIndex = 1;
+        }
+        if (n < 1) {
+          slideIndex = slides.length;
+        }
+        for (i = 0; i < slides.length; i++) {
+          slides[i].style.display = "none";
+        }
+        for (i = 0; i < dots.length; i++) {
+          dots[i].className = dots[i].className.replace(" active", "");
+        }
+        slides[slideIndex - 1].style.display = "block";
+        dots[slideIndex - 1].className += " active";
+      }
       break;
     case "signup":
       initTogglePasswordVisibilityListeners();
@@ -376,16 +426,16 @@ export function initListenersByPage(pageID) {
 
       $("#24hrTimeInput").change(function () {
         if ($(this).is(":checked")) {
-          firestoreDatabase.updateUserSettings("24hrTime", true);
+          updateUserSettings("24hrTime", true);
           settings.do24HrTime = true;
         } else {
-          firestoreDatabase.updateUserSettings("24hrTime", false);
+          updateUserSettings("24hrTime", false);
           settings.do24HrTime = false;
         }
       });
 
-      $("#appearanceSelect i").on("click", function () {
-        $("#appearanceSelect i").each(function () {
+      $("#appearanceSelect button").on("click", function () {
+        $("#appearanceSelect button").each(function () {
           $(this).removeClass("active");
         });
         $(this).addClass("active");
@@ -440,7 +490,7 @@ export function initListenersByPage(pageID) {
       // Give it a second to allow firebase to auto-login on page visit.
       const unsubscribeDashboard = onAuthStateChanged(getAuth(), (user) => {
         if (user) {
-          firestoreDatabase.getAllUserMadeClasses().then((data) => {
+          getAllUserMadeClasses().then((data) => {
             data.forEach((classEntry) => {
               dashboardAddClassElement(classEntry);
             });
@@ -452,6 +502,10 @@ export function initListenersByPage(pageID) {
           unsubscribeDashboard();
           // User is signed out
         }
+      });
+      resizeSelect("dashboardAssignmentTab");
+      document.getElementById("dashboardAssignmentTab").addEventListener("change", () => {
+        resizeSelect("dashboardAssignmentTab");
       });
       $(".buttonContainer button").on("click", function () {
         $(this).parent().find("button").removeClass("active");
@@ -467,14 +521,14 @@ export function initListenersByPage(pageID) {
 }
 
 // Opens a create OR edit class modal.
-function callClassModal(type) {
+async function callClassModal(type, classData = {}) {
   // Get mushroom elements and format them for the dropdown menu
   function getMushroomElementsForDropdown() {
     var dropdownContent = "";
     mushroomBank.forEach((mushroomElement, index) => {
       dropdownContent += `
         <li><label><div style="background-image: url(${mushroomElement.icon}); background-size: ${mushroomElement.scale}" class="classElementIcon"></div><span>${mushroomElement.title}</span></label>
-            <input type="radio" checked name="classIconSelect" value="${mushroomElement.title}"></li>`;
+            <input type="radio" checked name="classIconSelect" value="${mushroomElement.title}" id="mushroomIconBtn-${mushroomElement.title}"></li>`;
     });
     return dropdownContent;
   }
@@ -501,6 +555,10 @@ function callClassModal(type) {
             ${getMushroomElementsForDropdown()}
         </ul>
       </div>
+    </div>
+    <div class="inputContainer centered" style="display:none">
+      <label>Class Id</label>
+      <input id="classModal-classId" type='text' readonly value='${classData.classId}'/>
     </div>
     <div class="inputContainer centered">
       <label>Class Name</label>
@@ -595,14 +653,15 @@ function callClassModal(type) {
         </div>
       </div>
     </div>
-    <span id="classModalStatusText"></span>
+  <span id="classModalStatusText"></span>
   `;
 
-  function formatClassJsonObject() {
+  async function formatClassJsonObject() {
     var classJson = {};
     classJson.name = $("#classModal-className").val();
     classJson.icon = $('input[name="classIconSelect"]:checked').val();
     classJson.professor = $("#classModal-professor").val();
+    classJson.classId = $("#classModal-classId").val();
 
     // Construct time array
     // Check each of the day select fields to get days where class is in session.
@@ -666,7 +725,10 @@ function callClassModal(type) {
   // Generate Class Modal
   switch (type) {
     case "edit":
-      alertManager.generateModalAlert({
+      if (classData == undefined || classData == {})
+        throw new Error("No class data passed through");
+
+      await alertManager.generateModalAlert({
         icon: "text-add",
         header: `Edit Class`,
         subHeader: "",
@@ -679,9 +741,29 @@ function callClassModal(type) {
             closeModalOnClick: "false",
             onClick: async () => {
               try {
-                alert("logic needed");
+                const classId = $("#classModal-classId").val();
+                await deleteClassFromDatabase(classId)
+                  .then(async () => {
+                    $(`#classElem-${classId}`).remove();
+
+                    alertManager.generateModalAlert({
+                      icon: "mood-happy",
+                      subHeader: "Class Deleted",
+                      buttons: [{}],
+                    });
+                  })
+                  .catch((error) => {
+                    throw new Error(error);
+                  });
               } catch (error) {
-                $("#classModalStatusText").html(error);
+                alertManager.generateModalAlert({
+                  icon: "mood-sad",
+                  header: "",
+                  subHeader: "Error deleting class",
+                  bodyText: error,
+                  buttons: [{}],
+                });
+                console.log(error);
               }
             },
           },
@@ -690,15 +772,39 @@ function callClassModal(type) {
             closeModalOnClick: "false",
             onClick: async () => {
               try {
-                var classResultJson = formatClassJsonObject();
-                alert("logic needed");
+                const classResultJson = await formatClassJsonObject();
+                const classId = $("#classModal-classId").val();
+                await updateClassInDatabase(classId, classResultJson)
+                  .then(async () => {
+                    const newElem = classJsonToElement(classResultJson);
+                    $(`#classElem-${classId}`).replaceWith(newElem);
+                    console.log(newElem);
+
+                    addEventListenerToClassElement($(`#classElem-${classId}`));
+
+                    alertManager.generateModalAlert({
+                      icon: "mood-happy",
+                      subHeader: "Class Updated!",
+                      buttons: [{}],
+                    });
+                  })
+                  .catch((error) => {
+                    throw new Error(error);
+                  });
               } catch (error) {
-                $("#classModalStatusText").html(error);
+                alertManager.generateModalAlert({
+                  icon: "mood-sad",
+                  header: "",
+                  subHeader: "Error updating class",
+                  bodyText: error,
+                  buttons: [{}],
+                });
               }
             },
           },
         ],
       });
+
       break;
     case "create":
       alertManager.generateModalAlert({
@@ -710,13 +816,15 @@ function callClassModal(type) {
           { text: "Cancel" },
           {
             text: "Create",
-            closeModalOnClick: "false",
+            closeModalOnClick: false,
             onClick: async () => {
               try {
-                var classResultJson = formatClassJsonObject();
-                firestoreDatabase
-                  .addClassToDatabase(classResultJson)
-                  .then(() => {
+                var classResultJson = await formatClassJsonObject();
+                // if (classResultJson.name == "") throw new Error("A class name is required.");
+
+                await addClassToDatabase(classResultJson)
+                  .then((classId) => {
+                    classResultJson["classId"] = classId;
                     dashboardAddClassElement(classResultJson);
                     alertManager.generateModalAlert({
                       icon: "mood-happy",
@@ -724,17 +832,17 @@ function callClassModal(type) {
                       buttons: [{}],
                     });
                   })
-                  .catch((error) => {
-                    alertManager.generateModalAlert({
-                      icon: "mood-sad",
-                      header: "",
-                      subHeader: "Error creating class",
-                      bodyText: error,
-                      buttons: [{}],
-                    });
+                  .catch(async (error) => {
+                    throw new Error(error);
                   });
               } catch (error) {
-                $("#classModalStatusText").html(error);
+                alertManager.generateModalAlert({
+                  icon: "mood-sad",
+                  header: "",
+                  subHeader: "Error creating class",
+                  bodyText: error,
+                  buttons: [{}],
+                });
               }
             },
           },
@@ -788,10 +896,43 @@ function callClassModal(type) {
       }
     });
   });
+
+  // Populate the input fields if we are in type edit.
+  if (type == "edit") {
+    // Set the icon
+    document.getElementById(`mushroomIconBtn-${classData.icon}`).click();
+    // Set the name and professor fields
+    document.getElementById(`classModal-className`).value = classData.name;
+    document.getElementById(`classModal-professor`).value = classData.professor;
+    // Toggle the day selects
+    daySelectIds.forEach((checkboxId) => {
+      var day = checkboxId.replace("#classModal-daySelect", "");
+      if (classData.time[day] != undefined) {
+        document.getElementById(checkboxId.replace("#", "")).click();
+      }
+    });
+    // Set the timeSetting dropdown and the time boxes
+    if (classData.time == {} || $.isEmptyObject(classData.time)) {
+      return;
+    } else if (areAllEntriesEqual(classData.time)) {
+      $(`#classModal-timeSettings`).val("default").change();
+      var value = Object.values(classData.time)[0];
+      $(`#classModal-timeFrom-all`).val(value[0]);
+      $(`#classModal-timeTo-all`).val(value[1]);
+    } else {
+      $(`#classModal-timeSettings`).val("uniqueDaily").change();
+      for (const [key, value] of Object.entries(classData.time)) {
+        // console.log(`${key}: ${value}`);
+        $(`#classModal-timeFrom-${key}`).val(value[0]);
+        $(`#classModal-timeTo-${key}`).val(value[1]);
+      }
+    }
+  }
 }
 
 function classJsonToElement(classData) {
-  console.log(classData);
+  if (classData["classId"] == undefined) console.error("NO CLASSID WAS PASSED");
+
   function ifDayIsSelected(dayAbbreviation) {
     if (classData.time[dayAbbreviation] != null) return "class='selected'";
     return "";
@@ -803,8 +944,6 @@ function classJsonToElement(classData) {
     if ($.isEmptyObject(classData.time)) {
       return "";
     } else if (areAllEntriesEqual(classData.time)) {
-      console.log("caught!");
-
       // If all times are the same for each day, only print one set.
       var value = Object.values(classData.time)[0];
 
@@ -830,7 +969,7 @@ function classJsonToElement(classData) {
     return resultingTimeTable;
   }
   return `
-  <div class="classElement">
+  <div class="classElement" id="classElem-${classData.classId}" data-classId="${classData.classId}">
     <div class="icon" style="background-image: url(${getMushroomIconFromName(
       classData.icon
     )})"></div>
@@ -869,7 +1008,20 @@ function redirectPageRequiresAccount() {
 
 // HELPER FUNCTIONS ============================================
 export function dashboardAddClassElement(classData) {
-  $("#classEntryContainer").append(classJsonToElement(classData));
+  let classElement = classJsonToElement(classData);
+  let newElement = $("#classEntryContainer").append(classElement);
+  addEventListenerToClassElement(newElement[0].lastChild);
+}
+
+function addEventListenerToClassElement(elem) {
+  console.log($(elem).find(".classElement-content h3 a"));
+
+  $(elem)
+    .find(".classElement-content h3 a")
+    .on("click", async function () {
+      var thisClassId = $(this).closest(".classElement").data("classid");
+      callClassModal("edit", await getClassById(thisClassId));
+    });
 }
 
 function convertTo12Hour(time24) {
@@ -912,7 +1064,6 @@ function initTogglePasswordVisibilityListeners() {
 
 function initGoogleLoginBtn() {
   $(".googleSignIn").on("click", function () {
-    console.log("Attempting pop up");
     googlePopup();
   });
 }
@@ -922,4 +1073,24 @@ function setStatusText(id, text, time = 5) {
   setTimeout(() => {
     $(id).html("");
   }, time * 1000);
+}
+
+function resizeSelect(selectId) {
+  const select = document.getElementById(selectId);
+  const tempSpan = document.createElement("span");
+
+  // Apply same styles to mimic select option rendering
+  tempSpan.style.visibility = "hidden";
+  tempSpan.style.position = "absolute";
+  tempSpan.style.whiteSpace = "nowrap";
+  tempSpan.style.font = getComputedStyle(select).font;
+  tempSpan.style.fontWeight = 900;
+
+  tempSpan.textContent = select.options[select.selectedIndex].text;
+  document.body.appendChild(tempSpan);
+
+  // Adjust the select width to match the option text + some padding
+  select.style.width = tempSpan.offsetWidth + 34 + "px";
+
+  document.body.removeChild(tempSpan);
 }

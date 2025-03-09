@@ -26,12 +26,12 @@ const buttonParams = {
   closeModalOnClick: true,
   onClick: () => {},
   class: "secondary",
+  onlyAllowOneClick: true,
 };
 
 // Icons currently use PixelArtIcons from Gerrit Halfmann found here:
 // https://icon-sets.iconify.design/pixelarticons/
 
-debug();
 createModalElement();
 
 function createModalElement() {
@@ -104,7 +104,11 @@ function populateModalElement(customAlertParams) {
     var buttonElementRef = $(`#button${index}`);
     $(buttonElementRef).addClass(`${buttonElement.class}`);
     $(buttonElementRef).attr("closeModalOnClick", buttonElement.closeModalOnClick);
+    $(buttonElementRef).attr("onlyAllowOneClick", buttonElement.onlyAllowOneClick);
     $(`#button${index}`).on("click", function () {
+      if ($(this).attr("clicked") == "true") closeModal(customAlertParams);
+      if ($(this).attr("onlyAllowOneClick") == "true") $(this).off("click");
+
       buttonElement.onClick();
 
       if ($(this).attr("closeModalOnClick") == "true") closeModal(customAlertParams);
@@ -120,7 +124,7 @@ function closeModal() {
   modalContainerReference.classList.add("out");
 }
 
-export function generateModalAlert(params) {
+export async function generateModalAlert(params) {
   createModalElement();
   populateModalElement(params);
   displayModal();

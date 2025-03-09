@@ -28,20 +28,29 @@ h6,
 p {
   margin-bottom: 16px;
 }
+h3,
+h4,
+h5,
+h6,
+p {
+  font-weight: 400;
+}
 /* End of Reset */
 
 #app-root {
-  padding: 15px;
+  --gap: 16px;
+  padding: var(--gap);
   display: flex;
   align-items: stretch;
-  justify-content: space-between;
+  justify-content: flex-start;
   height: 100%;
-  gap: 20px;
+  width: 100%;
+  gap: var(--gap);
   #app {
-    gap: 20px;
+    gap: var(--gap);
+    overflow: hidden;
     border-radius: 12px;
     flex: 1;
-    overflow: scroll;
     display: flex;
     align-items: stretch;
     justify-content: flex-start;
@@ -77,6 +86,7 @@ p {
 
 hr:not(.raw) {
   @include themify($themes) {
+    border: 0;
     border-top: 2px solid themed("text");
     margin-bottom: 18px;
   }

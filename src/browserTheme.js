@@ -4,7 +4,6 @@ import * as cookieManager from "./cookieManager.min.js";
 export var browserTheme = "";
 
 export function checkDarkModePreference() {
-  console.log(cookieManager.getCookie("themePreference"));
   if (cookieManager.checkCookie("themePreference")) {
     switch (cookieManager.getCookie("themePreference")) {
       case "dark":

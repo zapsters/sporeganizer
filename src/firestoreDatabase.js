@@ -13,9 +13,11 @@ import {
   serverTimestamp,
   query,
   where,
+  orderBy,
 } from "firebase/firestore";
 import sanitizeHtml from "sanitize-html";
 const sanitizeHtmlSettings = { allowedTags: [], allowedAttributes: {} };
+import { updateClassQueryCache, getClassQueryCache, updateClassInCache } from "./userData";
 
 export async function getUserSettings() {
   const user = getAuth().currentUser;
@@ -78,8 +80,11 @@ export async function deleteUserFromCollection(uid) {
   await deleteDoc(doc(db, "users", uid));
 }
 
+// Add class / assignment Documents
 export async function addClassToDatabase(classJson) {
-  console.log(classJson);
+  if (classJson.name == "" || classJson.name == undefined) {
+    throw new Error("Missing class name");
+  }
 
   try {
     const classRef = await addDoc(collection(db, "classes"), {
@@ -90,6 +95,7 @@ export async function addClassToDatabase(classJson) {
       userId: getAuth().currentUser.uid,
       createdAt: serverTimestamp(),
     });
+    syncClassQueryCacheWithDatabase();
     console.log("Class added with ID:", classRef.id);
     return classRef.id;
   } catch (error) {
@@ -97,35 +103,104 @@ export async function addClassToDatabase(classJson) {
     throw error;
   }
 }
+export async function addAssignmentToDatabase(assignmentJson) {
+  console.log(assignmentJson);
+
+  try {
+    const assignmentRef = await addDoc(collection(db, "assignments"), {
+      icon: assignmentJson.icon,
+      assignmentId: assignmentJson.assignmentId,
+      name: sanitizeHtml(assignmentJson.name, sanitizeHtmlSettings),
+      time: assignmentJson.time,
+      userId: getAuth().currentUser.uid,
+      completed: assignmentJson.completed,
+      createdAt: serverTimestamp(),
+    });
+    // syncAssignmentQueryCacheWithDatabase();
+    console.log("Assignment added with ID:", assignmentRef.id);
+    return assignmentRef.id;
+  } catch (error) {
+    console.error("Error adding assignment:", error);
+    throw error;
+  }
+}
+
+// Update class / assignment data
+export async function updateClassInDatabase(classId, classJson) {
+  if (classJson.name == "" || classJson.name == undefined) throw new Error("Missing class name");
+
+  // Set the "capital" field of the city 'DC'
+  await updateDoc(doc(db, "classes", classId), classJson);
+  updateClassInCache(classId, classJson);
+}
+
+// Remove class / assignment data
+export async function deleteClassFromDatabase(classId) {
+  await deleteDoc(doc(db, "classes", classId));
+  updateClassInCache(classId, "");
+}
 
 // Create a reference to the classes collection
 const classesRef = collection(db, "classes");
 export async function getAllUserMadeClasses() {
-  // Create a query against the classes collection.
-  const q = query(classesRef, where("userId", "==", getAuth().currentUser.uid));
+  let queryCheck = await getClassQueryCache();
+  if (queryCheck != null) {
+    console.log("Loaded Class Data from Cache");
 
-  var querySnapshotResults = [];
+    return queryCheck;
+  }
+
+  // Create a query against the classes collection.
+  const q = query(
+    classesRef,
+    where("userId", "==", getAuth().currentUser.uid),
+    orderBy("createdAt", "asc")
+  );
   const querySnapshot = await getDocs(q);
-  querySnapshot.forEach((doc) => {
-    // doc.data() is never undefined for query doc snapshots
-    querySnapshotResults.push(doc.data());
-  });
+
+  const querySnapshotResults = querySnapshot.docs.map((doc) => ({
+    classId: doc.id, // Firestore document ID
+    ...doc.data(), // Other document fields
+  }));
+  console.warn("Loaded Class Data from Database");
+  updateClassQueryCache(querySnapshotResults);
 
   return querySnapshotResults;
-} // Create a reference to the classes collection
+}
 
+export async function syncClassQueryCacheWithDatabase() {
+  // Create a query against the classes collection.
+  const q = query(
+    classesRef,
+    where("userId", "==", getAuth().currentUser.uid),
+    orderBy("createdAt", "asc")
+  );
+  const querySnapshot = await getDocs(q);
+
+  const querySnapshotResults = querySnapshot.docs.map((doc) => ({
+    classId: doc.id, // Firestore document ID
+    ...doc.data(), // Other document fields
+  }));
+  console.warn("Synced Class Data from Database");
+  updateClassQueryCache(querySnapshotResults);
+}
+
+export async function getClassById(classId) {
+  const allClasses = await getAllUserMadeClasses();
+  return allClasses.find((classEntry) => classEntry.classId == classId);
+}
+
+// Create a reference to the assignments collection
 const assignmentsRef = collection(db, "assignments");
 export async function getAllUserMadeAssignments() {
-  // Create a query against the classes collection.
-  const q = query(classesRef, where("userId", "==", getAuth().currentUser.uid));
-
-  var querySnapshotResults = [];
+  // Create a query against the assignments collection.
+  const q = query(assignmentsRef, where("userId", "==", getAuth().currentUser.uid));
   const querySnapshot = await getDocs(q);
-  querySnapshot.forEach((doc) => {
-    // doc.data() is never undefined for query doc snapshots
-    querySnapshotResults.push(doc.data());
-  });
-  console.log(querySnapshotResults);
+
+  const querySnapshotResults = querySnapshot.docs.map((doc) => ({
+    assignmentId: doc.id, // Firestore document ID
+    ...doc.data(), // Other document fields
+  }));
 
   return querySnapshotResults;
 }

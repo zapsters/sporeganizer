@@ -74,6 +74,9 @@ button:not(.raw) {
     width: 100% !important;
   }
 }
+input[type="checkbox"] {
+  cursor: pointer;
+}
 input,
 select {
   @include themify($themes) {
@@ -81,8 +84,7 @@ select {
     border-bottom: 3px solid themed("primary");
     background-color: transparent;
     color: themed("text");
-    &:disabled,
-    &:read-only {
+    &:disabled {
       cursor: not-allowed;
     }
   }
@@ -90,6 +92,7 @@ select {
 
 select {
   width: 100%;
+  cursor: pointer;
 }
 
 input[type="time"]::-webkit-calendar-picker-indicator {
@@ -244,6 +247,12 @@ button.raw {
   border-radius: 5px;
   overflow: hidden;
   height: 27px;
+}
+
+.toggle-switch:has(input:focus-visible) {
+  @include themify($themes) {
+    outline: 5px outset themed("accent");
+  }
 }
 
 .toggle-switch input {

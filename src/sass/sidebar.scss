@@ -2,7 +2,7 @@
 @use "variables.scss" as *;
 
 aside.sb-expanded {
-  --sb-width: 15.7rem;
+  --sb-width: 20rem;
   nav a span,
   nav a p {
     opacity: 1;
@@ -11,11 +11,13 @@ aside.sb-expanded {
 }
 
 aside {
-  font-family: "Dongle";
-  --iconSize: 56px;
-  --fontSize: 2.5rem;
-  --padding: 13px;
-  --gap: 0rem;
+  font-family: "Domine", "Times New Roman", Times, serif;
+  --iconSize: 60px;
+  --fontSize: 27px;
+  --fontSizeLogo: 28px;
+  --padding: 18px;
+  --paddingLogo: 24px;
+  --gap: 8px;
   --sb-width: calc(var(--iconSize) + var(--padding) * 2);
   font-size: var(--fontSize);
   // inset: 0 auto 0 0;
@@ -47,10 +49,10 @@ aside {
         scale: 1.2;
       }
       span.logo {
+        position: relative;
         width: unset;
-        font-family: "Dongle";
-        font-size: 44px;
-        transform: translateY(1px);
+        font-size: var(--fontSizeLogo);
+        font-weight: 900;
       }
       li#nav-homeTab {
         display: none;
@@ -64,7 +66,7 @@ aside {
         align-items: center;
         justify-content: space-evenly;
         &:first-of-type {
-          padding: 14px 0;
+          padding: 20px 0;
           border-bottom: 2px solid white;
         }
         &:hover {
@@ -103,6 +105,7 @@ aside {
           display: flex;
           align-items: center;
           gap: 9px;
+          font-weight: 500;
           white-space: pre;
           color: #fff;
           text-decoration: none;
@@ -122,15 +125,10 @@ aside {
             margin-bottom: 0;
             transition: opacity 0.2s linear;
             -webkit-box-orient: vertical;
-            line-height: 1em;
-            transform: translateY(3px);
             -webkit-line-clamp: 1;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            &.logo {
-              transform: translateY(5px);
-            }
           }
         }
       }
@@ -196,14 +194,12 @@ aside {
           button {
             position: relative;
             padding: 0px !important;
-            line-height: 0.8em;
             span,
             p {
               width: 100%;
               opacity: 1;
               position: absolute;
               top: 58px;
-              background-color: red;
               text-align: center;
               font-size: 23px;
               line-clamp: 2;

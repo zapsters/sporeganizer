@@ -2,7 +2,7 @@
 <html>
   <div class="mainContainer" style="flex: 0.8; min-width: 200px">
     <header>
-      <h1>Class</h1>
+      <h1>Classes</h1>
       <button id="classAddBtn" class="raw">
         <img src="images/ui/plus.svg" alt="Add Class" srcset="" />
       </button>
@@ -60,36 +60,62 @@
   </div>
   <div class="mainContainer">
     <header>
-      <h1>Assignments</h1>
+      <!-- <h1>Assignments</h1> -->
+      <select name="dashboardAssignmentTab" id="dashboardAssignmentTab">
+        <option value="assignments">Assignments</option>
+        <option value="pastAssignments">Past Assignments</option>
+      </select>
       <button id="homeworkAddBtn" class="raw">
         <img src="images/ui/plus.svg" alt="Add Homework" srcset="" />
       </button>
     </header>
-    <div class="mainContainer-content">
-      <div class="classElement">
+    <div class="mainContainer-content" id="assignmentEntryContainer">
+      <h4>Due Today,</h4>
+      <div class="classElement assignmentElement">
         <div class="icon"></div>
         <div class="classElement-content">
-          <h3><a>Math</a></h3>
-          <h6>Professor Thomas</h6>
-          <ul class="classDatesContainer">
-            <li>Mon</li>
-            <li class="selected">Tue</li>
-            <li>Wed</li>
-            <li class="selected">Thur</li>
-            <li>Fri</li>
-          </ul>
-          <table>
-            <tr>
-              <td>Mon</td>
-              <td>8:30am - 10:00am</td>
-            </tr>
-            <tr>
-              <td>Tues</td>
-              <td>8:30am - 10:00am</td>
-            </tr>
-          </table>
+          <h3><a>Memorize that one table</a></h3>
+          <h6>Chemistry</h6>
+          <p>Due 11:59 PM</p>
+          <h6>Chemistry</h6>
+          <p>Due 11:59 PM</p>
+          <h6>Chemistry</h6>
+          <p>Due 11:59 PM</p>
+        </div>
+        <div class="actionBtns">
+          <div class="actionButton">
+            <input type="checkbox" name="" id="" />
+            <i></i>
+          </div>
         </div>
       </div>
+      <div class="classElement assignmentElement">
+        <div class="icon"></div>
+        <div class="classElement-content">
+          <h3><a>Memorize that one table</a></h3>
+          <h6>Chemistry</h6>
+          <p>Due 11:59 PM</p>
+        </div>
+      </div>
+      <hr />
+      <h4>Due Wednesday,</h4>
+      <div class="classElement assignmentElement">
+        <div class="icon"></div>
+        <div class="classElement-content">
+          <h3><a>Memorize that one table</a></h3>
+          <h6>Chemistry</h6>
+          <p>Due 11:59 PM</p>
+        </div>
+      </div>
+      <div class="classElement assignmentElement">
+        <div class="icon"></div>
+        <div class="classElement-content">
+          <h3><a>Memorize that one table</a></h3>
+          <h6>Chemistry</h6>
+          <p>Due 11:59 PM</p>
+        </div>
+      </div>
+      <hr />
     </div>
   </div>
 </html>
