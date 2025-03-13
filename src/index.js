@@ -613,12 +613,12 @@ async function callClassModal(type, classData = {}) {
       </ul>
     </div>
     <div class="inputContainer centered">
-        <label>Time Settings</label>
-        <select id="classModal-timeSettings">
-          <option value='default'>Same time each day</option>
-          <option value='uniqueDaily'>Different time every day</option>
-        </select>
-      </div>
+      <label>Time Settings</label>
+      <select id="classModal-timeSettings">
+        <option value='default'>Same time each day</option>
+        <option value='uniqueDaily'>Different time every day</option>
+      </select>
+    </div>
     <div class="inputContainer centered flex" id="defaultFromAndToInputs">
       <div class="inputContainer">
         <label>From</label>
@@ -696,6 +696,7 @@ async function callClassModal(type, classData = {}) {
     classJson.icon = $('input[name="classIconSelect"]:checked').val();
     classJson.professor = $("#classModal-professor").val();
     classJson.classId = $("#classModal-classId").val();
+    classJson.notes = "";
 
     // Construct time array
     // Check each of the day select fields to get days where class is in session.
@@ -962,6 +963,276 @@ async function callClassModal(type, classData = {}) {
   }
 }
 
+// Opens a create OR edit assignment modal.
+// callAssignmentModal("create");
+async function callAssignmentModal(type, assignmentData = {}) {
+  // Get mushroom elements and format them for the dropdown menu
+  function getMushroomElementsForDropdown() {
+    var dropdownContent = "";
+    mushroomBank.forEach((mushroomElement, index) => {
+      dropdownContent += `
+        <li><label><div style="background-image: url(${mushroomElement.icon}); background-size: ${mushroomElement.scale}" class="classElementIcon"></div><span>${mushroomElement.title}</span></label>
+            <input type="radio" checked name="classIconSelect" value="${mushroomElement.title}" id="mushroomIconBtn-${mushroomElement.title}"></li>`;
+    });
+    return dropdownContent;
+  }
+
+  var alertBody = `
+    <hr>
+    <div class="inputContainer centered">
+      <div class="assignmentElementIcon center large" id="assignmentModalIconPreview"></div>
+      <div class="dropdown">
+          <button class="dropbtn">
+              Icons
+          </button>
+          
+          <ul class="dropdown-content" id="classIconDropdown">
+            ${getMushroomElementsForDropdown()}
+        </ul>
+      </div>
+    </div>
+    <div class="inputContainer centered" style="display:none">
+      <label>assignment Id</label>
+      <input id="assignmentModal-assignmentId" type='text' readonly value='${
+        assignmentData.assignmentId
+      }'/>
+    </div>
+    <div class="inputContainer centered">
+      <label>Assignment Name</label>
+      <input id="assignmentModal-assignmentName" type='text'/>
+    </div>
+    <div class="inputContainer centered">
+      <label>Class</label>
+      <select id="classModal-timeSettings">
+        <option value='none'>none</option>
+        <option value='default'>Math</option>
+        <option value='default'>Chem</option>
+      </select>
+    </div>
+    <div class="inputContainer centered flex" id="defaultFromAndToInputs">
+      <div class="inputContainer">
+        <label>Due date</label>
+        <input id="assignmentModal-timeFrom-all" type="date" />
+      </div>
+      <div class="inputContainer">
+        <label>Due time</label>
+        <input id="assignmentModal-timeTo-all" type="time" value="23:59"/>
+      </div>
+    </div>
+
+    <div id="uniqueDailyTimeSelect" style="display: none">
+      <div class="inputContainer centered flex spanLabel" style="display: none" id="uniqueDailyTimeSelectMon">
+        <span class="primary">Monday</span>
+        <div class="inputContainer">
+          <label>From</label>
+          <input id="assignmentModal-timeFrom-Mon" type="time" />
+        </div>
+        <div class="inputContainer">
+          <label>To</label>
+          <input id="assignmentModal-timeTo-Mon" type="time" />
+        </div>
+      </div>
+      <div class="inputContainer centered flex spanLabel" style="display: none" id="uniqueDailyTimeSelectTue">
+        <span class="primary">Tuesday</span>
+        <div class="inputContainer">
+          <label>From</label>
+          <input id="assignmentModal-timeFrom-Tue" type="time" />
+        </div>
+        <div class="inputContainer">
+          <label>To</label>
+          <input id="assignmentModal-timeTo-Tue" type="time" />
+        </div>
+      </div>
+      <div class="inputContainer centered flex spanLabel" style="display: none" id="uniqueDailyTimeSelectWed">
+        <span class="primary">Wednesday</span>
+        <div class="inputContainer">
+          <label>From</label>
+          <input id="assignmentModal-timeFrom-Wed" type="time" />
+        </div>
+        <div class="inputContainer">
+          <label>To</label>
+          <input id="assignmentModal-timeTo-Wed" type="time" />
+        </div>
+      </div>
+      <div class="inputContainer centered flex spanLabel" style="display: none" id="uniqueDailyTimeSelectThu">
+        <span class="primary">Thursday</span>
+        <div class="inputContainer">
+          <label>From</label>
+          <input id="assignmentModal-timeFrom-Thu" type="time" />
+        </div>
+        <div class="inputContainer">
+          <label>To</label>
+          <input id="assignmentModal-timeTo-Thu" type="time" />
+        </div>
+      </div>
+      <div class="inputContainer centered flex spanLabel" style="display: none" id="uniqueDailyTimeSelectFri">
+        <span class="primary">Friday</span>
+        <div class="inputContainer">
+          <label>From</label>
+          <input id="assignmentModal-timeFrom-Fri" type="time" />
+        </div>
+        <div class="inputContainer">
+          <label>To</label>
+          <input id="assignmentModal-timeTo-Fri" type="time" />
+        </div>
+      </div>
+    </div>
+  <span id="assignmentModalStatusText"></span>
+  `;
+
+  async function formatAssignmentJsonObject() {
+    var assignmentJson = {};
+    assignmentJson.name = $("#assignmentModal-assignmentName").val();
+    assignmentJson.icon = $('input[name="assignmentIconSelect"]:checked').val();
+    assignmentJson.professor = $("#assignmentModal-professor").val();
+    assignmentJson.assignmentId = $("#assignmentModal-assignmentId").val();
+    assignmentJson.notes = "";
+    assignmentJson.time = assignmentTimeArray;
+    return assignmentJson;
+  }
+
+  // Generate Assignment Modal
+  switch (type) {
+    case "edit":
+      if (assignmentData == undefined || assignmentData == {})
+        throw new Error("No assignment data passed through");
+
+      await alertManager.generateModalAlert({
+        icon: "text-add",
+        header: `Edit Assignment`,
+        subHeader: "",
+        bodyText: alertBody,
+        buttons: [
+          { text: "Cancel" },
+          {
+            text: "Delete Assignment",
+            class: "dangerous",
+            closeModalOnClick: "false",
+            onClick: async () => {
+              try {
+                const assignmentId = $("#assignmentModal-assignmentId").val();
+                await deleteAssignmentFromDatabase(assignmentId)
+                  .then(async () => {
+                    $(`#assignmentElem-${assignmentId}`).remove();
+
+                    alertManager.generateModalAlert({
+                      icon: "mood-happy",
+                      subHeader: "Assignment Deleted",
+                      buttons: [{}],
+                    });
+                  })
+                  .catch((error) => {
+                    throw new Error(error);
+                  });
+              } catch (error) {
+                alertManager.generateModalAlert({
+                  icon: "mood-sad",
+                  header: "",
+                  subHeader: "Error deleting assignment",
+                  bodyText: error,
+                  buttons: [{}],
+                });
+                throw error;
+              }
+            },
+          },
+          {
+            text: "Confirm",
+            closeModalOnClick: "false",
+            onClick: async () => {
+              try {
+                const assignmentResultJson = await formatAssignmentJsonObject();
+                const AssignmentId = $("#assignmentModal-assignmentId").val();
+                await updateAssignmentInDatabase(assignmentId, assignmentResultJson)
+                  .then(async () => {
+                    const newElem = assignmentJsonToElement(assignmentResultJson);
+                    $(`#assignmentElem-${assignmentId}`).replaceWith(newElem);
+
+                    addEventListenerToAssignmentElement($(`#assignmentElem-${assignmentId}`));
+
+                    alertManager.generateModalAlert({
+                      icon: "mood-happy",
+                      subHeader: "Assignment Updated!",
+                      buttons: [{}],
+                    });
+                  })
+                  .catch((error) => {
+                    throw new Error(error);
+                  });
+              } catch (error) {
+                alertManager.generateModalAlert({
+                  icon: "mood-sad",
+                  header: "",
+                  subHeader: "Error updating assignment",
+                  bodyText: error,
+                  buttons: [{}],
+                });
+              }
+            },
+          },
+        ],
+      });
+
+      break;
+    case "create":
+      alertManager.generateModalAlert({
+        icon: "text-add",
+        header: `Create Assignment`,
+        subHeader: "",
+        bodyText: alertBody,
+        buttons: [
+          { text: "Cancel" },
+          {
+            text: "Create",
+            closeModalOnClick: false,
+            onClick: async () => {
+              try {
+                var assignmentResultJson = await formatAssignmentJsonObject();
+                // if (assignmentResultJson.name == "") throw new Error("A assignment name is required.");
+
+                await addAssignmentToDatabase(assignmentResultJson)
+                  .then((assignmentId) => {
+                    assignmentResultJson["assignmentId"] = assignmentId;
+                    dashboardAddAssignmentElement(assignmentResultJson);
+                    alertManager.generateModalAlert({
+                      icon: "mood-happy",
+                      subHeader: "Assignment Added!",
+                      buttons: [{}],
+                    });
+                  })
+                  .catch(async (error) => {
+                    throw new Error(error);
+                  });
+              } catch (error) {
+                alertManager.generateModalAlert({
+                  icon: "mood-sad",
+                  header: "",
+                  subHeader: "Error creating assignment",
+                  bodyText: error,
+                  buttons: [{}],
+                });
+              }
+            },
+          },
+        ],
+      });
+      break;
+    default:
+      alert("error unrecognized assignment modal type.");
+      break;
+  }
+
+  // Add logic to the modal ==============================
+  //   Sterilize all html
+  $("input[type=text]").on("change", function () {
+    $(this).val(sanitizeHtml($(this).val(), { allowedTags: [], allowedAttributes: {} }));
+  });
+
+  // Populate the input fields if we are in type edit.
+  if (type == "edit") {
+  }
+}
+
 function classJsonToElement(classData) {
   if (classData["classId"] == undefined) throw "NO CLASSID WAS PASSED";
 
@@ -1020,8 +1291,8 @@ function classJsonToElement(classData) {
         ${getTimes()}
       </table>
     </div>
-    <div class="infoBox">
-      <textarea placeholder="Notes..." name="infoBox" id="infoBox">${classData.info}</textarea>
+    <div class="noteBox">
+      <textarea placeholder="Notes..." name="noteBox" id="noteBox">${classData.notes}</textarea>
     </div>
     <div class="actionBtns">
       <div class="actionButton">
@@ -1064,6 +1335,14 @@ function addEventListenerToClassElement(elem) {
     .on("click", async function () {
       var thisClassId = $(this).closest(".classElement").data("classid");
       callClassModal("edit", await getClassById(thisClassId));
+    });
+  $(elem)
+    .find("textarea")
+    .on("focusout", function () {
+      var thisClassId = $(this).closest(".classElement").data("classid");
+      updateClassInDatabase(thisClassId, {
+        notes: $(this).val(),
+      });
     });
 }
 

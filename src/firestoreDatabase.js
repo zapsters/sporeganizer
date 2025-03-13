@@ -82,6 +82,7 @@ export async function addClassToDatabase(classJson) {
       time: classJson.time,
       userId: getAuth().currentUser.uid,
       createdAt: serverTimestamp(),
+      notes: "",
     });
     syncClassQueryCacheWithDatabase();
     return classRef.id;
@@ -109,9 +110,6 @@ export async function addAssignmentToDatabase(assignmentJson) {
 
 // Update class / assignment data
 export async function updateClassInDatabase(classId, classJson) {
-  if (classJson.name == "" || classJson.name == undefined) throw new Error("Missing class name");
-
-  // Set the "capital" field of the city 'DC'
   await updateDoc(doc(db, "classes", classId), classJson);
   updateClassInCache(classId, classJson);
 }
@@ -144,7 +142,6 @@ export async function getAllUserMadeClasses() {
   }));
   console.warn("Loaded Class Data from Database");
   updateClassQueryCache(querySnapshotResults);
-
   return querySnapshotResults;
 }
 
@@ -161,7 +158,7 @@ export async function syncClassQueryCacheWithDatabase() {
     classId: doc.id, // Firestore document ID
     ...doc.data(), // Other document fields
   }));
-  console.warn("Synced Class Data from Database");
+  console.warn("Synced Class Data from Database", querySnapshotResults);
   updateClassQueryCache(querySnapshotResults);
 }
 

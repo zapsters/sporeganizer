@@ -2,7 +2,7 @@
 @use "variables.scss" as *;
 
 aside.sb-expanded {
-  --sb-width: 18rem;
+  --sb-width: 15.8rem;
   nav a span,
   nav a p {
     opacity: 1;
@@ -12,9 +12,9 @@ aside.sb-expanded {
 
 aside {
   font-family: "Domine", "Times New Roman", Times, serif;
-  --iconSize: 62px;
-  --fontSize: 27px;
-  --fontSizeLogo: 28px;
+  --iconSize: 50px;
+  --fontSize: 23px;
+  --fontSizeLogo: 25px;
   --padding: 18px;
   --paddingLogo: 19px;
   --logoScale: 1.4;

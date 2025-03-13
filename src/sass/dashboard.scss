@@ -18,9 +18,9 @@
     padding: 8px 8px;
     padding-bottom: 6px;
     position: relative;
-    &:has(.classElement-content h3:hover) .infoBox,
-    &:has(.infoBox textarea:focus) .infoBox,
-    .infoBox:hover {
+    &:has(.classElement-content h3:hover) .noteBox,
+    &:has(.noteBox textarea:focus) .noteBox,
+    .noteBox:hover {
       display: block;
     }
     .icon {
@@ -61,7 +61,7 @@
         }
       }
     }
-    .infoBox {
+    .noteBox {
       display: none;
       position: absolute;
       z-index: 100;
@@ -128,13 +128,13 @@
     align-items: center;
     flex-wrap: wrap;
     justify-content: flex-start;
-    gap: 0.4em;
+    gap: 4px;
     margin-top: 3px;
     li {
       background-color: themed("background");
       border: 2px solid list.nth(themed("primaryButton"), 2);
       border-radius: 5px;
-      padding: 4px 5px;
+      padding: 3px 4px;
       min-width: 46px;
       font-size: 14px;
       text-align: center;
@@ -226,7 +226,7 @@ hr {
   display: flex;
   align-items: stretch;
   justify-content: stretch;
-  padding: 12px;
+  padding: 12px 12px 10px 12px;
   @include themify($themes) {
     // border-bottom: 3px solid themed(text);
   }
@@ -240,6 +240,8 @@ hr {
   }
   button {
     flex: 1;
+    padding: 6px !important;
+    // font-size: 18px !important;
   }
 }
 

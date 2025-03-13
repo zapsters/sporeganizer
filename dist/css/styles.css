@@ -2049,7 +2049,7 @@
   margin-bottom: 2px;
   display: block;
   font-size: 18px;
-  font-weight: 700;
+  font-weight: 500;
 }
 .inputContainer input {
   width: 100% !important;
@@ -2570,8 +2570,8 @@ button.raw {
   padding-bottom: 6px;
   position: relative;
 }
-.theme-light .classElement:has(.classElement-content h3:hover) .infoBox, .theme-light .classElement:has(.infoBox textarea:focus) .infoBox,
-.theme-light .classElement .infoBox:hover {
+.theme-light .classElement:has(.classElement-content h3:hover) .noteBox, .theme-light .classElement:has(.noteBox textarea:focus) .noteBox,
+.theme-light .classElement .noteBox:hover {
   display: block;
 }
 .theme-light .classElement .icon {
@@ -2612,7 +2612,7 @@ button.raw {
 .theme-light .classElement .classElement-content table tr td:nth-child(1) {
   width: 45px;
 }
-.theme-light .classElement .infoBox {
+.theme-light .classElement .noteBox {
   display: none;
   position: absolute;
   z-index: 100;
@@ -2623,7 +2623,7 @@ button.raw {
   border: 2px solid #ba8e36;
   background-color: #146d46;
 }
-.theme-light .classElement .infoBox textarea {
+.theme-light .classElement .noteBox textarea {
   padding: 4px;
   margin: 0 0 -6px 0;
   background-color: transparent;
@@ -2631,23 +2631,23 @@ button.raw {
   color: #110d09;
   border: none;
 }
-.theme-light .classElement .infoBox textarea::placeholder {
+.theme-light .classElement .noteBox textarea::placeholder {
   font-weight: bold;
   opacity: 0.5;
   color: #110d09;
 }
-.theme-light .classElement .infoBox textarea::-webkit-resizer {
+.theme-light .classElement .noteBox textarea::-webkit-resizer {
   background-image: url("../images/ui/pixelarticons-scale.svg");
   background-size: cover;
   filter: drop-shadow(16px 16px 20px blue);
   background-position: center;
   background-repeat: no-repeat;
 }
-.theme-light .theme-light .classElement .infoBox textarea::-webkit-resizer {
+.theme-light .theme-light .classElement .noteBox textarea::-webkit-resizer {
   filter: saturate(0%) brightness(0%) invert(47.0588235294%) opacity(2);
   filter: url('data:image/svg+xml;utf8,    <svg xmlns="http://www.w3.org/2000/svg">      <filter id="recolor" color-interpolation-filters="sRGB">        <feColorMatrix type="matrix" values="          0 0 0 0 0.7294117647          0 0 0 0 0.5568627451          0 0 0 0 0.2117647059          0 0 0 2 0        "/>      </filter>    </svg>    #recolor');
 }
-.theme-dark .theme-light .classElement .infoBox textarea::-webkit-resizer {
+.theme-dark .theme-light .classElement .noteBox textarea::-webkit-resizer {
   filter: saturate(0%) brightness(0%) invert(69.8039215686%) opacity(2);
   filter: url('data:image/svg+xml;utf8,    <svg xmlns="http://www.w3.org/2000/svg">      <filter id="recolor" color-interpolation-filters="sRGB">        <feColorMatrix type="matrix" values="          0 0 0 0 0.8117647059          0 0 0 0 0.7333333333          0 0 0 0 0.5843137255          0 0 0 2 0        "/>      </filter>    </svg>    #recolor');
 }
@@ -2657,8 +2657,8 @@ button.raw {
   padding-bottom: 6px;
   position: relative;
 }
-.theme-dark .classElement:has(.classElement-content h3:hover) .infoBox, .theme-dark .classElement:has(.infoBox textarea:focus) .infoBox,
-.theme-dark .classElement .infoBox:hover {
+.theme-dark .classElement:has(.classElement-content h3:hover) .noteBox, .theme-dark .classElement:has(.noteBox textarea:focus) .noteBox,
+.theme-dark .classElement .noteBox:hover {
   display: block;
 }
 .theme-dark .classElement .icon {
@@ -2699,7 +2699,7 @@ button.raw {
 .theme-dark .classElement .classElement-content table tr td:nth-child(1) {
   width: 45px;
 }
-.theme-dark .classElement .infoBox {
+.theme-dark .classElement .noteBox {
   display: none;
   position: absolute;
   z-index: 100;
@@ -2710,7 +2710,7 @@ button.raw {
   border: 2px solid #cfbb95;
   background-color: #146d46;
 }
-.theme-dark .classElement .infoBox textarea {
+.theme-dark .classElement .noteBox textarea {
   padding: 4px;
   margin: 0 0 -6px 0;
   background-color: transparent;
@@ -2718,23 +2718,23 @@ button.raw {
   color: #f6f2ee;
   border: none;
 }
-.theme-dark .classElement .infoBox textarea::placeholder {
+.theme-dark .classElement .noteBox textarea::placeholder {
   font-weight: bold;
   opacity: 0.5;
   color: #f6f2ee;
 }
-.theme-dark .classElement .infoBox textarea::-webkit-resizer {
+.theme-dark .classElement .noteBox textarea::-webkit-resizer {
   background-image: url("../images/ui/pixelarticons-scale.svg");
   background-size: cover;
   filter: drop-shadow(16px 16px 20px blue);
   background-position: center;
   background-repeat: no-repeat;
 }
-.theme-light .theme-dark .classElement .infoBox textarea::-webkit-resizer {
+.theme-light .theme-dark .classElement .noteBox textarea::-webkit-resizer {
   filter: saturate(0%) brightness(0%) invert(47.0588235294%) opacity(2);
   filter: url('data:image/svg+xml;utf8,    <svg xmlns="http://www.w3.org/2000/svg">      <filter id="recolor" color-interpolation-filters="sRGB">        <feColorMatrix type="matrix" values="          0 0 0 0 0.7294117647          0 0 0 0 0.5568627451          0 0 0 0 0.2117647059          0 0 0 2 0        "/>      </filter>    </svg>    #recolor');
 }
-.theme-dark .theme-dark .classElement .infoBox textarea::-webkit-resizer {
+.theme-dark .theme-dark .classElement .noteBox textarea::-webkit-resizer {
   filter: saturate(0%) brightness(0%) invert(69.8039215686%) opacity(2);
   filter: url('data:image/svg+xml;utf8,    <svg xmlns="http://www.w3.org/2000/svg">      <filter id="recolor" color-interpolation-filters="sRGB">        <feColorMatrix type="matrix" values="          0 0 0 0 0.8117647059          0 0 0 0 0.7333333333          0 0 0 0 0.5843137255          0 0 0 2 0        "/>      </filter>    </svg>    #recolor');
 }
@@ -2791,14 +2791,14 @@ button.raw {
   align-items: center;
   flex-wrap: wrap;
   justify-content: flex-start;
-  gap: 0.4em;
+  gap: 4px;
   margin-top: 3px;
 }
 .theme-light .classDatesContainer li {
   background-color: #c2c2ca;
   border: 2px solid rgba(186, 142, 54, 0.3843137255);
   border-radius: 5px;
-  padding: 4px 5px;
+  padding: 3px 4px;
   min-width: 46px;
   font-size: 14px;
   text-align: center;
@@ -2831,14 +2831,14 @@ button.raw {
   align-items: center;
   flex-wrap: wrap;
   justify-content: flex-start;
-  gap: 0.4em;
+  gap: 4px;
   margin-top: 3px;
 }
 .theme-dark .classDatesContainer li {
   background-color: #134533;
   border: 2px solid rgba(207, 187, 149, 0.5960784314);
   border-radius: 5px;
-  padding: 4px 5px;
+  padding: 3px 4px;
   min-width: 46px;
   font-size: 14px;
   text-align: center;
@@ -2938,7 +2938,7 @@ hr {
   display: flex;
   align-items: stretch;
   justify-content: stretch;
-  padding: 12px;
+  padding: 12px 12px 10px 12px;
   gap: 10px;
   --buttonBorderRadius: 12px;
 }
@@ -2950,6 +2950,7 @@ hr {
 }
 .buttonContainer button {
   flex: 1;
+  padding: 6px !important;
 }
 
 #assignmentEntryContainer,
@@ -3367,7 +3368,7 @@ p {
 }
 
 aside.sb-expanded {
-  --sb-width: 18rem;
+  --sb-width: 15.8rem;
 }
 aside.sb-expanded nav a span,
 aside.sb-expanded nav a p {
@@ -3376,9 +3377,9 @@ aside.sb-expanded nav a p {
 
 aside {
   font-family: "Domine", "Times New Roman", Times, serif;
-  --iconSize: 62px;
-  --fontSize: 27px;
-  --fontSizeLogo: 28px;
+  --iconSize: 50px;
+  --fontSize: 23px;
+  --fontSizeLogo: 25px;
   --padding: 18px;
   --paddingLogo: 19px;
   --logoScale: 1.4;
@@ -3881,6 +3882,11 @@ aside nav ul li:last-child {
   color: #110d09;
   background-color: #c2c2ca;
 }
+.theme-light .mainContainer #assignmentEntryContainer,
+.theme-light .mainContainer #classEntryContainer {
+  display: table-row;
+  height: 100%;
+}
 .theme-light .mainContainer a.primary {
   color: #ba8e36;
   text-align: left;
@@ -3960,10 +3966,9 @@ aside nav ul li:last-child {
 }
 .theme-light .mainContainer .mainContainer-content {
   min-height: 100%;
-  display: table-row;
   height: 100%;
   overflow: auto;
-  padding: 10px 10px;
+  padding: 50px;
 }
 .theme-light .mainContainer .mainContainer-content input {
   font-size: 20px;
@@ -3971,6 +3976,11 @@ aside nav ul li:last-child {
 .theme-dark .mainContainer {
   color: #f6f2ee;
   background-color: #134533;
+}
+.theme-dark .mainContainer #assignmentEntryContainer,
+.theme-dark .mainContainer #classEntryContainer {
+  display: table-row;
+  height: 100%;
 }
 .theme-dark .mainContainer a.primary {
   color: #cfbb95;
@@ -4051,10 +4061,9 @@ aside nav ul li:last-child {
 }
 .theme-dark .mainContainer .mainContainer-content {
   min-height: 100%;
-  display: table-row;
   height: 100%;
   overflow: auto;
-  padding: 10px 10px;
+  padding: 50px;
 }
 .theme-dark .mainContainer .mainContainer-content input {
   font-size: 20px;
@@ -4062,18 +4071,20 @@ aside nav ul li:last-child {
 
 .theme-light .mainContainer-alt header {
   font-size: 47px;
-  padding: 13px;
-  padding-top: 5px;
+  padding: 8px;
+  padding-bottom: 2px;
 }
 .theme-light .mainContainer-alt .mainContainer-content {
+  background-color: red;
   padding: 20px;
 }
 .theme-dark .mainContainer-alt header {
   font-size: 47px;
-  padding: 13px;
-  padding-top: 5px;
+  padding: 8px;
+  padding-bottom: 2px;
 }
 .theme-dark .mainContainer-alt .mainContainer-content {
+  background-color: red;
   padding: 20px;
 }
 
