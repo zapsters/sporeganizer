@@ -1,0 +1,29 @@
+<div class="mainContainer mainContainer-alt account options">
+	<header>
+		<h1><span>Options</span></h1>
+	</header>
+	<div class="mainContainer-content">
+		<h4>Time Settings</h4>
+		<section>
+			<span>24 hour time</span>
+			<label class="toggle-switch square">
+				<input type="checkbox" id="24hrTimeInput" />
+				<span class="slider"></span>
+			</label>
+		</section>
+		<h4>Appearance</h4>
+		<section id="appearanceSelect">
+			<span id="appearanceSelectCurrentText"></span>
+			<button class="raw" data-appearance="auto" id="autoModeBtn" aria-label="Match System Theme">
+				<i class="pixelart-icons-font-clock"></i>
+			</button>
+			<button class="raw" data-appearance="light" id="lightModeBtn" aria-label="Light Mode">
+				<i class="pixelart-icons-font-cloud-sun"></i>
+			</button>
+			<button class="raw" data-appearance="dark" id="darkModeBtn" aria-label="Dark Mode">
+				<i class="pixelart-icons-font-cloud-moon"></i>
+			</button>
+			<!-- <img src="images/cloud-auto.svg" data-appearance="auto" alt="" srcset="" /> -->
+		</section>
+	</div>
+</div>
