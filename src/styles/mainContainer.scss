@@ -8,16 +8,10 @@
 	font-size: 25px;
 	transition-property: background-color;
 	transition-duration: 0.2s;
-	overflow-y: auto !important;
 	transition-timing-function: linear;
-	display: table;
-	overflow: hidden !important;
+	overflow: auto;
+	display: block;
 	@include themify($themes) {
-		#assignmentEntryContainer,
-		#classEntryContainer {
-			display: table-row;
-			height: 100%;
-		}
 		a.primary {
 			color: themed('primary');
 			text-align: left;
@@ -34,9 +28,6 @@
 		}
 		a.borderHover:hover {
 			border-bottom: 3px solid themed('primary');
-		}
-		section {
-			padding-left: 5px;
 		}
 		color: themed('text');
 		background-color: themed('background');
@@ -59,10 +50,10 @@
 			select {
 				font-family: inherit;
 				// padding-right: 1.1em;
-				margin-bottom: -3px !important;
-				margin-top: -6px !important;
+				margin-bottom: -1px !important;
+				margin-top: -7px !important;
 				background-color: red;
-				height: 100%;
+				// height: 100%;
 				border: 0;
 				font-size: inherit;
 				width: 100%;
@@ -70,6 +61,7 @@
 				-moz-appearance: none;
 				appearance: none;
 				background: url('../images/ui/chevron-down.svg') 100% / 34px no-repeat;
+				@include recolor(themed('text'), 1);
 				option {
 					font-size: 24px;
 				}
@@ -96,12 +88,11 @@
 			select {
 				font-size: inherit;
 				font-weight: inherit;
-				margin: -3px 0 0 0;
+				margin: -2px 0 0 0;
 			}
 		}
 		.mainContainer-content {
-			min-height: calc(100%);
-			height: 100%;
+			display: block;
 			overflow: auto;
 			padding: 50px;
 			input {
@@ -130,9 +121,6 @@
 	@include themify($themes) {
 		color: themed('text');
 		background-color: themed('background');
-	}
-	section {
-		padding-left: 5px;
 	}
 }
 

@@ -1,10 +1,52 @@
+<script>
+	import { goto } from '$app/navigation';
+	import Jquery from 'jquery';
+	import {
+		googlePopup,
+		initTogglePasswordVisibilityListeners,
+		checkRequired,
+		signUserIn
+	} from '$lib/model';
+	import { onMount } from 'svelte';
+	onMount(() => {
+		initTogglePasswordVisibilityListeners();
+	});
+	// @ts-ignore
+	async function onSubmit(e) {
+		e.preventDefault();
+		var checkRequiredResponse = checkRequired('signIn-form');
+		if (!checkRequiredResponse[0]) {
+			// @ts-ignore
+			Jquery('#signIn-statusText').html(checkRequiredResponse[1]);
+			return;
+		}
+		const email = Jquery('#signIn-email').val();
+		const password = Jquery('#signIn-password').val();
+		await signUserIn(email, password)
+			.then(() => {
+				goto('/dashboard');
+			})
+			.catch((error) => {
+				console.log('um2');
+				Jquery('#signIn-statusText').html(error);
+			});
+	}
+</script>
+
 <div class="mainContainer flex">
 	<div class="signIn content">
 		<h1>Login to Your Account</h1>
 		<h2>Don't let your tasks <i>sprout</i> out of control!</h2>
 		<form action="" id="signIn-form" autocomplete="off">
 			<div class="input-container">
-				<input required type="text" name="email" id="signIn-email" autocomplete="email" />
+				<input
+					required
+					type="text"
+					name="email"
+					id="signIn-email"
+					autocomplete="email"
+					data-np-autofill-field-type="email"
+				/>
 				<label for="email">Email</label>
 			</div>
 			<div class="input-container">
@@ -20,12 +62,21 @@
 					<img src="../images/ui/eye-open.svg" alt="" srcset="" />
 				</button>
 			</div>
+
 			<div class="input-container" style="text-align: left">
-				<a class="primary" href="#forgot">Forgot Password</a>
+				<a class="primary" href="/forgot">Forgot Password</a>
 			</div>
 			<span id="signIn-statusText"></span>
 			<div class="input-container">
-				<input autocomplete="off" type="submit" id="signIn-submit" value="Sign In" />
+				<input
+					autocomplete="off"
+					type="submit"
+					id="signIn-submit"
+					value="Sign In"
+					onclick={(e) => {
+						onSubmit(e);
+					}}
+				/>
 			</div>
 		</form>
 		<div class="orBox">
@@ -38,7 +89,12 @@
 				<span class="gsi-material-button-contents">Create Account</span>
 			</div>
 		</a>
-		<div tabindex="0" class="gsi-material-button googleSignIn">
+		<button
+			onclick={() => {
+				googlePopup();
+			}}
+			class="gsi-material-button googleSignIn"
+		>
 			<div class="gsi-material-button-state"></div>
 			<div class="gsi-material-button-content-wrapper">
 				<div class="gsi-material-button-icon">
@@ -71,6 +127,6 @@
 				<span class="gsi-material-button-contents">Sign in with Google</span>
 				<span id="googleSignIn" style="display: none">Sign in with Google</span>
 			</div>
-		</div>
+		</button>
 	</div>
 </div>

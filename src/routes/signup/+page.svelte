@@ -1,20 +1,53 @@
+<script>
+	// @ts-nocheck
+
+	import { goto } from '$app/navigation';
+	import Jquery from 'jquery';
+	import {
+		checkRequired,
+		googlePopup,
+		initTogglePasswordVisibilityListeners,
+		signUserUp
+	} from '$lib/model';
+	import { onMount } from 'svelte';
+	onMount(async () => {
+		initTogglePasswordVisibilityListeners();
+		Jquery('#signUp-submit').on('click', async (e) => {
+			e.preventDefault();
+			var checkRequiredResponse = checkRequired('signUp-form');
+			if (!checkRequiredResponse[0]) {
+				Jquery('#signUp-statusText').html(checkRequiredResponse[1]);
+				return;
+			}
+			const displayName = Jquery('#signUp-displayName').val();
+			const email = Jquery('#signUp-email').val();
+			const password = Jquery('#signUp-password').val();
+			console.log(displayName);
+
+			await signUserUp(displayName, email, password)
+				.then(() => {
+					goto('/dashboard');
+				})
+				.catch((error) => {
+					console.log(error.message);
+
+					Jquery('#signUp-statusText').html(error.message);
+				});
+		});
+	});
+</script>
+
 <div class="mainContainer flex">
 	<div class="signIn content">
 		<h1>Create an Account</h1>
 		<h2>Stay <i>fung-tual</i> with deadlines!</h2>
 		<form id="signUp-form" autocomplete="off">
 			<div class="input-container">
-				<input
-					required
-					type="text"
-					id="signUp-displayName"
-					name="displayName"
-					autocomplete="nickname"
-				/>
+				<input required type="text" id="signUp-displayName" name="displayName" maxlength="30" />
 				<label for="displayName">Display Name</label>
 			</div>
 			<div class="input-container">
-				<input required type="text" id="signUp-email" name="email" autocomplete="email" />
+				<input required type="text" id="signUp-email" name="email" autocomplete="username" />
 				<label for="email">Email</label>
 			</div>
 			<div class="input-container">
@@ -46,7 +79,13 @@
 				<span class="gsi-material-button-contents">Login to your Account</span>
 			</div>
 		</a>
-		<button class="gsi-material-button googleSignIn" id="googleSignIn">
+		<button
+			onclick={() => {
+				googlePopup();
+			}}
+			class="gsi-material-button googleSignIn"
+			id="googleSignIn"
+		>
 			<div class="gsi-material-button-state"></div>
 			<div class="gsi-material-button-content-wrapper">
 				<div class="gsi-material-button-icon">

@@ -1,3 +1,67 @@
+<script lang="ts">
+	import { onMount } from 'svelte';
+	import jQuery from 'jquery';
+
+	// @ts-ignore
+	// @ts-ignore
+	import { app, db, provider } from '$lib/firebase';
+	// @ts-ignore
+	import * as alertManager from '$lib/alert.js';
+	// @ts-ignore
+	import * as firestoreDatabase from '$lib/firestoreDatabase';
+	onMount(() => {
+		let slideIndex = 1;
+		showSlides(slideIndex);
+		jQuery('.dot').on('click', function () {
+			// @ts-ignore
+			currentSlide(jQuery(this).attr('id')[3]);
+		});
+
+		jQuery('.prev').on('click', () => {
+			plusSlides(-1);
+		});
+		jQuery('.next').on('click', () => {
+			plusSlides(1);
+		});
+
+		// Next/previous controls
+		// @ts-ignore
+		function plusSlides(n) {
+			showSlides((slideIndex += n));
+		}
+
+		// Thumbnail image controls
+		// @ts-ignore
+		function currentSlide(n) {
+			showSlides((slideIndex = n));
+		}
+
+		// @ts-ignore
+
+		function showSlides(n) {
+			let i;
+			let slides = document.getElementsByClassName('mySlides') as HTMLCollectionOf<HTMLElement>;
+			let dots = document.getElementsByClassName('dot');
+			if (n > slides.length) {
+				slideIndex = 1;
+			}
+			if (n < 1) {
+				slideIndex = slides.length;
+			}
+			for (i = 0; i < slides.length; i++) {
+				// @ts-ignore
+				slides[i].style.display = 'none';
+			}
+			for (i = 0; i < dots.length; i++) {
+				dots[i].className = dots[i].className.replace(' active', '');
+			}
+			// @ts-ignore
+			slides[slideIndex - 1].style.display = 'block';
+			dots[slideIndex - 1].className += ' active';
+		}
+	});
+</script>
+
 <div class="mainContainer landingPage">
 	<div class="content">
 		<div class="banner">
@@ -32,25 +96,24 @@
 		<!-- Full-width images with number and caption text -->
 		<div class="mySlides fade">
 			<div class="numbertext">1 / 3</div>
-			<img class="raw" src="../images/previewPics/preview1.png" style="height: 100%" />
-			<div class="text">Caption Text</div>
+			<img class="raw" alt="Preview 1" src="images/previewPics/preview1.png" />
 		</div>
 
 		<div class="mySlides fade">
 			<div class="numbertext">2 / 3</div>
-			<img class="raw" src="../images/previewPics/preview2.png" style="width: 100%" />
+			<img class="raw" alt="Preview 2" src="images/previewPics/preview2.png" />
 			<div class="text">Caption Two</div>
 		</div>
 
 		<div class="mySlides fade">
 			<div class="numbertext">3 / 3</div>
-			<img class="raw" src="../images/previewPics/preview3.png" style="width: 100%" />
+			<img class="raw" alt="Preview 3" src="images/previewPics/preview3.png" />
 			<div class="text">Caption Three</div>
 		</div>
 
 		<!-- Next and previous buttons -->
-		<a class="prev">&#10094;</a>
-		<a class="next">&#10095;</a>
+		<button class="raw prev">&#10094;</button>
+		<button class="raw next">&#10095;</button>
 		<!-- The dots/circles -->
 		<div class="dotContainer" style="text-align: center">
 			<span class="dot" id="dot1"></span>

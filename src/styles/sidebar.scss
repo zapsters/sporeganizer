@@ -2,7 +2,9 @@
 @use 'variables.scss' as *;
 
 aside.sb-expanded {
-	--sb-width: 17.2rem;
+	// --sb-width: 17rem;
+
+	--sb-width: calc(var(--iconSize) + var(--padding) * 2 + 7.5em);
 	nav a span,
 	nav a p {
 		opacity: 1;
@@ -12,10 +14,11 @@ aside.sb-expanded {
 
 aside {
 	font-family: 'Domine', 'Times New Roman', Times, serif;
-	--iconSize: 50px;
+	--iconSize: 54px;
 	--fontSize: 23px;
 	--fontSizeLogo: 25px;
 	--padding: 18px;
+	--paddingTop: 8px;
 	--paddingLogo: 19px;
 	--logoScale: 1.4;
 	--gap: 8px;
@@ -60,15 +63,11 @@ aside {
 			li {
 				position: relative;
 				box-sizing: content-box;
-				padding: 10px 0;
 				cursor: pointer;
 				display: flex;
 				align-items: center;
+				padding: 0;
 				justify-content: space-evenly;
-				&:first-of-type {
-					border-bottom: 2px solid white;
-					padding: var(--paddingLogo) 0;
-				}
 				&:hover {
 					@include themify($themes) {
 						color: themed('text');
@@ -95,6 +94,12 @@ aside {
 				p {
 					font-size: 22px;
 				}
+				&:first-of-type {
+					border-bottom: 2px solid white;
+					a {
+						padding: var(--paddingLogo) 0;
+					}
+				}
 				a,
 				button {
 					background-color: unset;
@@ -109,6 +114,8 @@ aside {
 					white-space: pre;
 					color: #fff;
 					text-decoration: none;
+					padding: var(--paddingTop) 0;
+
 					i {
 						// padding: var(--padding);
 						box-sizing: content-box;
@@ -134,6 +141,8 @@ aside {
 			}
 			li:last-child {
 				margin-top: auto;
+				i {
+				}
 			}
 		}
 	}
@@ -141,15 +150,12 @@ aside {
 
 @media (max-width: $tabletBreakPoint) {
 	aside.sb-expanded {
-		--sb-width: 16.9rem;
+		// --sb-width: 16rem;
 	}
 	aside {
 		--iconSize: 3rem;
 		nav {
 			ul {
-				li {
-					padding: 8px 0;
-				}
 			}
 		}
 	}

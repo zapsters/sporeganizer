@@ -1,257 +1,265 @@
-@use "themes.scss" as *;
-@use "variables.scss" as *;
+@use 'themes.scss' as *;
+@use 'variables.scss' as *;
 
 .landingPage {
-  padding: 30px;
-  ul {
-    padding-left: 24px;
-  }
-  .content {
-    color: #f6f2ee !important;
-    margin-bottom: 46px;
-    border-radius: 10px;
-    width: 100%;
-    background-image: url("../images/IMG_5938.jpg");
-    background-size: cover;
-    background-position: right;
-    background-repeat: no-repeat;
-    height: 60vh;
-    min-height: fit-content;
-    padding: 10px 20px 10px 0;
-    padding-left: 13px;
-    .banner {
-      margin-top: 30px;
-      background-image: url("../images/bannerHomepage.png");
-      padding: 24px 0 0px 17px;
-      background-origin: border-box;
-      // width: fit-content;
+	padding: 30px;
+	ul {
+		padding-left: 24px;
+	}
+	.content {
+		// min-height: fit-content;
+		height: 74vh;
+		color: #f6f2ee !important;
+		margin-bottom: 46px;
+		border-radius: 10px;
+		width: 100%;
+		background-image: url('images/IMG_5938.jpg');
+		background-size: cover;
+		background-position: right;
+		background-repeat: no-repeat;
+		background-color: red;
+		padding: 10px 20px 10px 0;
+		padding-left: 13px;
+		h1,
+		h3,
+		p {
+			text-shadow: 2px 2px 1px black;
+		}
+		.banner {
+			margin-top: 30px;
+			// background-image: url("../images/bannerHomepage.png");
+			padding: 24px 0 0px 17px;
+			background-origin: border-box;
+			// width: fit-content;
 
-      height: 160px;
-      background-size: contain;
-      background-position: left top;
-      background-repeat: no-repeat;
-      flex-direction: column;
-      display: flex;
-      align-items: flex-start;
-      justify-content: flex-start;
+			background-size: contain;
+			background-position: left top;
+			background-repeat: no-repeat;
+			flex-direction: column;
+			display: flex;
+			align-items: flex-start;
+			justify-content: flex-start;
 
-      h1 {
-        margin-top: 3px;
-        font-size: 55px;
-        margin-bottom: 3px;
-        display: flex;
-        align-items: center;
-        justify-content: left;
-        font-family: "Domine", "Times New Roman", Times, serif;
-      }
-      h3 {
-        @include themify($themes) {
-          color: themed("primary");
-        }
-        font-family: "Doppio One";
-        font-weight: 300;
-        font-size: 27px;
-        white-space: pre;
-      }
-    }
-    .contentAlt {
-      padding: 0 22px;
-      max-width: 620px;
-      font-family: "Doppio One";
-      font-size: 20px;
-      max-width: 28.4em;
-      .inputContainer {
-        margin: 0 auto;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: space-evenly;
-        max-width: unset;
-      }
-      button {
-        padding: 10px 16 px;
-        font-size: 20px;
-        text-align: center;
-        @include themify($themes) {
-          background-color: themed("secondary");
-          &:hover {
-            background-color: themed("primary");
-          }
-        }
-      }
-    }
-  }
+			h1 {
+				margin-top: 3px;
+				font-size: 55px;
+				margin-bottom: 3px;
+				display: flex;
+				align-items: center;
+				justify-content: left;
+				font-family: 'Domine', 'Times New Roman', Times, serif;
+			}
+			h3 {
+				@include themify($themes) {
+					color: themed('primary');
+				}
+				font-family: 'Doppio One';
+				font-weight: 300;
+				font-size: 27px;
+				white-space: pre;
+			}
+		}
+		.contentAlt {
+			padding: 0 22px;
+			max-width: 620px;
+			font-family: 'Doppio One';
+			font-size: 20px;
+			max-width: 28.4em;
+			.inputContainer {
+				margin: 0 auto;
+				width: 100%;
+				display: flex;
+				align-items: center;
+				justify-content: space-evenly;
+				max-width: unset;
+			}
+			button {
+				padding: 10px 16 px;
+				font-size: 20px;
+				text-align: center;
+				@include themify($themes) {
+					background-color: themed('secondary');
+					&:hover {
+						background-color: themed('primary');
+					}
+				}
+			}
+		}
+	}
 }
 
 /* Slideshow container */
 .slideshow-container {
-  position: relative;
-  border-radius: 14px;
-  aspect-ratio: 1536 / 1232;
-  overflow: hidden;
-  max-width: 800px;
-  /* Hide the images by default */
-  .mySlides {
-    display: none;
-    height: 100%;
-  }
+	position: relative;
+	border-radius: 14px;
+	max-width: 730px;
+	/* Hide the images by default */
+	.mySlides {
+		overflow: hidden;
+		border-radius: 14px;
+		display: none;
+		img {
+			display: block;
+			width: 100%;
+		}
+	}
 
-  /* Next & previous buttons */
-  .prev,
-  .next {
-    cursor: pointer;
-    position: absolute;
-    top: 50%;
-    width: auto;
-    padding: 10px;
-    @include themify($themes) {
-      color: themed("primary");
-    }
-    font-weight: bold;
-    font-size: 38px;
-    border-radius: 0 3px 3px 0;
-    user-select: none;
+	/* Next & previous buttons */
+	.prev,
+	.next {
+		cursor: pointer;
+		position: absolute;
+		top: 50%;
+		width: auto;
+		padding: 10px;
+		@include themify($themes) {
+			color: themed('primary');
+		}
+		font-weight: bold;
+		font-size: 38px;
+		border-radius: 0 3px 3px 0;
+		user-select: none;
 
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-  }
+		display: flex;
+		align-items: center;
+		justify-content: space-evenly;
+	}
 
-  /* Position the "next button" to the right */
-  .next {
-    right: 0;
-    border-radius: 3px 0 0 3px;
-  }
+	/* Position the "next button" to the right */
+	.next {
+		right: 0;
+		border-radius: 3px 0 0 3px;
+	}
 
-  /* On hover, add a black background color with a little bit see-through */
-  .prev:hover,
-  .next:hover {
-    background-color: rgba(0, 0, 0, 0.8);
-    text-decoration: none !important;
-  }
+	/* On hover, add a black background color with a little bit see-through */
+	.prev:hover,
+	.next:hover {
+		background-color: rgba(0, 0, 0, 0.8);
+		text-decoration: none !important;
+	}
 
-  /* Caption text */
-  .text {
-    color: #f2f2f2;
-    font-size: 15px;
-    padding: 8px 12px;
-    position: absolute;
-    bottom: 28px;
-    width: 100%;
-    text-align: center;
-  }
+	/* Caption text */
+	.text {
+		color: #f2f2f2;
+		font-size: 15px;
+		padding: 8px 12px;
+		position: absolute;
+		bottom: 28px;
+		width: 100%;
+		text-align: center;
+	}
 
-  /* Number text (1/3 etc) */
-  .numbertext {
-    color: #f2f2f2;
-    font-size: 12px;
-    padding: 0px;
-    position: absolute;
-    top: -20px;
-  }
+	/* Number text (1/3 etc) */
+	.numbertext {
+		color: #f2f2f2;
+		font-size: 12px;
+		padding: 0px;
+		position: absolute;
+		top: -20px;
+	}
 
-  /* The dots/bullets/indicators */
-  .dotContainer {
-    width: 100%;
-    position: absolute;
-    bottom: 10px;
-    .dot {
-      cursor: pointer;
-      height: 15px;
-      width: 15px;
-      margin: 0 2px;
-      background-color: #bbb;
-      border-radius: 50%;
-      display: inline-block;
-      transition: background-color 0.6s ease;
-    }
-  }
+	/* The dots/bullets/indicators */
+	.dotContainer {
+		width: 100%;
+		position: absolute;
+		bottom: 10px;
+		.dot {
+			cursor: pointer;
+			height: 15px;
+			width: 15px;
+			margin: 0 2px;
+			background-color: #bbb;
+			border-radius: 50%;
+			display: inline-block;
+			transition: background-color 0.6s ease;
+		}
+	}
 
-  .active,
-  .dot:hover {
-    @include themify($themes) {
-      background-color: themed("primary");
-    }
-  }
+	.active,
+	.dot:hover {
+		@include themify($themes) {
+			background-color: themed('primary');
+		}
+	}
 
-  /* Fading animation */
-  .fade {
-    animation-name: fade;
-    animation-duration: 1.5s;
-  }
+	/* Fading animation */
+	.fade {
+		animation-name: fade;
+		animation-duration: 1.5s;
+	}
 
-  @keyframes fade {
-    from {
-      opacity: 1;
-    }
-    to {
-      opacity: 1;
-    }
-  }
+	@keyframes fade {
+		from {
+			opacity: 1;
+		}
+		to {
+			opacity: 1;
+		}
+	}
 }
 
 @media (max-width: $tabletBreakPoint) {
-  .landingPage {
-    .content {
-      .banner {
-        margin-left: -12px;
-        margin-right: -12px;
-        h1 {
-          margin-top: 0px;
-          font-size: 55px;
-        }
-        h3 {
-          font-size: 20px;
-        }
-      }
-    }
-  }
+	.landingPage {
+		.content {
+			.banner {
+				margin-left: -12px;
+				margin-right: -12px;
+				h1 {
+					margin-top: 0px;
+					font-size: 55px;
+				}
+				h3 {
+					font-size: 20px;
+				}
+			}
+		}
+	}
 }
 
 @media (max-width: $mobileBreakPoint) {
-  .landingPage {
-    padding: 10px;
-    h2 {
-      font-size: 22px;
-      margin-bottom: 0px;
-    }
-    li {
-      font-size: 14px;
-    }
-    .content {
-      max-width: 100% !important;
-      .banner {
-        margin-top: 20px;
-        padding-top: 12px;
-        height: unset;
-        // width: 100%;
-        padding-left: 20px;
-        h1 {
-          margin-top: 0px;
-          font-size: 33px;
-          margin-bottom: -2px;
-        }
-        h3 {
-          font-size: 13px;
-        }
-      }
-      .contentAlt {
-        max-width: 340px;
-        p {
-          font-size: 12px;
-        }
-        button {
-          font-size: 15px;
-        }
-      }
-    }
-  }
-  .slideshow-container {
-    /* Next & previous buttons */
-    .prev,
-    .next {
-      font-size: 27px;
-      // padding: 36px  ;
-    }
-  }
+	.landingPage {
+		padding: 10px;
+		h2 {
+			font-size: 22px;
+			margin-bottom: 0px;
+		}
+		li {
+			font-size: 14px;
+		}
+		.content {
+			max-width: 100% !important;
+			.banner {
+				margin-top: 20px;
+				padding-top: 12px;
+				height: unset;
+				// width: 100%;
+				padding-left: 20px;
+				h1 {
+					margin-top: 0px;
+					font-size: 33px;
+					margin-bottom: -2px;
+				}
+				h3 {
+					font-size: 13px;
+				}
+			}
+			.contentAlt {
+				max-width: 340px;
+				p {
+					font-size: 12px;
+				}
+				button {
+					font-size: 15px;
+				}
+			}
+		}
+	}
+	.slideshow-container {
+		/* Next & previous buttons */
+		.prev,
+		.next {
+			font-size: 27px;
+			// padding: 36px  ;
+		}
+	}
 }

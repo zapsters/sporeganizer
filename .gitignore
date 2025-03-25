@@ -34,3 +34,8 @@ vite.config.ts.timestamp-*
 # project
 styles.css.map
 .prepros
+
+# firebase
+firebase-debug.log
+firestore-debug.log
+firestore.indexes.json

@@ -3,18 +3,18 @@
 $theme-map: null;
 $themes: (
 	light: (
-		text: #110d09,
-		background: #c2c2ca,
-		backgroundAlt: #f0f0f4,
-		primary: #ba8e36,
+		text: #0a0b27,
+		background: #dbdbe5,
+		backgroundAlt: #dde1ea,
+		primary: #9a8458,
 		secondary: #146d46,
-		accent: #146d46,
+		accent: #134533,
 		navHover: #ffffff33,
 		navText: #f1f9f7,
 		alertRed: rgb(242, 8, 8),
 		primaryButton: (
-			#ba8e36,
-			#ba8e3662
+			#9a8458,
+			#9a8458bd
 		)
 	),
 	dark: (
