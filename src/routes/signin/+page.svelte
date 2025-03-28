@@ -59,7 +59,7 @@
 				/>
 				<label for="password">Password</label>
 				<button class="toggleVisibility" aria-label="toggle Visibility">
-					<img src="../images/ui/eye-open.svg" alt="" srcset="" />
+					<img src="images/ui/eye-open.svg" alt="" srcset="" />
 				</button>
 			</div>
 

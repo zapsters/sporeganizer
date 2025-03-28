@@ -54,14 +54,14 @@
 				<input required autocomplete="off" name="password" type="password" id="signUp-password" />
 				<label for="password">Password</label>
 				<button class="toggleVisibility">
-					<img src="../images/ui/eye-open.svg" alt="" srcset="" />
+					<img src="images/ui/eye-open.svg" alt="" srcset="" />
 				</button>
 			</div>
 			<div class="input-container">
 				<input required type="password" name="passwordRepeat" />
 				<label for="passwordRepeat">Re-enter Password</label>
 				<button class="toggleVisibility">
-					<img src="../images/ui/eye-open.svg" alt="" srcset="" />
+					<img src="images/ui/eye-open.svg" alt="" srcset="" />
 				</button>
 			</div>
 			<span id="signUp-statusText"></span>

@@ -19,16 +19,24 @@ import {
 } from 'firebase/firestore';
 import { DOMPurifyFunc } from './model';
 import {
-	updateClassQueryCache,
-	getClassQueryCache,
+	updateQueryCache,
+	getQueryCache,
 	updateClassInCache,
 	updateSettingParameter
 } from '$lib/userData';
 
 export async function getUserSettings() {
+	if (!checkLogInStatus()) return;
 	const user = getAuth().currentUser;
 	if (!user) {
 		return null;
+	}
+
+	let queryCheck = await getQueryCache('settings');
+
+	if (queryCheck != null) {
+		console.log('Retrieved settings from cache');
+		return queryCheck;
 	}
 
 	const userRef = doc(db, 'users', user.uid);
@@ -37,7 +45,8 @@ export async function getUserSettings() {
 		const userSnap = await getDoc(userRef);
 		if (userSnap.exists()) {
 			const settings = userSnap.data().settings || {};
-
+			console.warn('Loaded Settings Data from Database');
+			updateQueryCache('settings', userSnap);
 			return settings;
 		} else {
 			return null;
@@ -52,6 +61,7 @@ export async function getUserSettings() {
  * @param {any} value
  */
 export async function updateUserSettings(key, value) {
+	if (!checkLogInStatus()) return;
 	// @ts-ignore
 	const userRef = doc(db, 'users', getAuth().currentUser.uid);
 
@@ -65,7 +75,8 @@ export async function updateUserSettings(key, value) {
  * @param {{ uid: string; displayName: any; email: any; emailVerified: any; providerData: { providerId: any; }[]; } | undefined} currentUser
  */
 export async function addUserToCollection(currentUser) {
-	if (currentUser == undefined) return;
+	if (!checkLogInStatus()) return;
+	if (currentUser == undefined || getAuth().currentUser != currentUser) return;
 	await setDoc(doc(db, `users`, currentUser.uid), {
 		userId: currentUser.uid,
 		// @ts-ignore
@@ -85,18 +96,18 @@ export async function addUserToCollection(currentUser) {
  * @param {string} uid
  */
 export async function deleteUserFromCollection(uid) {
+	if (!checkLogInStatus()) return;
 	await deleteDoc(doc(db, 'users', uid));
 }
 
 /**
- * @param {{ uid: string; displayName: string; email: string; emailVerified: any; providerData: { providerId: any; }[]; } | undefined} currentUser
  * @param {any} key
  * @param {any} value
  */
-export async function updateFieldInUserCollection(currentUser, key, value) {
-	if (currentUser == undefined) return;
+export async function updateFieldInUserCollection(key, value) {
+	if (!checkLogInStatus()) return;
 	try {
-		await updateDoc(doc(db, `users`, currentUser.uid), { [key]: value });
+		await updateDoc(doc(db, `users`, getAuth().currentUser.uid), { [key]: value });
 	} catch (error) {
 		console.error('Error updating key: ', key);
 	}
@@ -107,6 +118,7 @@ export async function updateFieldInUserCollection(currentUser, key, value) {
  * @param {{ name: string | undefined; icon: any; professor: any; time: any; }} classJson
  */
 export async function addClassToDatabase(classJson) {
+	if (!checkLogInStatus()) return;
 	if (classJson.name == '' || classJson.name == undefined) {
 		throw new Error('Missing class name');
 	}
@@ -124,7 +136,7 @@ export async function addClassToDatabase(classJson) {
 			createdAt: serverTimestamp(),
 			notes: ''
 		});
-		syncClassQueryCacheWithDatabase();
+		updateClassInCache(classRef.id, classJson);
 		return classRef.id;
 	} catch (error) {
 		throw error;
@@ -134,6 +146,7 @@ export async function addClassToDatabase(classJson) {
  * @param {{ icon: any; assignmentId: any; name: any; time: any; completed: any; }} assignmentJson
  */
 export async function addAssignmentToDatabase(assignmentJson) {
+	if (!checkLogInStatus()) return;
 	try {
 		const assignmentRef = await addDoc(collection(db, 'assignments'), {
 			icon: assignmentJson.icon,
@@ -159,6 +172,7 @@ export async function addAssignmentToDatabase(assignmentJson) {
  * @param {any} classJson
  */
 export async function updateClassInDatabase(classId, classJson) {
+	if (!checkLogInStatus()) return;
 	await updateDoc(doc(db, 'classes', classId), classJson);
 	updateClassInCache(classId, classJson);
 }
@@ -168,6 +182,7 @@ export async function updateClassInDatabase(classId, classJson) {
  * @param {string} classId
  */
 export async function deleteClassFromDatabase(classId) {
+	if (!checkLogInStatus()) return;
 	await deleteDoc(doc(db, 'classes', classId));
 	updateClassInCache(classId, '');
 }
@@ -175,7 +190,11 @@ export async function deleteClassFromDatabase(classId) {
 // Create a reference to the classes collection
 const classesRef = collection(db, 'classes');
 export async function getAllUserMadeClasses() {
-	let queryCheck = await getClassQueryCache();
+	if (!checkLogInStatus()) {
+		return;
+	}
+
+	let queryCheck = await getQueryCache('classes');
 
 	if (queryCheck != null) {
 		console.log('Retrieved classes from cache');
@@ -196,26 +215,8 @@ export async function getAllUserMadeClasses() {
 		...doc.data() // Other document fields
 	}));
 	console.warn('Loaded Class Data from Database');
-	updateClassQueryCache(querySnapshotResults);
+	updateQueryCache('classes', querySnapshotResults);
 	return querySnapshotResults;
-}
-
-export async function syncClassQueryCacheWithDatabase() {
-	// Create a query against the classes collection.
-	const q = query(
-		classesRef,
-		// @ts-ignore
-		where('userId', '==', getAuth().currentUser.uid),
-		orderBy('createdAt', 'asc')
-	);
-	const querySnapshot = await getDocs(q);
-
-	const querySnapshotResults = querySnapshot.docs.map((doc) => ({
-		classId: doc.id, // Firestore document ID
-		...doc.data() // Other document fields
-	}));
-	console.warn('Synced Class Data from Database', querySnapshotResults);
-	updateClassQueryCache(querySnapshotResults);
 }
 
 /**
@@ -231,6 +232,7 @@ export async function getClassById(classId) {
 // Create a reference to the assignments collection
 const assignmentsRef = collection(db, 'assignments');
 export async function getAllUserMadeAssignments() {
+	if (!checkLogInStatus()) return;
 	// Create a query against the assignments collection.
 	// @ts-ignore
 	const q = query(assignmentsRef, where('userId', '==', getAuth().currentUser.uid));
@@ -242,4 +244,10 @@ export async function getAllUserMadeAssignments() {
 	}));
 
 	return querySnapshotResults;
+}
+
+export function checkLogInStatus() {
+	const loggedIn = getAuth().currentUser != null;
+	if (!loggedIn) console.error('No current user.');
+	return loggedIn;
 }

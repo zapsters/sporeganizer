@@ -197,11 +197,11 @@ export function deleteCurrentUser() {
 
 // HELPER FUNCTIONS =====================
 
-export function redirectPageRequiresAccount() {
+export function redirectPageRequiresAccount(redirect = true) {
 	alertManager
 		.generateModalAlert({
 			header: 'Requires an Account',
-			subHeader: `This page requires an account.`,
+			subHeader: `No user logged in`,
 			bodyText: `Ready to see what Sporeganizer has to offer? Create an account to get started!`,
 			buttons: [
 				{
@@ -211,7 +211,7 @@ export function redirectPageRequiresAccount() {
 			]
 		})
 		.then(function () {
-			goto('/signin');
+			if (redirect) goto('/signin');
 		});
 }
 
@@ -253,21 +253,18 @@ export function resizeSelect(selectId) {
 	const tempSpan = document.createElement('span');
 
 	// Apply same styles to mimic select option rendering
-	tempSpan.style.visibility = 'hidden';
-	tempSpan.style.position = 'absolute';
-	tempSpan.style.whiteSpace = 'nowrap';
-	// @ts-ignore
+	// tempSpan.style.visibility = 'hidden';
+	// tempSpan.style.position = 'absolute';
+	// tempSpan.style.whiteSpace = 'nowrap';
 	tempSpan.style.font = getComputedStyle(select).font;
-	// @ts-ignore
-	tempSpan.style.fontWeight = 900;
-
+	tempSpan.style.fontSize = getComputedStyle(select).fontSize;
+	tempSpan.style.fontWeight = '900';
 	// @ts-ignore
 	tempSpan.textContent = select.options[select.selectedIndex].text;
 	document.body.appendChild(tempSpan);
-
-	// Adjust the select width to match the option text + some padding
-	// @ts-ignore
-	select.style.width = tempSpan.offsetWidth + 34 + 'px';
+	// Adjust the select width to match the option text +/- some padding
+	select.style.width =
+		tempSpan.offsetWidth + parseInt(getComputedStyle(select).backgroundSize) - 13 + 'px';
 
 	document.body.removeChild(tempSpan);
 }

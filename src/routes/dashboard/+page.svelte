@@ -4,14 +4,11 @@
 	import { onMount } from 'svelte';
 	import { onAuthStateChanged, getAuth } from 'firebase/auth';
 	import {
-		// @ts-ignore
 		updateUserSettings,
 		addClassToDatabase,
 		getAllUserMadeClasses,
-		// @ts-ignore
 		getAllUserMadeAssignments,
 		deleteClassFromDatabase,
-		// @ts-ignore
 		getClassById,
 		updateClassInDatabase
 	} from '$lib/firestoreDatabase.js';
@@ -38,8 +35,7 @@
 				unsubscribeDashboard();
 				// User is signed in
 			} else {
-				console.log('No user');
-				redirectPageRequiresAccount();
+				// redirectPageRequiresAccount(false);
 				unsubscribeDashboard();
 				// User is signed out
 			}
@@ -53,6 +49,8 @@
 			Jquery(this).parent().find('button').removeClass('active');
 			Jquery(this).addClass('active');
 			Jquery('#classEntryContainer').html('');
+			if (getAuth().currentUser == null) throw new Error('No current user');
+
 			switch (Jquery(this).data('filter')) {
 				case 'all':
 					getAllUserMadeClasses().then((data) => {
@@ -88,9 +86,6 @@
 					});
 					break;
 			}
-		});
-		Jquery('#classAddBtn').on('click', () => {
-			callClassModal('create');
 		});
 	});
 
@@ -203,16 +198,9 @@
 	// Opens a create OR edit class modal.
 	// @ts-ignore
 	async function callClassModal(type, classData = {}) {
-		// Get mushroom elements and format them for the dropdown menu
-		function getMushroomElementsForDropdown() {
-			var dropdownContent = '';
-			// @ts-ignore
-			mushroomBank.forEach((mushroomElement, index) => {
-				dropdownContent += `
-        <li><label><div style="background-image: url(${mushroomElement.icon}); background-size: ${mushroomElement.scale}" class="classElementIcon"></div><span>${mushroomElement.title}</span></label>
-            <input type="radio" checked name="classIconSelect" value="${mushroomElement.title}" id="mushroomIconBtn-${mushroomElement.title}"></li>`;
-			});
-			return dropdownContent;
+		if (getAuth().currentUser == null) {
+			redirectPageRequiresAccount();
+			return;
 		}
 
 		var classTimeArray = {};
@@ -651,16 +639,9 @@
 	// callAssignmentModal("create");
 	// @ts-ignore
 	async function callAssignmentModal(type, assignmentData = {}) {
-		// Get mushroom elements and format them for the dropdown menu
-		function getMushroomElementsForDropdown() {
-			var dropdownContent = '';
-			// @ts-ignore
-			mushroomBank.forEach((mushroomElement, index) => {
-				dropdownContent += `
-        <li><label><div style="background-image: url(${mushroomElement.icon}); background-size: ${mushroomElement.scale}" class="classElementIcon"></div><span>${mushroomElement.title}</span></label>
-            <input type="radio" checked name="classIconSelect" value="${mushroomElement.title}" id="mushroomIconBtn-${mushroomElement.title}"></li>`;
-			});
-			return dropdownContent;
+		if (getAuth().currentUser == null) {
+			redirectPageRequiresAccount();
+			return;
 		}
 
 		var alertBody = `
@@ -946,12 +927,21 @@
 	}
 
 	// HELPER FUNCTIONS ============================================
-	// @ts-ignore
-	export function dashboardAddClassElement(classData) {
+	// Get mushroom elements and format them for the dropdown menu
+	function getMushroomElementsForDropdown() {
+		var dropdownContent = '';
 		// @ts-ignore
+		mushroomBank.forEach((mushroomElement, index) => {
+			dropdownContent += `
+        <li><label><div style="background-image: url(${mushroomElement.icon}); background-size: ${mushroomElement.scale}" class="classElementIcon"></div><span>${mushroomElement.title}</span></label>
+            <input type="radio" checked name="classIconSelect" value="${mushroomElement.title}" id="mushroomIconBtn-${mushroomElement.title}"></li>`;
+		});
+		return dropdownContent;
+	}
+
+	export function dashboardAddClassElement(classData) {
 		let classElement = classJsonToElement(classData);
 		let newElement = Jquery('#classEntryContainer').append(classElement);
-		// @ts-ignore
 		addEventListenerToClassElement(newElement[0].lastChild);
 	}
 </script>
@@ -959,7 +949,7 @@
 <div class="mainContainer" style="flex: 0.8; min-width: 200px">
 	<header>
 		<h1>Classes</h1>
-		<button id="classAddBtn" class="raw">
+		<button id="classAddBtn" on:click={() => callClassModal('create')} class="raw">
 			<img src="images/ui/plus.svg" alt="Add Class" srcset="" />
 		</button>
 	</header>
@@ -1004,8 +994,8 @@
 			<option value="assignments">Assignments</option>
 			<option value="pastAssignments">Past Assignments</option>
 		</select>
-		<button id="homeworkAddBtn" class="raw">
-			<img src="images/ui/plus.svg" alt="Add Homework" srcset="" />
+		<button id="assignmentAddBtn" on:click={() => callAssignmentModal('create')} class="raw">
+			<img src="images/ui/plus.svg" alt="Add Assignment" srcset="" />
 		</button>
 	</header>
 	<div class="mainContainer-content" style="padding-top: 0" id="assignmentEntryContainer">

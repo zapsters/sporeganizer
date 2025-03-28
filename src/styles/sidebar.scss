@@ -112,7 +112,9 @@ aside {
 					gap: 9px;
 					font-weight: 500;
 					white-space: pre;
-					color: #fff;
+					@include themify($themes) {
+						color: themed('navText');
+					}
 					text-decoration: none;
 					padding: var(--paddingTop) 0;
 
@@ -132,6 +134,7 @@ aside {
 						margin-bottom: 0;
 						transition: opacity 0.2s linear;
 						-webkit-box-orient: vertical;
+						line-clamp: 1;
 						-webkit-line-clamp: 1;
 						white-space: nowrap;
 						overflow: hidden;
@@ -141,23 +144,17 @@ aside {
 			}
 			li:last-child {
 				margin-top: auto;
-				i {
-				}
 			}
 		}
 	}
 }
 
 @media (max-width: $tabletBreakPoint) {
-	aside.sb-expanded {
-		// --sb-width: 16rem;
-	}
+	// aside.sb-expanded {
+	// 	// --sb-width: 16rem;
+	// }
 	aside {
 		--iconSize: 3rem;
-		nav {
-			ul {
-			}
-		}
 	}
 }
 @media (max-width: $mobileBreakPoint) {

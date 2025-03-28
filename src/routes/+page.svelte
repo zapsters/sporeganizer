@@ -76,10 +76,39 @@
 				hassle.
 			</p>
 			<div class="inputContainer centered">
-				<a href="#signin"><button>Get Started</button></a>
+				<a href="/signin"><button>Get Started</button></a>
 			</div>
 		</div>
 	</div>
+	<h2>Stay Organized, Stay Focused</h2>
+	<p>
+		Tired of messy to-do lists and forgotten deadlines? <strong>Sporeganizer</strong> helps you track
+		assignments, due dates, and study sessions—all in a simple, lightweight app designed for students
+		who want to stay on top of their work.
+	</p>
+	<br />
+
+	<h2>Why Sporeganizer?</h2>
+	<ul>
+		<li>
+			<strong>Effortless Task Management</strong> – Add, edit, and check off homework with ease.
+		</li>
+		<li><strong>Stay on Top of Deadlines</strong> – Get a clear view of what’s due and when.</li>
+		<li><strong>Minimal & Fast</strong> – No clutter, just what you need to stay productive.</li>
+		<li>
+			<strong>A Unique, Nature-Inspired Design</strong> – A refreshing alternative to generic planners.
+		</li>
+	</ul>
+	<br />
+
+	<h2>Get Started Today</h2>
+	<p>
+		Sporeganizer is built to help you manage your school life without distractions. No ads, no
+		unnecessary features—just a simple, effective way to stay organized.
+	</p>
+	<p><a href="/login">Try Sporeganizer Now</a></p>
+
+	<br />
 	<h2>Features</h2>
 	<ul>
 		<li>Access your dashboard from anywhere.</li>
@@ -95,18 +124,18 @@
 	<div class="slideshow-container">
 		<!-- Full-width images with number and caption text -->
 		<div class="mySlides fade">
-			<div class="numbertext">1 / 3</div>
+			<div class="numberText">1 / 3</div>
 			<img class="raw" alt="Preview 1" src="images/previewPics/preview1.png" />
 		</div>
 
 		<div class="mySlides fade">
-			<div class="numbertext">2 / 3</div>
+			<div class="numberText">2 / 3</div>
 			<img class="raw" alt="Preview 2" src="images/previewPics/preview2.png" />
 			<div class="text">Caption Two</div>
 		</div>
 
 		<div class="mySlides fade">
-			<div class="numbertext">3 / 3</div>
+			<div class="numberText">3 / 3</div>
 			<img class="raw" alt="Preview 3" src="images/previewPics/preview3.png" />
 			<div class="text">Caption Three</div>
 		</div>
@@ -121,4 +150,10 @@
 			<span class="dot" id="dot3"></span>
 		</div>
 	</div>
+	<br />
+	<br />
+	<footer>
+		<span>Made with love by Erin Ballinger &lt;3</span>
+		<span>See more at <a href="https://erinballinger.com">erinballinger.com</a></span>
+	</footer>
 </div>

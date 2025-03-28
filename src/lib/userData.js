@@ -2,11 +2,8 @@ import Jquery from 'jquery';
 import { getUserSettings } from '$lib/firestoreDatabase';
 import { onAuthStateChanged, getAuth } from 'firebase/auth';
 
-const settingsChangeEvent = new Event('settingsChangeEvent');
-
-let settingsSyncedThisVisit = false;
-
-export const settings = {
+const settings = {
+	hasBeenFetched: false,
 	do24HrTime: false // This can now be updated
 };
 
@@ -14,9 +11,6 @@ export async function syncSettings() {
 	return /** @type {Promise<void>} */ (
 		/** @type {Promise<void>} */ (
 			new Promise((resolve, reject) => {
-				if (settingsSyncedThisVisit) {
-					resolve();
-				}
 				const unsubscribe = onAuthStateChanged(getAuth(), async (user) => {
 					unsubscribe(); // Unsubscribe immediately to avoid multiple triggers
 
@@ -25,8 +19,10 @@ export async function syncSettings() {
 							const userSettings = await getUserSettings(); // Ensure this is awaited
 							settings.do24HrTime = Boolean(userSettings['24hrTime']);
 
-							console.log('Settings updated!');
-							settingsSyncedThisVisit = true;
+							Object.defineProperty(settings, 'hasBeenFetched', {
+								value: true,
+								writable: false
+							});
 							resolve(); // Resolve when settings are fully synced
 						} catch (error) {
 							console.error('Error syncing settings:', error);
@@ -41,6 +37,12 @@ export async function syncSettings() {
 	);
 }
 
+export async function getSettings() {
+	while (!settings['hasBeenFetched'])
+		// define the condition as you like
+		await new Promise((resolve) => setTimeout(resolve, 1000));
+}
+
 export function getSettingParameter(key) {
 	return settings[key];
 }
@@ -51,20 +53,25 @@ export function updateSettingParameter(key, value) {
 
 // DATA CACHING HANDLER =====================================================
 const queryCache = {
-	classes: null
+	classes: null,
+	settings: null
 };
 
 // Function to update cache (mutates existing array)
-export async function updateClassQueryCache(newCache) {
-	queryCache['classes'] = newCache; // Add new data
+export async function updateQueryCache(cacheName, cachedData) {
+	queryCache[cacheName] = cachedData; // Add new data
 }
 export async function updateClassInCache(classId, classJson) {
 	const index = queryCache['classes'].findIndex((item) => item.classId === classId);
 
-	if (index == -1) throw new Error('Class not found.');
-
-	// Delete if our new json is empty...
-	if (Jquery.isEmptyObject(classJson)) {
+	// Check if the classId does not exist, if so, add it.
+	if (index == -1) {
+		queryCache['classes'][classId] = {
+			classId: classId, // Firestore document ID
+			...classJson
+		};
+	} else if (Jquery.isEmptyObject(classJson)) {
+		// Delete if our new json is empty...
 		queryCache['classes'].splice(index, 1);
 	} else {
 		// Update the cache with the data
@@ -74,10 +81,11 @@ export async function updateClassInCache(classId, classJson) {
 			...classJson
 		};
 	}
+	console.log('updated class cache.', queryCache['classes']);
 }
 
-export async function getClassQueryCache() {
+export async function getQueryCache(queryCacheKey) {
 	// If our classQueryCache is already defined,
-	if (queryCache['classes'] != undefined) return queryCache['classes'];
+	if (queryCache[queryCacheKey] != undefined) return queryCache[queryCacheKey];
 	return null;
 }

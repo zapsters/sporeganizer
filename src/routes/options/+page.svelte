@@ -16,7 +16,7 @@
 		updateClassInDatabase
 	} from '$lib/firestoreDatabase.js';
 	import { redirectPageRequiresAccount, resizeSelect, getDayOfTheWeekAbbr } from '$lib/model';
-	import { syncSettings, settings, getSettingParameter } from '$lib/userData.js';
+	import { getSettings, getSettingParameter, updateSettingParameter } from '$lib/userData.js';
 	import { browserTheme, setTheme } from '$lib/browserTheme';
 
 	onMount(() => {
@@ -25,7 +25,8 @@
 		const unsubscribeDashboard = onAuthStateChanged(getAuth(), async (user) => {
 			if (user) {
 				// Do logic
-				await syncSettings();
+				await getSettings();
+				console.log(getSettingParameter('do24HrTime'));
 
 				Jquery('#24hrTimeInput').prop('checked', getSettingParameter('do24HrTime'));
 
@@ -94,14 +95,12 @@
 		});
 
 		Jquery('#24hrTimeInput').on('change', function () {
-			console.log('caught');
-
 			if (Jquery(this).is(':checked')) {
 				updateUserSettings('24hrTime', true);
-				settings.do24HrTime = true;
+				updateSettingParameter('24hrTime', true);
 			} else {
 				updateUserSettings('24hrTime', false);
-				settings.do24HrTime = false;
+				updateSettingParameter('24hrTime', false);
 			}
 		});
 	});

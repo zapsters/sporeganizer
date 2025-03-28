@@ -1,8 +1,6 @@
 @use 'themes.scss' as *;
 @use 'sass:list';
-.test {
-	background-color: red;
-}
+
 button:not(.raw):not(.toggleVisibility):not(.gsi-material-button) {
 	@include themify($themes) {
 		padding: 8px;

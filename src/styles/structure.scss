@@ -9,7 +9,7 @@
 }
 html,
 body {
-	font-family: 'Doppio One', 'Roboto';
+	font-family: 'Lexend', 'Roboto Condensed';
 	height: 100dvh !important;
 	@include themify($themes) {
 		color: themed('text');

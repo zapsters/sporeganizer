@@ -70,16 +70,12 @@
 		margin: 10px 0;
 		height: 100%;
 		.toggleVisibility {
-			display: flex;
-			align-items: center;
-			justify-content: space-evenly;
 			position: absolute;
-			right: 0;
+			right: 0px;
 			top: 50%;
 			transform: translateY(-50%);
-			width: 35px;
 			font-size: 30px;
-			height: 50px;
+			height: 40px;
 			img {
 				width: 38px;
 				cursor: pointer;

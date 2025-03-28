@@ -14,10 +14,9 @@
 
 	onMount(async () => {
 		firebase.connectEmulators();
-		// Sync our user's settings
 		checkDarkModePreference();
 		await syncSettings();
-		console.log('test');
+		// Sync our user's settings
 
 		const auth = getAuth();
 		onAuthStateChanged(auth, (user) => {
@@ -33,10 +32,12 @@
 				jQuery('#displayNameInput').val(user.displayName);
 				jQuery('#status').html('signed in');
 				jQuery('#nav-accountTab').css('display', 'block');
+				jQuery('#nav-optionsTab').css('display', 'block');
 				jQuery('#nav-signInTab').css('display', 'none');
 			} else {
 				jQuery('#status').html('not signed in');
 				jQuery('#nav-accountTab').css('display', 'none');
+				jQuery('#nav-optionsTab').css('display', 'none');
 				jQuery('#nav-signInTab').css('display', 'block');
 			}
 		});
@@ -119,11 +120,17 @@
 							<span>Dashboard</span>
               </a>
 							</li> -->
-				<li>
+				<li id="nav-optionsTab" style="display: none">
 					<a href="/options">
 						<i><img src="images/ui/settings.svg" style="width: 100%" alt="dashboard" srcset="" /></i
 						>
 						<span>Options</span>
+					</a>
+				</li>
+				<li>
+					<a href="/about">
+						<i><img src="images/ui/about.svg" style="width: 100%" alt="about" srcset="" /></i>
+						<span>About</span>
 					</a>
 				</li>
 				<li>
@@ -151,6 +158,7 @@
 		position: fixed;
 		top: 50%;
 		left: 50%;
+		z-index: 100 !important;
 		transform: translate(-50%, -50%);
 		padding: 1rem 2rem;
 		background: #333;

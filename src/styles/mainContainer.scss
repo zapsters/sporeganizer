@@ -12,13 +12,16 @@
 	overflow: auto;
 	display: block;
 	@include themify($themes) {
-		a.primary {
-			color: themed('primary');
-			text-align: left;
-			cursor: pointer;
+		p a,
+		span a {
 			margin: 0;
 			padding: 0;
+		}
+		a.primary,
+		a {
+			color: list.nth(themed('primaryButton'), 1);
 			&:hover {
+				color: list.nth(themed('primaryButton'), 2);
 				text-decoration: underline;
 			}
 		}
@@ -42,9 +45,8 @@
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
-			font-size: 33px;
-			font-weight: 500;
-			font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			font-size: 36px;
+			font-weight: 400;
 			border-bottom: 3px solid themed('text');
 
 			select {
@@ -60,7 +62,8 @@
 				-webkit-appearance: none;
 				-moz-appearance: none;
 				appearance: none;
-				background: url('../images/ui/chevron-down.svg') 100% / 34px no-repeat;
+				background: url('../images/ui/chevron-down.svg') 100% / 40px no-repeat;
+				background-position: right;
 				@include recolor(themed('text'), 1);
 				option {
 					font-size: 24px;

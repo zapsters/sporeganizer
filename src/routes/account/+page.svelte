@@ -5,7 +5,6 @@
 	import { onMount } from 'svelte';
 	import { onAuthStateChanged, getAuth, EmailAuthProvider } from 'firebase/auth';
 	import {
-		updateUserSettings,
 		addClassToDatabase,
 		getAllUserMadeClasses,
 		getAllUserMadeAssignments,
@@ -25,7 +24,6 @@
 		updateUserDisplayName,
 		initTogglePasswordVisibilityListeners
 	} from '$lib/model';
-	import { syncSettings, settings } from '$lib/userData.js';
 
 	onMount(() => {
 		// Redirect user to the login page if we are not logged in.
