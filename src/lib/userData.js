@@ -26,11 +26,13 @@ export async function syncSettings() {
 					if (user) {
 						try {
 							const userSettings = await getUserSettings(); // Ensure this is awaited
-							settings.do24HrTime = Boolean(userSettings['24hrTime']);
+							settings.do24HrTime = Boolean(userSettings['do24HrTime']);
 
 							Object.defineProperty(settings, 'hasBeenFetched', {
 								value: true
 							});
+							console.log(settings);
+
 							resolve(); // Resolve when settings are fully synced
 						} catch (error) {
 							console.error('Error syncing settings:', error);
@@ -59,6 +61,8 @@ export function getSettingParameter(key) {
 }
 export function updateSettingParameter(key, value) {
 	settings[key] = value;
+	console.log(settings);
+
 	console.log(`Setting Param Updated ${key}:${value}`);
 }
 

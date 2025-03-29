@@ -126,18 +126,19 @@
 		<div class="mySlides fade">
 			<div class="numberText">1 / 3</div>
 			<img class="raw" alt="Preview 1" src="images/previewPics/preview1.png" />
+			<div class="text">Dashboard</div>
 		</div>
 
 		<div class="mySlides fade">
 			<div class="numberText">2 / 3</div>
 			<img class="raw" alt="Preview 2" src="images/previewPics/preview2.png" />
-			<div class="text">Caption Two</div>
+			<div class="text">Account</div>
 		</div>
 
 		<div class="mySlides fade">
 			<div class="numberText">3 / 3</div>
 			<img class="raw" alt="Preview 3" src="images/previewPics/preview3.png" />
-			<div class="text">Caption Three</div>
+			<div class="text">Options</div>
 		</div>
 
 		<!-- Next and previous buttons -->
@@ -154,6 +155,11 @@
 	<br />
 	<footer>
 		<span>Made with love by Erin Ballinger &lt;3</span>
-		<span>See more at <a href="https://erinballinger.com">erinballinger.com</a></span>
+		<span style="font-size: smaller; font-weight: 100 !important;"
+			>Banner and Mushrooms designed by Mushollow</span
+		>
+		<span style="margin-top: 5px;"
+			>See more at <a href="https://erinballinger.com">erinballinger.com</a></span
+		>
 	</footer>
 </div>

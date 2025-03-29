@@ -95,11 +95,9 @@
 
 		Jquery('#24hrTimeInput').on('change', function () {
 			if (Jquery(this).is(':checked')) {
-				updateUserSettings('24hrTime', true);
-				updateSettingParameter('24hrTime', true);
+				updateUserSettings('do24HrTime', true);
 			} else {
-				updateUserSettings('24hrTime', false);
-				updateSettingParameter('24hrTime', false);
+				updateUserSettings('do24HrTime', false);
 			}
 		});
 	});

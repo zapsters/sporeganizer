@@ -114,9 +114,6 @@ export async function updateFieldInUserCollection(key, value) {
 }
 
 // Add class / assignment Documents
-/**
- * @param {{ name: string | undefined; icon: any; professor: any; time: any; }} classJson
- */
 export async function addClassToDatabase(classJson) {
 	if (!checkLogInStatus()) return;
 	if (classJson.name == '' || classJson.name == undefined) {
@@ -129,12 +126,11 @@ export async function addClassToDatabase(classJson) {
 			// @ts-ignore
 			name: DOMPurifyFunc(classJson.name),
 			// @ts-ignore
-			professor: DOMPurifyFunc(classJson.professor),
+			notes: DOMPurifyFunc(classJson.notes),
 			time: classJson.time,
 			// @ts-ignore
 			userId: getAuth().currentUser.uid,
-			createdAt: serverTimestamp(),
-			notes: ''
+			createdAt: serverTimestamp()
 		});
 		updateClassInCache(classRef.id, classJson);
 		return classRef.id;
