@@ -5,11 +5,6 @@
 	padding: 30px;
 	p {
 		font-size: 24px;
-		strong {
-			@include themify($themes) {
-				color: themed('primary');
-			}
-		}
 	}
 	h2 {
 		font-size: 33px;
@@ -26,7 +21,7 @@
 		margin-bottom: 46px;
 		border-radius: 10px;
 		width: 100%;
-		background-image: url('images/IMG_5938.jpg');
+		background-image: url('/images/IMG_5938.jpg');
 		background-size: cover;
 		background-position: right;
 		background-repeat: no-repeat;
@@ -42,8 +37,6 @@
 			// background-image: url("../images/bannerHomepage.png");
 			padding: 24px 0 0px 17px;
 			background-origin: border-box;
-			// width: fit-content;
-
 			background-size: contain;
 			background-position: left top;
 			background-repeat: no-repeat;
@@ -55,9 +48,9 @@
 			h1 {
 				text-underline-offset: 5px;
 				text-decoration: underline;
-				font-weight: 900;
+				font-weight: 700;
 				margin-top: 3px;
-				font-size: 55px;
+				font-size: 60px;
 				margin-bottom: 3px;
 				display: flex;
 				align-items: center;

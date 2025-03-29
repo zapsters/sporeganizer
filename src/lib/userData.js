@@ -4,8 +4,17 @@ import { onAuthStateChanged, getAuth } from 'firebase/auth';
 
 const settings = {
 	hasBeenFetched: false,
-	do24HrTime: false // This can now be updated
+	do24HrTime: false, // This can now be updated,
+	reset: function () {
+		this.hasBeenFetched = false;
+		this.do24HrTime = false;
+	}
 };
+
+export function clearLocalData() {
+	settings.reset();
+	queryCache.reset();
+}
 
 export async function syncSettings() {
 	return /** @type {Promise<void>} */ (
@@ -20,8 +29,7 @@ export async function syncSettings() {
 							settings.do24HrTime = Boolean(userSettings['24hrTime']);
 
 							Object.defineProperty(settings, 'hasBeenFetched', {
-								value: true,
-								writable: false
+								value: true
 							});
 							resolve(); // Resolve when settings are fully synced
 						} catch (error) {
@@ -41,6 +49,9 @@ export async function getSettings() {
 	while (!settings['hasBeenFetched'])
 		// define the condition as you like
 		await new Promise((resolve) => setTimeout(resolve, 1000));
+	console.log('Retrieved settings from cache.');
+
+	return settings;
 }
 
 export function getSettingParameter(key) {
@@ -54,7 +65,11 @@ export function updateSettingParameter(key, value) {
 // DATA CACHING HANDLER =====================================================
 const queryCache = {
 	classes: null,
-	settings: null
+	settings: null,
+	reset: function () {
+		this.classes = null;
+		this.settings = null;
+	}
 };
 
 // Function to update cache (mutates existing array)
@@ -66,10 +81,10 @@ export async function updateClassInCache(classId, classJson) {
 
 	// Check if the classId does not exist, if so, add it.
 	if (index == -1) {
-		queryCache['classes'][classId] = {
-			classId: classId, // Firestore document ID
-			...classJson
-		};
+		queryCache['classes'].push({
+			...classJson,
+			classId: classId // Firestore document ID
+		});
 	} else if (Jquery.isEmptyObject(classJson)) {
 		// Delete if our new json is empty...
 		queryCache['classes'].splice(index, 1);
@@ -77,8 +92,8 @@ export async function updateClassInCache(classId, classJson) {
 		// Update the cache with the data
 		// @ts-ignore
 		queryCache['classes'][index] = {
-			classId: classId, // Firestore document ID
-			...classJson
+			...classJson,
+			classId: classId // Firestore document ID
 		};
 	}
 	console.log('updated class cache.', queryCache['classes']);

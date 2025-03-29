@@ -12,6 +12,9 @@
 	overflow: auto;
 	display: block;
 	@include themify($themes) {
+		strong {
+			color: themed('primary');
+		}
 		p a,
 		span a {
 			margin: 0;
@@ -54,7 +57,6 @@
 				// padding-right: 1.1em;
 				margin-bottom: -1px !important;
 				margin-top: -7px !important;
-				background-color: red;
 				// height: 100%;
 				border: 0;
 				font-size: inherit;
@@ -62,7 +64,7 @@
 				-webkit-appearance: none;
 				-moz-appearance: none;
 				appearance: none;
-				background: url('../images/ui/chevron-down.svg') 100% / 40px no-repeat;
+				background: url('/images/ui/chevron-down.svg') 100% / 40px no-repeat;
 				background-position: right;
 				@include recolor(themed('text'), 1);
 				option {

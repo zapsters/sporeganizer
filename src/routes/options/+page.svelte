@@ -26,7 +26,6 @@
 			if (user) {
 				// Do logic
 				await getSettings();
-				console.log(getSettingParameter('do24HrTime'));
 
 				Jquery('#24hrTimeInput').prop('checked', getSettingParameter('do24HrTime'));
 

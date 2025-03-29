@@ -24,6 +24,7 @@ import { app, db, provider } from '$lib/firebase';
 import * as alertManager from '$lib/alert.js';
 import * as firestoreDatabase from '$lib/firestoreDatabase';
 import DOMPurify from 'dompurify';
+import { clearLocalData } from './userData';
 
 // @ts-ignore
 export function DOMPurifyFunc(input) {
@@ -32,6 +33,7 @@ export function DOMPurifyFunc(input) {
 
 // USER HANDLING =========================================
 const auth = getAuth();
+
 // @ts-ignore
 export async function signUserUp(displayName, email, password) {
 	if (displayName.length > 30) throw new Error('Display name is invalid.');
@@ -169,6 +171,7 @@ export async function updateUserDisplayName(displayName, responseElement) {
 export function signUserOut() {
 	signOut(auth)
 		.then(() => {
+			clearLocalData();
 			goto('/');
 		})
 		.catch((error) => {

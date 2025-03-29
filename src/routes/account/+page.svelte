@@ -24,6 +24,7 @@
 		updateUserDisplayName,
 		initTogglePasswordVisibilityListeners
 	} from '$lib/model';
+	import { clearLocalData } from '$lib/userData';
 
 	onMount(() => {
 		// Redirect user to the login page if we are not logged in.
@@ -60,6 +61,7 @@
 					closeModalOnClick: 'false',
 					onClick: async () => {
 						try {
+							clearLocalData();
 							deleteCurrentUser();
 						} catch (error) {
 							Jquery('#deleteAccountStatusText').html(error);
