@@ -20,7 +20,7 @@ import { goto } from '$app/navigation';
 
 // @ts-ignore
 // @ts-ignore
-import { app, db, provider } from '$lib/firebase';
+import { app, db, provider } from '$lib/firebaseConfig';
 import * as alertManager from '$lib/alert.js';
 import * as firestoreDatabase from '$lib/firestoreDatabase';
 import DOMPurify from 'dompurify';
@@ -49,6 +49,7 @@ export async function signUserUp(displayName, email, password) {
 				// @ts-ignore
 				Jquery('.displayName').html(auth.currentUser.displayName);
 			});
+			clearLocalData();
 		})
 		.catch((error) => {
 			Jquery('#signUp-statusText').html(error.message);
@@ -60,6 +61,7 @@ export async function signUserUp(displayName, email, password) {
 // @ts-ignore
 export async function signUserIn(siEmail, siPassword) {
 	await signInWithEmailAndPassword(auth, siEmail, siPassword);
+	clearLocalData();
 }
 
 // @ts-ignore
@@ -82,19 +84,17 @@ export async function googlePopup() {
 		signInWithPopup(auth, provider)
 			.then((result) => {
 				firestoreDatabase.addUserToCollection(result.user);
+				clearLocalData();
 				goto('/dashboard');
 			})
 			.catch((error) => {
 				throw error;
 			});
 	} else {
-		// @ts-ignore
-		// @ts-ignore
 		signInWithRedirect(auth, provider);
 	}
 }
 
-// @ts-ignore
 export async function reauthenticate(credentials) {
 	const auth = getAuth();
 	const user = auth.currentUser;
@@ -109,9 +109,7 @@ export async function reauthenticate(credentials) {
 		});
 }
 
-// @ts-ignore
 export async function updateUserPassword(newPassword) {
-	// @ts-ignore
 	await updatePassword(getAuth().currentUser, newPassword)
 		.then(() => {
 			console.log('worked', newPassword);
@@ -267,7 +265,7 @@ export function resizeSelect(selectId) {
 	document.body.appendChild(tempSpan);
 	// Adjust the select width to match the option text +/- some padding
 	select.style.width =
-		tempSpan.offsetWidth + parseInt(getComputedStyle(select).backgroundSize) - 13 + 'px';
+		tempSpan.offsetWidth + parseInt(getComputedStyle(select).backgroundSize) + 'px';
 
 	document.body.removeChild(tempSpan);
 }

@@ -9,18 +9,19 @@
 	import { fly } from 'svelte/transition';
 	import { syncSettings } from '$lib/userData';
 	import { checkDarkModePreference } from '$lib/browserTheme';
+	export let settings;
 
 	let sidebarOpen: boolean = true; // Define the state outside of the event
 
 	onMount(async () => {
 		firebase.connectEmulators();
 		checkDarkModePreference();
-		await syncSettings();
 		// Sync our user's settings
 
 		const auth = getAuth();
-		onAuthStateChanged(auth, (user) => {
+		onAuthStateChanged(auth, async (user) => {
 			if (user) {
+				await syncSettings();
 				// User is signed in, see docs for a list of available properties
 				// https://firebase.google.com/docs/reference/js/auth.user
 
@@ -32,12 +33,10 @@
 				jQuery('#displayNameInput').val(user.displayName);
 				jQuery('#status').html('signed in');
 				jQuery('#nav-accountTab').css('display', 'block');
-				jQuery('#nav-optionsTab').css('display', 'block');
 				jQuery('#nav-signInTab').css('display', 'none');
 			} else {
 				jQuery('#status').html('not signed in');
 				jQuery('#nav-accountTab').css('display', 'none');
-				jQuery('#nav-optionsTab').css('display', 'none');
 				jQuery('#nav-signInTab').css('display', 'block');
 			}
 		});
@@ -90,7 +89,7 @@
 						<span class="logo">Sporeganizer</span>
 					</a>
 				</li>
-				<li id="nav-homeTab">
+				<li id="nav-homeTab" class="hideOnMobile">
 					<a href="/">
 						<i><img src="images/ui/home.svg" alt="dashboard" srcset="" /></i>
 						<span>Home</span>
@@ -114,23 +113,20 @@
 						<span class="displayName">Account</span>
 					</a>
 				</li>
+				{#if settings}
+					<p>Theme: {settings.theme}</p>
+				{/if}
 				<!-- <li>
 						<a href="/dashboard">
 							<i class="pixelart-icons-font-art-text pixelArtIcon"></i>
 							<span>Dashboard</span>
               </a>
 							</li> -->
-				<li id="nav-optionsTab" style="display: none">
+				<li id="nav-optionsTab">
 					<a href="/options">
 						<i><img src="images/ui/settings.svg" style="width: 100%" alt="dashboard" srcset="" /></i
 						>
 						<span>Options</span>
-					</a>
-				</li>
-				<li>
-					<a href="/about">
-						<i><img src="images/ui/about.svg" style="width: 100%" alt="about" srcset="" /></i>
-						<span>About</span>
 					</a>
 				</li>
 				<li>

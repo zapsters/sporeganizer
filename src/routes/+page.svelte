@@ -4,7 +4,7 @@
 
 	// @ts-ignore
 	// @ts-ignore
-	import { app, db, provider } from '$lib/firebase';
+	import { app, db, provider } from '$lib/firebaseConfig';
 	// @ts-ignore
 	import * as alertManager from '$lib/alert.js';
 	// @ts-ignore
@@ -156,10 +156,12 @@
 	<footer>
 		<span>Made with love by Erin Ballinger &lt;3</span>
 		<span style="font-size: smaller; font-weight: 100 !important;"
-			>Banner and Mushrooms designed by Mushollow</span
+			>Banner image and Mushrooms artwork is take / designed by <a href="https://erinballinger.com"
+				>Mushollow</a
+			></span
 		>
 		<span style="margin-top: 5px;"
-			>See more at <a href="https://erinballinger.com">erinballinger.com</a></span
+			>See more at <a target="_blank" href="https://erinballinger.com">erinballinger.com</a></span
 		>
 	</footer>
 </div>

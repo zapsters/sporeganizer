@@ -1,3 +1,4 @@
+@use 'variables.scss' as *;
 @use 'themes.scss' as *;
 @use 'sass:list';
 
@@ -9,6 +10,10 @@ button:not(.raw):not(.toggleVisibility):not(.gsi-material-button) {
 		border: 3px solid list.nth(themed('primaryButton'), 1);
 		color: list.nth(themed('primaryButton'), 1);
 		background-color: transparent;
+		&.primary {
+			background-color: themed('secondary');
+			padding: 8px 20px !important;
+		}
 		&:hover {
 			background-color: list.nth(themed('primaryButton'), 2);
 			color: themed('background');
@@ -95,7 +100,7 @@ select {
 	cursor: pointer;
 }
 
-input[type='time']::-webkit-calendar-picker-indicator {
+input::-webkit-calendar-picker-indicator {
 	@include themify($themes) {
 		@include recolor(themed('primary'), 1);
 		cursor: pointer;
@@ -301,4 +306,11 @@ button.raw {
 .toggleVisibility {
 	background-color: transparent;
 	border: 0;
+}
+
+@media (max-width: $mobileBreakPoint) {
+	button:not(.raw):not(.toggleVisibility):not(.gsi-material-button) {
+		font-size: 16px !important;
+		padding: 5px !important;
+	}
 }

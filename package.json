@@ -38,6 +38,7 @@
 	},
 	"dependencies": {
 		"dompurify": "^3.2.4",
-		"firebase": "^11.4.0"
+		"firebase": "^11.4.0",
+		"firebase-admin": "^13.2.0"
 	}
 }

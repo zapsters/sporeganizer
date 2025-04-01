@@ -1,7 +1,6 @@
 @use 'themes.scss' as *;
 @use 'variables.scss' as *;
 @use 'sass:list';
-
 .classElement {
 	&:hover {
 		@include themify($themes) {
@@ -16,18 +15,17 @@
 	overflow: visible;
 	@include themify($themes) {
 		border-bottom: 2px solid themed('text');
-		padding: 8px 8px;
-		padding-bottom: 6px;
+		padding: 4px 8px;
 		position: relative;
 		ul {
 			margin-top: 6px;
 		}
 		.icon {
 			flex: none;
-			width: 100px;
+			width: 90px;
 		}
 		.classElement-content {
-			padding: 4px 0px 4px 12px;
+			padding: 0px 0px 4px 7px;
 			flex: 1;
 			overflow: hidden;
 			h3,
@@ -36,7 +34,7 @@
 				max-width: fit-content;
 				color: themed('primary');
 				margin-bottom: 0px;
-				font-size: 29px;
+				font-size: 27px;
 				overflow: hidden;
 				text-overflow: ellipsis;
 				font-weight: 500;
@@ -72,7 +70,7 @@
 		aspect-ratio: 1/1;
 		border-radius: 50%;
 		padding: 10px;
-		background-image: url('../images/mushrooms/flyAgaric.png');
+		background-image: url('../images/mushrooms/missingno.png');
 		background-size: contain;
 		background-position: center;
 		background-origin: content-box;
@@ -93,14 +91,13 @@
 		align-items: center;
 		flex-wrap: wrap;
 		justify-content: flex-start;
-		gap: 4px;
+		gap: 6px;
 		margin-top: 3px;
 		li {
 			background-color: themed('background');
 			border: 2px solid list.nth(themed('primaryButton'), 2);
 			border-radius: 5px;
-			padding: 3px 4px;
-			min-width: 46px;
+			padding: 3px 6px;
 			font-size: 14px;
 			text-align: center;
 			list-style: none;
@@ -150,19 +147,28 @@ hr {
 		@include themify($themes) {
 			color: themed('primary');
 		}
-		font-size: 30px;
+		font-size: 27px;
 		position: relative;
 		display: flex;
 		align-items: flex-start;
 		justify-content: space-evenly;
 		flex: 1;
 
+		@include themify($themes) {
+			a {
+				color: themed('primary');
+				&:hover {
+					color: themed('primary');
+				}
+			}
+		}
+
 		i {
 			background-image: url('../images/ui/checkbox.svg');
 			background-size: cover;
 			background-position: center;
 			background-repeat: no-repeat;
-			width: 35px;
+			width: 32px;
 			aspect-ratio: 1/1;
 			pointer-events: none;
 			@include themify($themes) {
@@ -191,7 +197,7 @@ hr {
 	display: flex;
 	align-items: stretch;
 	justify-content: stretch;
-	padding: 12px 12px 10px 12px;
+	padding: 12px 12px 7px 12px;
 	@include themify($themes) {
 		// border-bottom: 3px solid themed(text);
 	}
@@ -210,18 +216,54 @@ hr {
 	}
 }
 
-#assignmentEntryContainer,
-#classEntryContainer {
-	width: 100%;
-	padding: 0;
-	overflow: visible;
-	h4 {
-		padding: 0 10px;
-		font-weight: 100;
-		margin-top: 17px;
-		margin-bottom: 4px;
-		&:first-of-type {
-			margin-top: 8px;
+@media (max-width: $mobileBreakPoint) {
+	.buttonContainer {
+		padding: 5px;
+		padding-bottom: 0;
+	}
+
+	.classDatesContainer {
+		li {
+			font-size: 10px !important;
+			padding: 2px !important;
+		}
+	}
+
+	.actionBtns {
+		gap: 2px !important;
+		.actionButton {
+			font-size: 24px !important;
+			i {
+				width: 28px !important;
+			}
+		}
+	}
+
+	.classElement {
+		@include themify($themes) {
+			padding: 1px 7px;
+			border-width: 2px;
+			ul {
+				margin-top: 3px;
+			}
+			.icon {
+				flex: none;
+				width: 80px;
+			}
+			.classElement-content {
+				padding: 0px 0px 2px 4px;
+				h3,
+				a {
+					font-size: 22px;
+				}
+				h6 {
+					font-weight: 400;
+					font-size: 14px;
+				}
+				table {
+					font-size: 12px;
+				}
+			}
 		}
 	}
 }

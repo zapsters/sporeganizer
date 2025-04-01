@@ -48,7 +48,7 @@
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
-			font-size: 36px;
+			font-size: 32px;
 			font-weight: 400;
 			border-bottom: 3px solid themed('text');
 
@@ -60,11 +60,11 @@
 				// height: 100%;
 				border: 0;
 				font-size: inherit;
-				width: 100%;
+				width: fit-content;
 				-webkit-appearance: none;
 				-moz-appearance: none;
 				appearance: none;
-				background: url('/images/ui/chevron-down.svg') 100% / 40px no-repeat;
+				background: url('/images/ui/chevron-down.svg') 100% / 36px no-repeat;
 				background-position: right;
 				@include recolor(themed('text'), 1);
 				option {
@@ -76,6 +76,7 @@
 				align-items: center;
 				justify-content: space-evenly;
 				@include recolor(themed('text'), 1);
+				transform: translateY(-2px);
 				cursor: pointer;
 				svg:not(.gsi-material-button svg),
 				img {
@@ -100,8 +101,21 @@
 			display: block;
 			overflow: auto;
 			padding: 50px;
+
+			width: 100%;
+			padding: 0;
+			overflow: visible;
+
 			input {
 				font-size: 20px;
+			}
+
+			h2 {
+				padding: 0 10px;
+				font-weight: 400;
+				font-size: 27px;
+				margin-top: 4px;
+				margin-bottom: 1px;
 			}
 		}
 	}
@@ -133,4 +147,33 @@
 	display: block;
 	align-items: center;
 	justify-content: space-evenly;
+}
+
+@media (max-width: $mobileBreakPoint) {
+	.mainContainer {
+		header {
+			font-size: 20px !important;
+			position: relative;
+			border-width: 2px !important;
+			select {
+				background: url('/images/ui/chevron-down.svg') 100% / 30px no-repeat !important;
+				font-size: inherit;
+				option {
+					font-size: inherit !important;
+				}
+			}
+			button img {
+				height: 29px !important;
+				position: absolute;
+				left: -24px;
+				top: -16px;
+			}
+		}
+		.mainContainer-content {
+			h2 {
+				font-size: 19px !important;
+				margin-top: 3px !important;
+			}
+		}
+	}
 }

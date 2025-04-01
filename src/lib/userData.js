@@ -31,6 +31,7 @@ export async function syncSettings() {
 							Object.defineProperty(settings, 'hasBeenFetched', {
 								value: true
 							});
+
 							console.log(settings);
 
 							resolve(); // Resolve when settings are fully synced
@@ -48,8 +49,7 @@ export async function syncSettings() {
 }
 
 export async function getSettings() {
-	while (!settings['hasBeenFetched'])
-		// define the condition as you like
+	while (!settings['hasBeenFetched'] && getAuth().currentUser != null)
 		await new Promise((resolve) => setTimeout(resolve, 1000));
 	console.log('Retrieved settings from cache.');
 
@@ -61,8 +61,6 @@ export function getSettingParameter(key) {
 }
 export function updateSettingParameter(key, value) {
 	settings[key] = value;
-	console.log(settings);
-
 	console.log(`Setting Param Updated ${key}:${value}`);
 }
 

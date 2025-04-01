@@ -2,7 +2,7 @@
 // @ts-ignore
 import { getAuth, sendEmailVerification } from 'firebase/auth';
 
-import { db } from '$lib/firebase';
+import { db } from '$lib/firebaseConfig';
 import {
 	doc,
 	collection,
@@ -26,10 +26,10 @@ import {
 } from '$lib/userData';
 
 export async function getUserSettings() {
-	if (!checkLogInStatus()) return;
 	const user = getAuth().currentUser;
+
 	if (!user) {
-		return null;
+		throw new Error('No current user');
 	}
 
 	let queryCheck = await getQueryCache('settings');
@@ -61,13 +61,13 @@ export async function getUserSettings() {
  * @param {any} value
  */
 export async function updateUserSettings(key, value) {
-	if (!checkLogInStatus()) return;
-	// @ts-ignore
-	const userRef = doc(db, 'users', getAuth().currentUser.uid);
+	if (checkLogInStatus()) {
+		const userRef = doc(db, 'users', getAuth().currentUser.uid);
 
-	await updateDoc(userRef, {
-		[`settings.${key}`]: value // Firestore dot notation
-	});
+		await updateDoc(userRef, {
+			[`settings.${key}`]: value // Firestore dot notation
+		});
+	}
 	await updateSettingParameter(key, value);
 }
 
@@ -115,7 +115,12 @@ export async function updateFieldInUserCollection(key, value) {
 
 // Add class / assignment Documents
 export async function addClassToDatabase(classJson) {
-	if (!checkLogInStatus()) return;
+	if (!checkLogInStatus()) {
+		let classes = await getAllUserMadeClasses();
+		classJson.classId = `preview${classes.length}`;
+		updateClassInCache(classJson.classId + 1, classJson);
+		return classJson.classId;
+	}
 	if (classJson.name == '' || classJson.name == undefined) {
 		throw new Error('Missing class name');
 	}
@@ -168,7 +173,10 @@ export async function addAssignmentToDatabase(assignmentJson) {
  * @param {any} classJson
  */
 export async function updateClassInDatabase(classId, classJson) {
-	if (!checkLogInStatus()) return;
+	if (!checkLogInStatus()) {
+		updateClassInCache(classId, classJson);
+		return;
+	}
 	await updateDoc(doc(db, 'classes', classId), classJson);
 	updateClassInCache(classId, classJson);
 }
@@ -178,7 +186,10 @@ export async function updateClassInDatabase(classId, classJson) {
  * @param {string} classId
  */
 export async function deleteClassFromDatabase(classId) {
-	if (!checkLogInStatus()) return;
+	if (!checkLogInStatus()) {
+		updateClassInCache(classId, '');
+		return;
+	}
 	await deleteDoc(doc(db, 'classes', classId));
 	updateClassInCache(classId, '');
 }
@@ -186,10 +197,6 @@ export async function deleteClassFromDatabase(classId) {
 // Create a reference to the classes collection
 const classesRef = collection(db, 'classes');
 export async function getAllUserMadeClasses() {
-	if (!checkLogInStatus()) {
-		return;
-	}
-
 	let queryCheck = await getQueryCache('classes');
 
 	if (queryCheck != null) {
@@ -244,6 +251,5 @@ export async function getAllUserMadeAssignments() {
 
 export function checkLogInStatus() {
 	const loggedIn = getAuth().currentUser != null;
-	if (!loggedIn) console.error('No current user.');
 	return loggedIn;
 }

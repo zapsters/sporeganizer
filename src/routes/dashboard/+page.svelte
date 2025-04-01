@@ -12,7 +12,13 @@
 		getClassById,
 		updateClassInDatabase
 	} from '$lib/firestoreDatabase.js';
-	import { getSettingParameter } from '$lib/userData';
+	import {
+		getQueryCache,
+		getSettingParameter,
+		getSettings,
+		syncSettings,
+		updateQueryCache
+	} from '$lib/userData';
 	import {
 		redirectPageRequiresAccount,
 		resizeSelect,
@@ -20,26 +26,72 @@
 		DOMPurifyFunc
 	} from '$lib/model';
 	import { mushroomBank } from '$lib/mushroomBank';
+	import { generateModalAlert } from '$lib/alert';
+	import { goto } from '$app/navigation';
+	import { auth } from '$lib/firebaseConfig';
 
-	onMount(() => {
+	onMount(async () => {
 		// Redirect user to the login page if we are not logged in.
 		// Give it a second to allow firebase to auto-login on page visit.
-		const unsubscribeDashboard = onAuthStateChanged(getAuth(), (user) => {
-			if (user) {
-				getAllUserMadeClasses().then((data) => {
-					Jquery('#classEntryContainer').html('');
-					data.forEach((classEntry) => {
-						dashboardAddClassElement(classEntry);
-					});
+
+		await getSettings();
+		if (getAuth().currentUser) {
+			getAllUserMadeClasses().then((data) => {
+				Jquery('#classEntryContainer').html('');
+				data.forEach((classEntry) => {
+					dashboardAddClassElement(classEntry);
 				});
-				unsubscribeDashboard();
-				// User is signed in
-			} else {
-				// redirectPageRequiresAccount(false);
-				unsubscribeDashboard();
-				// User is signed out
+			});
+			// User is signed in
+		} else {
+			generateModalAlert({
+				icon: 'warning-box',
+				header: 'This is a preview',
+				bodyText:
+					'Without a login, your data will not be saved past this session. Login or create an account to save your session data and utilize Sporeganizer to its full extent.',
+				buttons: [
+					{},
+					{
+						text: 'Login',
+						class: 'primary',
+						onClick: function () {
+							goto('signin');
+						}
+					}
+				]
+			});
+			if ((await getQueryCache('classes')) == null) {
+				updateQueryCache('classes', [
+					{
+						name: 'Chemistry',
+						icon: 'Shaggy Ink Cap',
+						notes: 'S210 - Science Building',
+						classId: 'preview1',
+						time: {
+							Mon: ['09:00', '11:50'],
+							Wed: ['09:00', '11:50']
+						}
+					},
+					{
+						name: 'Intermediate Application Development',
+						icon: 'Fly Agaric',
+						notes: 'I215 - Informatics Building',
+						classId: 'preview2',
+						time: {
+							Tue: ['16:00', '18:00'],
+							Thu: ['13:00', '14:15']
+						}
+					}
+				]);
 			}
-		});
+			getAllUserMadeClasses().then((data) => {
+				Jquery('#classEntryContainer').html('');
+				data.forEach((classEntry) => {
+					dashboardAddClassElement(classEntry);
+				});
+			});
+		}
+
 		resizeSelect('dashboardAssignmentTab');
 		// @ts-ignore
 		document.getElementById('dashboardAssignmentTab').addEventListener('change', () => {
@@ -49,7 +101,6 @@
 			Jquery(this).parent().find('button').removeClass('active');
 			Jquery(this).addClass('active');
 			Jquery('#classEntryContainer').html('');
-			if (getAuth().currentUser == null) throw new Error('No current user');
 
 			switch (Jquery(this).data('filter')) {
 				case 'all':
@@ -87,13 +138,26 @@
 					break;
 			}
 		});
+
+		// Manage the alternate / right screen select box.
+		Jquery('#dashboardAssignmentTab').on('change', function () {
+			switch (Jquery(this).val()) {
+				case 'currentAssignments':
+					break;
+				case 'pastAssignments':
+					break;
+			}
+		});
 	});
 
 	function getMushroomIconFromName(name) {
-		const thisMushroomBankJson = mushroomBank.filter(function (data) {
+		let thisMushroomBankJson = mushroomBank.filter(function (data) {
 			return data.title == name;
 		})[0];
-		if (thisMushroomBankJson == undefined) return null;
+		if (thisMushroomBankJson == undefined)
+			thisMushroomBankJson = mushroomBank.filter(function (data) {
+				return data.title == 'missingno';
+			})[0];
 		return thisMushroomBankJson.icon;
 	}
 
@@ -198,11 +262,6 @@
 	// Opens a create OR edit class modal.
 	// @ts-ignore
 	async function callClassModal(type, classData = {}) {
-		if (getAuth().currentUser == null) {
-			redirectPageRequiresAccount();
-			return;
-		}
-
 		var classTimeArray = {};
 		const daySelectIds = [
 			'#classModal-daySelectMon',
@@ -458,6 +517,7 @@
 								try {
 									const classResultJson = await formatClassJsonObject();
 									const classId = Jquery('#classModal-classId').val();
+									classResultJson[classId] = classId;
 									// @ts-ignore
 									await updateClassInDatabase(classId, classResultJson)
 										.then(async () => {
@@ -513,7 +573,7 @@
 
 									// @ts-ignore
 									await addClassToDatabase(classResultJson)
-										.then((classId) => {
+										.then(async (classId) => {
 											classResultJson['classId'] = classId;
 											dashboardAddClassElement(classResultJson);
 											// @ts-ignore
@@ -639,52 +699,41 @@
 	// callAssignmentModal("create");
 	// @ts-ignore
 	async function callAssignmentModal(type, assignmentData = {}) {
-		if (getAuth().currentUser == null) {
-			redirectPageRequiresAccount();
-			return;
-		}
-
 		var alertBody = `
     <hr>
     <div class="inputContainer centered">
-      <div class="assignmentElementIcon center large" id="assignmentModalIconPreview"></div>
-      <div class="dropdown">
-          <button class="dropbtn">
-              Icons
-          </button>
-          
-          <ul class="dropdown-content" id="classIconDropdown">
-            ${getMushroomElementsForDropdown()}
-        </ul>
-      </div>
-    </div>
-    <div class="inputContainer centered" style="display:none">
-      <label>assignment Id</label>
-      <input id="assignmentModal-assignmentId" type='text' readonly value='${
-				// @ts-ignore
-				assignmentData.assignmentId
-			}'/>
-    </div>
-    <div class="inputContainer centered">
-      <label>Assignment Name</label>
-      <input id="assignmentModal-assignmentName" type='text'/>
-    </div>
-    <div class="inputContainer centered">
-      <label>Class</label>
-      <select id="classModal-timeSettings">
-        <option value='none'>none</option>
-        <option value='default'>Math</option>
-        <option value='default'>Chem</option>
-      </select>
-    </div>
+      <div class="classElementIcon center large" id="assignmentModalIconPreview"></div>
+			</div>
+			<div class="inputContainer centered" style="display: none">
+				<label>assignment Id</label>
+				<input id="assignmentModal-assignmentId" type='text' readonly value='${
+					// @ts-ignore
+					assignmentData.assignmentId
+				}'/>
+					</div>
+	<div class="inputContainer centered">
+		<label>Assignment Name</label>
+		<input id="assignmentModal-assignmentName" type='text'/>
+		</div>
+		<div class="inputContainer centered">
+			<label>Class</label>
+			<select id="assignmentModal-classSelection">
+				<option value='none'>none</option>
+				${await getClassesForDropdown()}
+			</select>
+		</div>
+		<div class="inputContainer centered">
+			<label>Notes</label>
+			<input id="assignmentModal-notes" type='text'/>
+		</div>
     <div class="inputContainer centered flex" id="defaultFromAndToInputs">
       <div class="inputContainer">
         <label>Due date</label>
-        <input id="assignmentModal-timeFrom-all" type="date" />
+        <input id="assignmentModal-dueDate" type="date" />
       </div>
       <div class="inputContainer">
         <label>Due time</label>
-        <input id="assignmentModal-timeTo-all" type="time" value="23:59"/>
+        <input id="assignmentModal-dueTime" type="time" value="23:59"/>
       </div>
     </div>
 
@@ -751,10 +800,10 @@
 		async function formatAssignmentJsonObject() {
 			var assignmentJson = {};
 			assignmentJson.name = Jquery('#assignmentModal-assignmentName').val();
-			assignmentJson.icon = Jquery('input[name="assignmentIconSelect"]:checked').val();
+			assignmentJson.classId = Jquery('input[name="assignmentIconSelect"]:checked').val();
 			assignmentJson.notes = Jquery('#assignmentModal-notes').val();
 			assignmentJson.assignmentId = Jquery('#assignmentModal-assignmentId').val();
-			assignmentJson.notes = '';
+
 			// @ts-ignore
 			assignmentJson.time = assignmentTimeArray;
 			return assignmentJson;
@@ -921,6 +970,28 @@
 			return Jquery(this).val(Jquery(this).val());
 		});
 
+		//   On Icon select, update the preview.
+		Jquery('#assignmentModal-classSelection').on('change', async function () {
+			let classSelectionId = Jquery(this).val();
+			if (classSelectionId == 'none') {
+				Jquery('#assignmentModalIconPreview').css(
+					'background-image',
+					// @ts-ignore
+					`url('${getMushroomIconFromName('missingnolol')}')`
+				);
+				return;
+			}
+			await getAllUserMadeClasses().then(function (result) {
+				let selectedClassJson = result.find((classes) => classes.classId == classSelectionId);
+				if (selectedClassJson == null) throw new Error('Class not found!');
+				Jquery('#assignmentModalIconPreview').css(
+					'background-image',
+					// @ts-ignore
+					`url('${getMushroomIconFromName(selectedClassJson.icon)}')`
+				);
+			});
+		});
+
 		// Populate the input fields if we are in type edit.
 		if (type == 'edit') {
 		}
@@ -928,10 +999,20 @@
 
 	// HELPER FUNCTIONS ============================================
 	// Get mushroom elements and format them for the dropdown menu
+	async function getClassesForDropdown() {
+		var dropdownContent = '';
+		await getAllUserMadeClasses().then((classes) => {
+			classes.forEach((classInfo) => {
+				dropdownContent += `<option value='${classInfo.classId}'>${classInfo.name}</option>`;
+			});
+		});
+		return dropdownContent;
+	}
 	function getMushroomElementsForDropdown() {
 		var dropdownContent = '';
 		// @ts-ignore
 		mushroomBank.forEach((mushroomElement, index) => {
+			if (mushroomElement.title == 'missingno') return;
 			dropdownContent += `
         <li><label><div style="background-image: url(${mushroomElement.icon}); background-size: ${mushroomElement.scale}" class="classElementIcon"></div><span>${mushroomElement.title}</span></label>
             <input type="radio" checked name="classIconSelect" value="${mushroomElement.title}" id="mushroomIconBtn-${mushroomElement.title}"></li>`;
@@ -999,27 +1080,26 @@
 		</button>
 	</header>
 	<div class="mainContainer-content" style="padding-top: 0" id="assignmentEntryContainer">
-		<!-- <h4>Due Today,</h4>
-      <div class="classElement assignmentElement">
-        <div class="icon"></div>
-        <div class="classElement-content">
-          <h3>Memorize that one table</h3>
-          <h6>Chemistry</h6>
-          <p>Due 11:59 PM</p>
-        </div>
-        <div class="noteBox">
-          <textarea placeholder="Notes..." name="infoBox" id="infoBox"></textarea>
-        </div>
-        <div class="actionBtns">
-          <div class="actionButton">
-            <a class="editOnClick pixelart-icons-font-edit"></a>
-          </div>
-          <div class="actionButton">
-            <input type="checkbox" name="" id="" />
-            <i></i>
-          </div>
-        </div>
-      </div>
-      <hr /> -->
+		<h2>Due Today,</h2>
+		<div class="classElement assignmentElement">
+			<div class="icon"></div>
+			<div class="classElement-content">
+				<h3>Memorize that one table</h3>
+				<h6>Chemistry</h6>
+				<p>Due 11:59 PM</p>
+			</div>
+			<div class="actionBtns">
+				<div class="actionButton">
+					<!-- svelte-ignore a11y_consider_explicit_label -->
+					<!-- svelte-ignore a11y_missing_attribute -->
+					<a class="editOnClick pixelart-icons-font-edit"></a>
+				</div>
+				<div class="actionButton">
+					<input type="checkbox" name="" id="" />
+					<i></i>
+				</div>
+			</div>
+		</div>
+		<hr />
 	</div>
 </div>
