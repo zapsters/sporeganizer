@@ -221,6 +221,17 @@
 			}
 			return resultingTimeTable;
 		}
+		function getDatesContainer() {
+			if (Object.keys(classData.time).length == 0) return '';
+
+			return `<ul class="classDatesContainer">
+        <li ${ifDayIsSelected('Mon')}>Mon</li>
+        <li ${ifDayIsSelected('Tue')}>Tue</li>
+        <li ${ifDayIsSelected('Wed')}>Wed</li>
+        <li ${ifDayIsSelected('Thu')}>Thu</li>
+        <li ${ifDayIsSelected('Fri')}>Fri</li>
+      </ul>`;
+		}
 		return `
   <div class="classElement" id="classElem-${classData.classId}" data-classId="${classData.classId}">
     <div class="icon" style="background-image: url(${getMushroomIconFromName(
@@ -231,13 +242,8 @@
         ${classData.name}
       </h3>
       <h6>${classData.notes}</h6>
-      <ul class="classDatesContainer">
-        <li ${ifDayIsSelected('Mon')}>Mon</li>
-        <li ${ifDayIsSelected('Tue')}>Tue</li>
-        <li ${ifDayIsSelected('Wed')}>Wed</li>
-        <li ${ifDayIsSelected('Thu')}>Thu</li>
-        <li ${ifDayIsSelected('Fri')}>Fri</li>
-      </ul>
+			${getDatesContainer()}
+      
       <table>
         ${getTimes()}
       </table>
