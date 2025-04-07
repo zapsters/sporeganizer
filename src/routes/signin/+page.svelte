@@ -1,13 +1,9 @@
 <script>
 	import { goto } from '$app/navigation';
 	import Jquery from 'jquery';
-	import {
-		googlePopup,
-		initTogglePasswordVisibilityListeners,
-		checkRequired,
-		signUserIn
-	} from '$lib/model';
+	import { googlePopup, checkRequired, signUserIn } from '$lib/modal';
 	import { onMount } from 'svelte';
+	import { initTogglePasswordVisibilityListeners } from '$lib/helpers';
 	onMount(() => {
 		initTogglePasswordVisibilityListeners();
 	});

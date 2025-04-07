@@ -1,30 +1,19 @@
 <script>
-	// @ts-nocheck
 	import { alertManager } from '$lib';
 	import Jquery from 'jquery';
 	import { onMount } from 'svelte';
 	import { onAuthStateChanged, getAuth, EmailAuthProvider } from 'firebase/auth';
 	import {
-		addClassToDatabase,
-		getAllUserMadeClasses,
-		getAllUserMadeAssignments,
-		deleteClassFromDatabase,
-		getClassById,
-		updateClassInDatabase
-	} from '$lib/firestoreDatabase.js';
-	import {
 		redirectPageRequiresAccount,
-		resizeSelect,
-		getDayOfTheWeekAbbr,
 		signUserOut,
-		DOMPurifyFunc,
 		updateUserPassword,
 		deleteCurrentUser,
 		reauthenticate,
 		updateUserDisplayName,
-		initTogglePasswordVisibilityListeners
-	} from '$lib/model';
+		updateUserEmail
+	} from '$lib/modal';
 	import { clearLocalData } from '$lib/userData';
+	import { DOMPurifyFunc, initTogglePasswordVisibilityListeners } from '$lib/helpers';
 
 	onMount(() => {
 		// Redirect user to the login page if we are not logged in.
@@ -58,7 +47,7 @@
 				{
 					text: 'Delete Account',
 					class: 'dangerous',
-					closeModalOnClick: 'false',
+					closeModalOnClick: false,
 					onClick: async () => {
 						try {
 							clearLocalData();
@@ -151,7 +140,7 @@
 								try {
 									var cred = EmailAuthProvider.credential(
 										getAuth().currentUser.email,
-										Jquery('#changePassword-currentPassword').val()
+										String(Jquery('#changePassword-currentPassword').val())
 									);
 									console.log(
 										Jquery('#changePassword-newPasswordSecond').val(),
@@ -232,8 +221,8 @@
 							onClick: async () => {
 								try {
 									var cred = EmailAuthProvider.credential(
-										Jquery('#changeEmail-currentEmail').val(),
-										Jquery('#changeEmail-currentPassword').val()
+										String(Jquery('#changeEmail-currentEmail').val()),
+										String(Jquery('#changeEmail-currentPassword').val())
 									);
 									await reauthenticate(cred);
 									await updateUserEmail(Jquery('#changeEmail-newEmail').val());

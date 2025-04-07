@@ -19,9 +19,14 @@
 		// Sync our user's settings
 
 		const auth = getAuth();
+
+		// Wait to continue until our Auth services has initialized.
+		await getAuth().authStateReady();
+
+		await syncSettings();
+
 		onAuthStateChanged(auth, async (user) => {
 			if (user) {
-				await syncSettings();
 				// User is signed in, see docs for a list of available properties
 				// https://firebase.google.com/docs/reference/js/auth.user
 

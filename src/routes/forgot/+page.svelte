@@ -1,5 +1,5 @@
 <script>
-	import { checkRequired, sendResetPasswordEmail } from '$lib/model';
+	import { checkRequired, sendResetPasswordEmail } from '$lib/modal';
 	import Jquery from 'jquery';
 
 	async function onResetBtn() {

@@ -2,18 +2,13 @@
 	import { onMount } from 'svelte';
 	import jQuery from 'jquery';
 
-	// @ts-ignore
-	// @ts-ignore
 	import { app, db, provider } from '$lib/firebaseConfig';
-	// @ts-ignore
 	import * as alertManager from '$lib/alert.js';
-	// @ts-ignore
 	import * as firestoreDatabase from '$lib/firestoreDatabase';
 	onMount(() => {
 		let slideIndex = 1;
 		showSlides(slideIndex);
 		jQuery('.dot').on('click', function () {
-			// @ts-ignore
 			currentSlide(jQuery(this).attr('id')[3]);
 		});
 
@@ -25,18 +20,14 @@
 		});
 
 		// Next/previous controls
-		// @ts-ignore
 		function plusSlides(n) {
 			showSlides((slideIndex += n));
 		}
 
 		// Thumbnail image controls
-		// @ts-ignore
 		function currentSlide(n) {
 			showSlides((slideIndex = n));
 		}
-
-		// @ts-ignore
 
 		function showSlides(n) {
 			let i;

@@ -2,7 +2,10 @@
 @use 'themes.scss' as *;
 @use 'sass:list';
 
-button:not(.raw):not(.toggleVisibility):not(.gsi-material-button) {
+button {
+	cursor: pointer;
+}
+button:not(.raw):not(.toggleVisibility):not(.googleSignIn) {
 	@include themify($themes) {
 		padding: 8px;
 		font-size: 18px;
@@ -38,7 +41,6 @@ button:not(.raw):not(.toggleVisibility):not(.gsi-material-button) {
 }
 
 .inputContainer {
-	max-width: 300px;
 	text-align: left;
 	--marginBottom: 20px;
 	margin-bottom: var(--marginBottom);

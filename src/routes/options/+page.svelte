@@ -2,21 +2,8 @@
 	import Jquery from 'jquery';
 	import { onMount } from 'svelte';
 	import * as cookieManager from '$lib/cookieManager.min.js';
-	import { onAuthStateChanged, getAuth } from 'firebase/auth';
-	import {
-		// @ts-ignore
-		updateUserSettings,
-		addClassToDatabase,
-		getAllUserMadeClasses,
-		// @ts-ignore
-		getAllUserMadeAssignments,
-		deleteClassFromDatabase,
-		// @ts-ignore
-		getClassById,
-		updateClassInDatabase
-	} from '$lib/firestoreDatabase.js';
-	import { redirectPageRequiresAccount, resizeSelect, getDayOfTheWeekAbbr } from '$lib/model';
-	import { getSettings, getSettingParameter, updateSettingParameter } from '$lib/userData.js';
+	import { updateUserSettings } from '$lib/firestoreDatabase.js';
+	import { getSettings, getSettingParameter } from '$lib/userData.js';
 	import { browserTheme, setTheme } from '$lib/browserTheme';
 
 	onMount(async () => {
@@ -95,7 +82,7 @@
 		<h1><span>Options</span></h1>
 	</header>
 	<div class="mainContainer-content">
-		<h4>Time Settings</h4>
+		<h2>Time Settings</h2>
 		<section>
 			<span>24 hour time</span>
 			<label class="toggle-switch square">
@@ -103,7 +90,7 @@
 				<span class="slider"></span>
 			</label>
 		</section>
-		<h4>Appearance</h4>
+		<h2>Appearance</h2>
 		<section id="appearanceSelect">
 			<span id="appearanceSelectCurrentText">#### Mode</span>
 			<button class="raw" data-appearance="auto" id="autoModeBtn" aria-label="Match System Theme">

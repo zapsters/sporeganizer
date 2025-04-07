@@ -1,5 +1,3 @@
-// @ts-ignore
-// @ts-ignore
 import { getAuth, sendEmailVerification } from 'firebase/auth';
 
 import { db } from '$lib/firebaseConfig';
@@ -17,41 +15,41 @@ import {
 	where,
 	orderBy
 } from 'firebase/firestore';
-import { DOMPurifyFunc } from './model';
 import {
-	updateQueryCache,
-	getQueryCache,
 	updateClassInCache,
-	updateSettingParameter
+	updateSettingParameter,
+	updateAssignmentInCache,
+	settingsCacheFetched,
+	settingsCache,
+	classCacheFetched,
+	classCache,
+	assignmentCache,
+	assignmentCacheFetched
 } from '$lib/userData';
+import { DOMPurifyFunc } from './helpers';
+import { get } from 'svelte/store';
+import type { AssignmentJson } from './types';
 
 export async function getUserSettings() {
 	const user = getAuth().currentUser;
-
 	if (!user) {
 		throw new Error('No current user');
 	}
 
-	let queryCheck = await getQueryCache('settings');
-
-	if (queryCheck != null) {
-		console.log('Retrieved settings from cache');
-		return queryCheck;
+	if (get(settingsCacheFetched)) {
+		return get(settingsCache);
 	}
 
 	const userRef = doc(db, 'users', user.uid);
-
-	try {
-		const userSnap = await getDoc(userRef);
-		if (userSnap.exists()) {
-			const settings = userSnap.data().settings || {};
-			console.warn('Loaded Settings Data from Database');
-			updateQueryCache('settings', userSnap);
-			return settings;
-		} else {
-			return null;
-		}
-	} catch (error) {
+	const userSnap = await getDoc(userRef);
+	console.warn('Loaded Settings Data from Database');
+	if (userSnap.exists()) {
+		const settings = userSnap.data().settings || {};
+		settingsCache.set(settings);
+		settingsCacheFetched.set(true);
+		return settings;
+	} else {
+		console.error('No user found');
 		return null;
 	}
 }
@@ -61,6 +59,7 @@ export async function getUserSettings() {
  * @param {any} value
  */
 export async function updateUserSettings(key, value) {
+	updateSettingParameter(key, value);
 	if (checkLogInStatus()) {
 		const userRef = doc(db, 'users', getAuth().currentUser.uid);
 
@@ -68,7 +67,6 @@ export async function updateUserSettings(key, value) {
 			[`settings.${key}`]: value // Firestore dot notation
 		});
 	}
-	await updateSettingParameter(key, value);
 }
 
 /**
@@ -79,7 +77,6 @@ export async function addUserToCollection(currentUser) {
 	if (currentUser == undefined || getAuth().currentUser != currentUser) return;
 	await setDoc(doc(db, `users`, currentUser.uid), {
 		userId: currentUser.uid,
-		// @ts-ignore
 		email: DOMPurifyFunc(currentUser.email),
 		providerId: currentUser.providerData[0].providerId,
 		icon: 'none',
@@ -87,7 +84,6 @@ export async function addUserToCollection(currentUser) {
 		settings: {}
 	});
 	if (!currentUser.emailVerified) {
-		// @ts-ignore
 		sendEmailVerification(getAuth().currentUser);
 	}
 }
@@ -116,24 +112,18 @@ export async function updateFieldInUserCollection(key, value) {
 // Add class / assignment Documents
 export async function addClassToDatabase(classJson) {
 	if (!checkLogInStatus()) {
-		let classes = await getAllUserMadeClasses();
+		let classes = Array(await getAllUserMadeClasses());
 		classJson.classId = `preview${classes.length}`;
 		updateClassInCache(classJson.classId + 1, classJson);
 		return classJson.classId;
-	}
-	if (classJson.name == '' || classJson.name == undefined) {
-		throw new Error('Missing class name');
 	}
 
 	try {
 		const classRef = await addDoc(collection(db, 'classes'), {
 			icon: classJson.icon,
-			// @ts-ignore
 			name: DOMPurifyFunc(classJson.name),
-			// @ts-ignore
 			notes: DOMPurifyFunc(classJson.notes),
 			time: classJson.time,
-			// @ts-ignore
 			userId: getAuth().currentUser.uid,
 			createdAt: serverTimestamp()
 		});
@@ -143,19 +133,20 @@ export async function addClassToDatabase(classJson) {
 		throw error;
 	}
 }
-/**
- * @param {{ icon: any; assignmentId: any; name: any; time: any; completed: any; }} assignmentJson
- */
-export async function addAssignmentToDatabase(assignmentJson) {
-	if (!checkLogInStatus()) return;
+
+export async function addAssignmentToDatabase(assignmentJson: AssignmentJson) {
+	if (!checkLogInStatus()) {
+		let assignments = Array(await getAllUserMadeAssignments());
+		assignmentJson.assignmentId = `preview${assignments.length}`;
+		updateAssignmentInCache(assignmentJson.assignmentId + 1, assignmentJson);
+		return assignmentJson.assignmentId;
+	}
+
 	try {
 		const assignmentRef = await addDoc(collection(db, 'assignments'), {
-			icon: assignmentJson.icon,
 			assignmentId: assignmentJson.assignmentId,
-			// @ts-ignore
 			name: DOMPurifyFunc(assignmentJson.name),
 			time: assignmentJson.time,
-			// @ts-ignore
 			userId: getAuth().currentUser.uid,
 			completed: assignmentJson.completed,
 			createdAt: serverTimestamp()
@@ -167,11 +158,6 @@ export async function addAssignmentToDatabase(assignmentJson) {
 	}
 }
 
-// Update class / assignment data
-/**
- * @param {string} classId
- * @param {any} classJson
- */
 export async function updateClassInDatabase(classId, classJson) {
 	if (!checkLogInStatus()) {
 		updateClassInCache(classId, classJson);
@@ -181,10 +167,15 @@ export async function updateClassInDatabase(classId, classJson) {
 	updateClassInCache(classId, classJson);
 }
 
-// Remove class / assignment data
-/**
- * @param {string} classId
- */
+export async function updateAssignmentInDatabase(assignmentId, assignmentJson) {
+	if (!checkLogInStatus()) {
+		updateAssignmentInCache(assignmentId, assignmentJson);
+		return;
+	}
+	await updateDoc(doc(db, 'assignments', assignmentId), assignmentJson);
+	updateAssignmentInCache(assignmentId, assignmentJson);
+}
+
 export async function deleteClassFromDatabase(classId) {
 	if (!checkLogInStatus()) {
 		updateClassInCache(classId, '');
@@ -193,63 +184,93 @@ export async function deleteClassFromDatabase(classId) {
 	await deleteDoc(doc(db, 'classes', classId));
 	updateClassInCache(classId, '');
 }
+export async function deleteAssignmentFromDatabase(assignmentId) {
+	if (!checkLogInStatus()) {
+		updateAssignmentInCache(assignmentId, '');
+		return;
+	}
+	await deleteDoc(doc(db, 'assignments', assignmentId));
+	updateAssignmentInCache(assignmentId, '');
+}
 
 // Create a reference to the classes collection
 const classesRef = collection(db, 'classes');
 export async function getAllUserMadeClasses() {
-	let queryCheck = await getQueryCache('classes');
-
-	if (queryCheck != null) {
-		console.log('Retrieved classes from cache');
-		return queryCheck;
+	if (get(classCacheFetched)) {
+		// Already fetched once, use cache
+		return get(classCache);
 	}
 
-	// Create a query against the classes collection.
+	if (checkLogInStatus) {
+		console.error('No current user.');
+		return;
+	}
+
+	// Fetch from Firestore
 	const q = query(
 		classesRef,
-		// @ts-ignore
 		where('userId', '==', getAuth().currentUser.uid),
 		orderBy('createdAt', 'asc')
 	);
 	const querySnapshot = await getDocs(q);
 
 	const querySnapshotResults = querySnapshot.docs.map((doc) => ({
-		classId: doc.id, // Firestore document ID
-		...doc.data() // Other document fields
+		classId: doc.id,
+		...doc.data()
 	}));
 	console.warn('Loaded Class Data from Database');
-	updateQueryCache('classes', querySnapshotResults);
+	classCache.set(querySnapshotResults);
+	classCacheFetched.set(true);
+
 	return querySnapshotResults;
 }
 
-/**
- * @param {any} classId
- */
 export async function getClassById(classId) {
 	const allClasses = await getAllUserMadeClasses();
-	return allClasses.find(
-		(/** @type {{ classId: any; }} */ classEntry) => classEntry.classId == classId
-	);
+	const result = allClasses.find((classEntry) => classEntry.classId == classId);
+
+	return result;
 }
 
 // Create a reference to the assignments collection
 const assignmentsRef = collection(db, 'assignments');
 export async function getAllUserMadeAssignments() {
-	if (!checkLogInStatus()) return;
-	// Create a query against the assignments collection.
-	// @ts-ignore
-	const q = query(assignmentsRef, where('userId', '==', getAuth().currentUser.uid));
+	if (get(assignmentCacheFetched)) {
+		// Already fetched once, use cache
+		return get(assignmentCache);
+	}
+
+	if (checkLogInStatus) {
+		console.error('No current user.');
+		return;
+	}
+
+	// Fetch from Firestore
+	const q = query(
+		assignmentsRef,
+		where('userId', '==', getAuth().currentUser.uid),
+		orderBy('time', 'desc')
+	);
 	const querySnapshot = await getDocs(q);
 
+	console.log(querySnapshot);
+
 	const querySnapshotResults = querySnapshot.docs.map((doc) => ({
-		assignmentId: doc.id, // Firestore document ID
-		...doc.data() // Other document fields
+		assignmentId: doc.id,
+		...doc.data()
 	}));
+	console.warn('Loaded Assignment Data from Database');
+	assignmentCache.set(querySnapshotResults);
+	assignmentCacheFetched.set(true);
 
 	return querySnapshotResults;
 }
 
+export async function getAssignmentById(assignmentId) {
+	const allAssignments = await getAllUserMadeAssignments();
+	return allAssignments.find((assignmentEntry) => assignmentEntry.assignmentId == assignmentId);
+}
+
 export function checkLogInStatus() {
-	const loggedIn = getAuth().currentUser != null;
-	return loggedIn;
+	return getAuth().currentUser != null;
 }

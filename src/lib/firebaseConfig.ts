@@ -2,14 +2,7 @@
 import { initializeApp } from 'firebase/app';
 // import { getAnalytics } from 'firebase/analytics';
 import { GoogleAuthProvider, getAuth, connectAuthEmulator } from 'firebase/auth';
-import {
-	doc,
-	setDoc,
-	getFirestore,
-	connectFirestoreEmulator,
-	getDoc,
-	onSnapshotsInSync
-} from 'firebase/firestore';
+import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
 
 const firebaseConfig = {
 	apiKey: 'AIzaSyBEzlCVVXLZk2gfOiSorG2ZyISFvZklTpU',

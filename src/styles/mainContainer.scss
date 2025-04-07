@@ -100,7 +100,6 @@
 		.mainContainer-content {
 			display: block;
 			overflow: auto;
-			padding: 50px;
 
 			width: 100%;
 			padding: 0;
@@ -110,12 +109,22 @@
 				font-size: 20px;
 			}
 
-			h2 {
+			h5 {
 				padding: 0 10px;
 				font-weight: 400;
 				font-size: 27px;
 				margin-top: 4px;
 				margin-bottom: 1px;
+				i {
+					color: themed('primary');
+					font-size: 31px;
+					position: absolute;
+					transform: translate(4px, 1px);
+				}
+			}
+			h2 {
+				margin-top: 10px !important;
+				margin-bottom: 4px !important;
 			}
 		}
 	}
@@ -125,11 +134,10 @@
 	@include themify($themes) {
 		header {
 			font-size: 47px;
-			padding: 8px;
-			padding-bottom: 2px;
+			padding: 0px 8px 0px 10px;
 		}
 		.mainContainer-content {
-			padding: 20px;
+			padding: 8px 20px;
 		}
 	}
 }
@@ -170,7 +178,7 @@
 			}
 		}
 		.mainContainer-content {
-			h2 {
+			h5 {
 				font-size: 19px !important;
 				margin-top: 3px !important;
 			}

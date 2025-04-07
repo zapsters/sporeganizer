@@ -1,22 +1,16 @@
 <script>
-	// @ts-nocheck
-
 	import { goto } from '$app/navigation';
 	import Jquery from 'jquery';
-	import {
-		checkRequired,
-		googlePopup,
-		initTogglePasswordVisibilityListeners,
-		signUserUp
-	} from '$lib/model';
+	import { checkRequired, googlePopup, signUserUp } from '$lib/modal';
 	import { onMount } from 'svelte';
+	import { initTogglePasswordVisibilityListeners } from '$lib/helpers';
 	onMount(async () => {
 		initTogglePasswordVisibilityListeners();
 		Jquery('#signUp-submit').on('click', async (e) => {
 			e.preventDefault();
 			var checkRequiredResponse = checkRequired('signUp-form');
 			if (!checkRequiredResponse[0]) {
-				Jquery('#signUp-statusText').html(checkRequiredResponse[1]);
+				Jquery('#signUp-statusText').html(String(checkRequiredResponse[1]));
 				return;
 			}
 			const displayName = Jquery('#signUp-displayName').val();
