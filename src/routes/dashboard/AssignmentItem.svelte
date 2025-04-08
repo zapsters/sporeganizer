@@ -3,22 +3,20 @@
 	import { getMushroomDataFromName } from '$lib/mushroomBank';
 	import { callAssignmentModal } from '$lib/customModals';
 	import { convertTo12Hour } from '$lib/helpers';
+	import type { ClassJson } from '$lib/types';
+	import { classCache } from '$lib/userData';
 
 	export let assignmentData;
 
-	let classData = null;
+	let classData: ClassJson | null = null;
 	let mushroomIconData = null;
 
-	// Load class data and mushroom icon once when assignmentData is available
-	$: if (assignmentData?.classId) {
-		getClassById(assignmentData.classId)
-			.then((data) => {
-				classData = data;
-				mushroomIconData = getMushroomDataFromName(data.icon);
-			})
-			.catch(() => {
-				mushroomIconData = getMushroomDataFromName();
-			});
+	// Subscribe to class store and react to changes
+	$: {
+		classCache.subscribe(($classes) => {
+			classData = $classes.find((c) => c.classId === assignmentData.classId) ?? null;
+			mushroomIconData = getMushroomDataFromName(classData?.icon);
+		});
 	}
 
 	function handleEditClick() {
