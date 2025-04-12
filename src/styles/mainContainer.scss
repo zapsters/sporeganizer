@@ -170,32 +170,3 @@
 	align-items: center;
 	justify-content: space-evenly;
 }
-
-@media (max-width: $mobileBreakPoint) {
-	.mainContainer {
-		header {
-			font-size: 20px !important;
-			position: relative;
-			border-width: 2px !important;
-			select {
-				background: url('/images/ui/chevron-down.svg') 100% / 30px no-repeat !important;
-				font-size: inherit;
-				option {
-					font-size: inherit !important;
-				}
-			}
-			button img {
-				height: 29px !important;
-				position: absolute;
-				left: -24px;
-				top: -16px;
-			}
-		}
-		.mainContainer-content {
-			h5 {
-				font-size: 19px !important;
-				margin-top: 3px !important;
-			}
-		}
-	}
-}

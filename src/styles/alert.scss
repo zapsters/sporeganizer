@@ -35,6 +35,7 @@
 				font-size: 70px !important;
 				@include themify($themes) {
 					@include recolor(themed('primary'), 1);
+					color: themed('primary') !important;
 				}
 			}
 			.closeBtn {
