@@ -183,6 +183,7 @@ hr {
 			pointer-events: none;
 			@include themify($themes) {
 				@include recolor(themed('primary'), 1);
+				color: themed('primary') !important;
 			}
 		}
 		&:has(input:focus-visible) i {
