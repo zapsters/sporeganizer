@@ -240,7 +240,7 @@ export async function getAllUserMadeAssignments() {
 		return get(assignmentCache);
 	}
 
-	if (checkLogInStatus) {
+	if (!checkLogInStatus) {
 		console.error('No current user.');
 		return;
 	}
