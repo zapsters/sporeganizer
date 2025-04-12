@@ -43,18 +43,29 @@
 
 	function getDatesContainer() {
 		if (!classData.time || Object.keys(classData.time).length === 0) return '';
-
+		// If Saturday and Sunday are not selected, then hide them in the class element.
+		if (ifDayIsSelected('Sat') != 'selected' && ifDayIsSelected('Sun') != 'selected') {
+			return `
+      <ul class="classDatesContainer">
+			<li class="${ifDayIsSelected('Mon')}">Mon</li>
+			<li class="${ifDayIsSelected('Tue')}">Tue</li>
+			<li class="${ifDayIsSelected('Wed')}">Wed</li>
+			<li class="${ifDayIsSelected('Thu')}">Thu</li>
+			<li class="${ifDayIsSelected('Fri')}">Fri</li>
+      </ul>
+			`;
+		}
 		return `
       <ul class="classDatesContainer">
-        <li class="${ifDayIsSelected('Mon')}">Mon</li>
-        <li class="${ifDayIsSelected('Tue')}">Tue</li>
-        <li class="${ifDayIsSelected('Wed')}">Wed</li>
-        <li class="${ifDayIsSelected('Thu')}">Thu</li>
-        <li class="${ifDayIsSelected('Fri')}">Fri</li>
-        <li class="${ifDayIsSelected('Sat')}">Sat</li>
-        <li class="${ifDayIsSelected('Sun')}">Sun</li>
+			<li class="${ifDayIsSelected('Mon')}">Mon</li>
+			<li class="${ifDayIsSelected('Tue')}">Tue</li>
+			<li class="${ifDayIsSelected('Wed')}">Wed</li>
+			<li class="${ifDayIsSelected('Thu')}">Thu</li>
+			<li class="${ifDayIsSelected('Fri')}">Fri</li>
+			<li class="${ifDayIsSelected('Sat')}">Sat</li>
+			<li class="${ifDayIsSelected('Sun')}">Sun</li>
       </ul>
-    `;
+			`;
 	}
 
 	$: mushroomIconData = getMushroomDataFromName(classData.icon);
