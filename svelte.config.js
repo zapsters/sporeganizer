@@ -1,9 +1,8 @@
 import sveltePreprocess from 'svelte-preprocess';
 import adapter from '@sveltejs/adapter-cloudflare';
 
+/** @type {import('@sveltejs/kit').Config} */
 const config = {
-	// Consult https://svelte.dev/docs/kit/integrations
-	// for more information about preprocessors
 	preprocess: sveltePreprocess({
 		scss: {
 			includePaths: ['src/styles']
@@ -11,7 +10,6 @@ const config = {
 	}),
 	kit: {
 		adapter: adapter()
-		// ... truncated ...
 	}
 };
 

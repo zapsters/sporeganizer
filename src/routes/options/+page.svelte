@@ -104,5 +104,6 @@
 			</button>
 			<!-- <img src="images/cloud-auto.svg" data-appearance="auto" alt="" srcset="" /> -->
 		</section>
+		<p style="margin-top: 50px; font-size: 18px;">Version: {__APP_VERSION__}</p>
 	</div>
 </div>
