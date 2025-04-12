@@ -18,6 +18,7 @@
 	// This will hold the classes results, useful for display both mobile and desktop data.
 	import { derived, get, writable } from 'svelte/store';
 	import AssignmentItem from './AssignmentItem.svelte';
+	import { getAllUserMadeAssignments, getAllUserMadeClasses } from '$lib/firestoreDatabase';
 
 	export const selectedFilter = writable('all');
 	let selectedScreen = 'assignments';
@@ -72,6 +73,8 @@
 		checkScreenSize();
 		window.addEventListener('resize', checkScreenSize);
 		await getAuth().authStateReady();
+		await getAllUserMadeClasses();
+		await getAllUserMadeAssignments();
 		if (!getAuth().currentUser) {
 			generateModalAlert({
 				icon: 'warning-box',

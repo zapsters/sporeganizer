@@ -2,8 +2,8 @@
 @use 'variables.scss' as *;
 @use 'sass:list';
 .classElement {
-	&:hover {
-		@include themify($themes) {
+	@include themify($themes) {
+		&:hover {
 			background-color: themed('backgroundAlt');
 		}
 	}

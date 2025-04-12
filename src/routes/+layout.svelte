@@ -16,7 +16,6 @@
 	onMount(async () => {
 		firebase.connectEmulators();
 		checkDarkModePreference();
-		// Sync our user's settings
 
 		const auth = getAuth();
 

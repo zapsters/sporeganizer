@@ -524,6 +524,7 @@ export async function callAssignmentModal(type, assignmentData = {} as Assignmen
 		assignmentJson.classId = String(Jquery('#assignmentModal-classSelection').val());
 		assignmentJson.notes = String(Jquery('#assignmentModal-notes').val());
 		assignmentJson.assignmentId = String(Jquery('#assignmentModal-assignmentId').val());
+
 		assignmentJson.time = String(Jquery('#assignmentModal-time').val());
 		return assignmentJson;
 	}
@@ -628,6 +629,8 @@ export async function callAssignmentModal(type, assignmentData = {} as Assignmen
 
 								await addAssignmentToDatabase(assignmentResultJson)
 									.then((assignmentId) => {
+										console.log('caught');
+
 										assignmentResultJson['assignmentId'] = assignmentId;
 
 										alertManager.generateModalAlert({

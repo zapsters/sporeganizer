@@ -144,11 +144,10 @@ export async function addAssignmentToDatabase(assignmentJson: AssignmentJson) {
 
 	try {
 		const assignmentRef = await addDoc(collection(db, 'assignments'), {
-			assignmentId: assignmentJson.assignmentId,
 			name: DOMPurifyFunc(assignmentJson.name),
 			time: assignmentJson.time,
 			userId: getAuth().currentUser.uid,
-			completed: assignmentJson.completed,
+			completed: assignmentJson.completed || false,
 			createdAt: serverTimestamp()
 		});
 		// syncAssignmentQueryCacheWithDatabase();
@@ -197,11 +196,12 @@ export async function deleteAssignmentFromDatabase(assignmentId) {
 const classesRef = collection(db, 'classes');
 export async function getAllUserMadeClasses() {
 	if (get(classCacheFetched)) {
+		console.warn('Loaded Class Data from Cache');
 		// Already fetched once, use cache
 		return get(classCache);
 	}
 
-	if (checkLogInStatus) {
+	if (!checkLogInStatus) {
 		console.error('No current user.');
 		return;
 	}
