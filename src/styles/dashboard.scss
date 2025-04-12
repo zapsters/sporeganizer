@@ -174,7 +174,7 @@ hr {
 		}
 
 		i {
-			background-image: url('../images/ui/checkbox.svg');
+			background-image: url('/images/ui/checkbox.svg');
 			background-size: cover;
 			background-position: center;
 			background-repeat: no-repeat;
@@ -192,7 +192,7 @@ hr {
 			}
 		}
 		&:has(input:checked) i {
-			background-image: url('../images/ui/checkbox-on.svg');
+			background-image: url('/images/ui/checkbox-on.svg');
 		}
 		input {
 			opacity: 0;
