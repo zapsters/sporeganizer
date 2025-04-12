@@ -629,8 +629,6 @@ export async function callAssignmentModal(type, assignmentData = {} as Assignmen
 
 								await addAssignmentToDatabase(assignmentResultJson)
 									.then((assignmentId) => {
-										console.log('caught');
-
 										assignmentResultJson['assignmentId'] = assignmentId;
 
 										alertManager.generateModalAlert({
@@ -672,24 +670,29 @@ export async function callAssignmentModal(type, assignmentData = {} as Assignmen
 	//   On Icon select, update the preview.
 	Jquery('#assignmentModal-classSelection').on('change', async function () {
 		let classSelectionId = Jquery(this).val();
+
 		let classData = await getClassById(classSelectionId);
 
-		if (classSelectionId == 'none') {
+		if (classSelectionId == 'none' || classSelectionId == null) {
+			Jquery('#assignmentModal-classSelection').val('none');
 			Jquery('#assignmentModalIconPreview').css(
 				'background-image',
 
 				`url('${getMushroomDataFromName('missingnolol').icon}')`
 			);
 			return;
-		}
-		await getAllUserMadeClasses().then(function (result) {
-			if (classData == null) throw new Error('Class not found!');
-			Jquery('#assignmentModalIconPreview').css(
-				'background-image',
+		} else {
+			await getAllUserMadeClasses().then(function (result) {
+				if (classData == null) {
+					throw new Error('Class not found!');
+				}
+				Jquery('#assignmentModalIconPreview').css(
+					'background-image',
 
-				`url('${getMushroomDataFromName(classData.icon).icon}')`
-			);
-		});
+					`url('${getMushroomDataFromName(classData.icon).icon}')`
+				);
+			});
+		}
 	});
 
 	// Populate the input fields if we are in type edit.

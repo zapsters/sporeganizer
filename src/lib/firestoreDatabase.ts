@@ -150,7 +150,7 @@ export async function addAssignmentToDatabase(assignmentJson: AssignmentJson) {
 			completed: assignmentJson.completed || false,
 			createdAt: serverTimestamp()
 		});
-		// syncAssignmentQueryCacheWithDatabase();
+		updateAssignmentInCache(assignmentJson.assignmentId + 1, assignmentJson);
 		return assignmentRef.id;
 	} catch (error) {
 		throw error;
@@ -196,12 +196,11 @@ export async function deleteAssignmentFromDatabase(assignmentId) {
 const classesRef = collection(db, 'classes');
 export async function getAllUserMadeClasses() {
 	if (get(classCacheFetched)) {
-		console.warn('Loaded Class Data from Cache');
-		// Already fetched once, use cache
+		// console.warn('Loaded Class Data from Cache');
 		return get(classCache);
 	}
 
-	if (!checkLogInStatus) {
+	if (!checkLogInStatus()) {
 		console.error('No current user.');
 		return;
 	}
@@ -237,10 +236,11 @@ const assignmentsRef = collection(db, 'assignments');
 export async function getAllUserMadeAssignments() {
 	if (get(assignmentCacheFetched)) {
 		// Already fetched once, use cache
+		console.log('Loaded Assignment Data from Cache');
 		return get(assignmentCache);
 	}
 
-	if (!checkLogInStatus) {
+	if (!checkLogInStatus()) {
 		console.error('No current user.');
 		return;
 	}
@@ -252,8 +252,6 @@ export async function getAllUserMadeAssignments() {
 		orderBy('time', 'desc')
 	);
 	const querySnapshot = await getDocs(q);
-
-	console.log(querySnapshot);
 
 	const querySnapshotResults = querySnapshot.docs.map((doc) => ({
 		assignmentId: doc.id,
