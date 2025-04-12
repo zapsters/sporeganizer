@@ -1,31 +1,32 @@
-@use "themes.scss" as *;
-@use "sass:list";
+@use 'themes.scss' as *;
+@use 'sass:list';
 
 .options {
-  .mainContainer-content {
-    h4 {
-      margin-bottom: 10px;
-    }
-    span {
-      font-size: 20px;
-      margin-bottom: 4px;
-      display: block;
-    }
-    img,
-    i {
-      border-bottom: 3.5px solid transparent;
-      cursor: pointer;
-      font-size: 40px;
-      @include themify($themes) {
-        @include recolor(themed("text"));
-      }
-    }
-    button.active,
-    img.active,
-    i.active {
-      @include themify($themes) {
-        border-bottom: 3.5px solid themed("text");
-      }
-    }
-  }
+	.mainContainer-content {
+		h4 {
+			margin-bottom: 10px;
+		}
+		span {
+			font-size: 20px;
+			margin-bottom: 4px;
+			display: block;
+		}
+		img,
+		i {
+			border-bottom: 3.5px solid transparent;
+			cursor: pointer;
+			font-size: 40px;
+			@include themify($themes) {
+				@include recolor(themed('text'));
+				color: themed('text') !important;
+			}
+		}
+		button.active,
+		img.active,
+		i.active {
+			@include themify($themes) {
+				border-bottom: 3.5px solid themed('text');
+			}
+		}
+	}
 }

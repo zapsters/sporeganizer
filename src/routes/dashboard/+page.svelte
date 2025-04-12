@@ -70,6 +70,7 @@
 	}
 
 	onMount(async () => {
+		resizeSelect('dashboardAssignmentTab');
 		checkScreenSize();
 		window.addEventListener('resize', checkScreenSize);
 		await getAuth().authStateReady();
@@ -181,8 +182,6 @@
 			}
 			settingsCacheFetched.set(true);
 		}
-
-		resizeSelect('dashboardAssignmentTab');
 		// @ts-ignore
 		document.getElementById('dashboardAssignmentTab').addEventListener('change', () => {
 			resizeSelect('dashboardAssignmentTab');
