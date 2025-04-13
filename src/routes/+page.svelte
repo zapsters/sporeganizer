@@ -97,7 +97,7 @@
 		Sporeganizer is built to help you manage your school life without distractions. No ads, no
 		unnecessary features—just a simple, effective way to stay organized.
 	</p>
-	<p><a href="/login">Try Sporeganizer Now</a></p>
+	<p><a href="/signin">Try Sporeganizer Now</a></p>
 
 	<br />
 	<h2>Features</h2>
