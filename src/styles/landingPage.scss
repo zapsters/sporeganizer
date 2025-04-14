@@ -3,8 +3,10 @@
 
 .landingPage {
 	padding: 30px;
-	p {
-		font-size: 24px;
+	p,
+	ul {
+		font-size: 22px;
+		font-weight: 300;
 	}
 	h2 {
 		font-size: 33px;
@@ -12,7 +14,6 @@
 	}
 	ul {
 		padding-left: 24px;
-		font-size: 22px;
 	}
 	.content {
 		overflow: hidden !important;
