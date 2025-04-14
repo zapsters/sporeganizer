@@ -2,9 +2,6 @@
 	import { onMount } from 'svelte';
 	import jQuery from 'jquery';
 
-	import { app, db, provider } from '$lib/firebaseConfig';
-	import * as alertManager from '$lib/alert.js';
-	import * as firestoreDatabase from '$lib/firestoreDatabase';
 	onMount(() => {
 		let slideIndex = 1;
 		showSlides(slideIndex);
@@ -82,12 +79,17 @@
 	<h2>Why Sporeganizer?</h2>
 	<ul>
 		<li>
-			<strong>Effortless Task Management</strong> – Add, edit, and check off homework with ease.
+			<strong>Effortless Task Management</strong> &hyphen; Add, edit, and check off homework with ease.
 		</li>
-		<li><strong>Stay on Top of Deadlines</strong> – Get a clear view of what’s due and when.</li>
-		<li><strong>Minimal & Fast</strong> – No clutter, just what you need to stay productive.</li>
 		<li>
-			<strong>A Unique, Nature-Inspired Design</strong> – A refreshing alternative to generic planners.
+			<strong>Stay on Top of Deadlines</strong> &hyphen; Get a clear view of what&apos;s due and when.
+		</li>
+		<li>
+			<strong>Minimal & Fast</strong> &hyphen; No clutter, just what you need to stay productive.
+		</li>
+		<li>
+			<strong>A Unique, Nature-Inspired Design</strong> &hyphen; A refreshing alternative to generic
+			planners.
 		</li>
 	</ul>
 	<br />
@@ -145,7 +147,7 @@
 	<br />
 	<br />
 	<footer>
-		<span>Made with love by Erin Ballinger &lt;3</span>
+		<span>Made with ❤ by Erin Ballinger</span>
 		<span style="font-size: smaller; font-weight: 100 !important;"
 			>Banner image and Mushrooms artwork was designed by <a href="https://erinballinger.com"
 				>Mushollow</a
