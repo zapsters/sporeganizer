@@ -14,7 +14,6 @@
 		img,
 		i {
 			border-bottom: 3.5px solid transparent;
-			cursor: pointer;
 			font-size: 40px;
 			@include themify($themes) {
 				filter: #{themed(primaryFilter)};

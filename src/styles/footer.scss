@@ -14,7 +14,13 @@ footer {
 		border: 4px solid themed('primary') !important;
 	}
 	span {
+		margin: 0 !important;
 		display: block;
 		max-width: 600px;
+	}
+	.primaryRecolor {
+		@include themify($themes) {
+			filter: #{themed(primaryFilter)};
+		}
 	}
 }
