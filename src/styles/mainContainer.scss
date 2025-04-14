@@ -41,10 +41,10 @@
 		img.recolor {
 			width: 40px;
 			cursor: pointer;
-			@include recolor(themed('text'), 1);
+			filter: #{themed(text)};
 		}
 		header {
-			padding: 8px 9px 3px 9px;
+			padding: 3px 9px 3px 9px;
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
@@ -55,8 +55,9 @@
 			select {
 				font-family: inherit;
 				// padding-right: 1.1em;
-				margin-bottom: -1px !important;
-				margin-top: -7px !important;
+				margin-bottom: -3px !important;
+				margin-left: -1px !important;
+				margin-top: -5px !important;
 				// height: 100%;
 				border: 0;
 				font-size: inherit;
@@ -66,7 +67,7 @@
 				appearance: none;
 				background: url('/images/ui/chevron-down.svg') 100% / 36px no-repeat;
 				background-position: right;
-				@include recolor(themed('text'), 1);
+				filter: #{themed(text)};
 				option {
 					font-size: 24px;
 				}
@@ -75,7 +76,7 @@
 				display: flex;
 				align-items: center;
 				justify-content: space-evenly;
-				@include recolor(themed('text'), 1);
+				filter: #{themed(text)};
 				transform: translateY(-2px);
 				cursor: pointer;
 				svg:not(.gsi-material-button svg),
@@ -148,7 +149,6 @@
 	@include themify($themes) {
 		header {
 			font-size: 47px;
-			padding: 0px 8px 0px 10px;
 		}
 		.mainContainer-content {
 			padding: 8px 20px;
@@ -169,4 +169,13 @@
 	display: block;
 	align-items: center;
 	justify-content: space-evenly;
+}
+
+@media (max-width: $mobileBreakPoint) {
+	.mainContainer {
+		header {
+			background-color: red !important;
+			font-size: 29px !important;
+		}
+	}
 }

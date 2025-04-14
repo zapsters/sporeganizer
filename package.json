@@ -6,7 +6,7 @@
 	"author": "Erin Ballinger",
 	"license": "ISC",
 	"scripts": {
-		"dev": "vite dev --open",
+		"dev": "vite dev --open --host",
 		"emulators:start": "firebase emulators:start",
 		"emulators:stop": "npx kill-port 4000 8080 8085",
 		"build": "vite build",

@@ -5,6 +5,7 @@
 	import { updateUserSettings } from '$lib/firestoreDatabase.js';
 	import { getSettings, getSettingParameter } from '$lib/userData.js';
 	import { browserTheme, setTheme } from '$lib/browserTheme';
+	import Footer from '$lib/components/Footer.svelte';
 
 	onMount(async () => {
 		// Redirect user to the login page if we are not logged in.
@@ -104,6 +105,8 @@
 			</button>
 			<!-- <img src="images/cloud-auto.svg" data-appearance="auto" alt="" srcset="" /> -->
 		</section>
-		<p style="margin-top: 50px; font-size: 18px;">Version: {__APP_VERSION__}</p>
+		<p style="margin: 50px 0 0 0; font-size: 18px;">Version: {__APP_VERSION__}</p>
+		<p><a href="/about" style="font-size: 18px;">About this project</a></p>
+		<Footer />
 	</div>
 </div>

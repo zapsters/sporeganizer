@@ -1,5 +1,8 @@
 // Google UI
 .gsi-material-button {
+	text-decoration: none;
+	border-color: transparent !important;
+	border-width: 0px;
 	color: black !important;
 	user-select: none;
 	-moz-user-select: none;
@@ -9,12 +12,13 @@
 	-webkit-appearance: none;
 	background-color: WHITE;
 	background-image: none;
-	border: 1px solid none;
+	border: 0px solid none;
 	-webkit-border-radius: 20px;
 	border-radius: 20px;
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	color: #1f1f1f;
+
 	cursor: pointer;
 	font-family: 'Roboto', arial, sans-serif;
 	font-size: 14px;
@@ -87,7 +91,6 @@
 .gsi-material-button:disabled {
 	cursor: default;
 	background-color: #ffffff61;
-	border-color: #1f1f1f1f;
 }
 
 .gsi-material-button:disabled .gsi-material-button-contents {
@@ -111,9 +114,11 @@
 	box-shadow:
 		0 1px 2px 0 rgba(60, 64, 67, 0.3),
 		0 1px 3px 1px rgba(60, 64, 67, 0.15);
+	text-decoration: underline;
 }
 
 .gsi-material-button:not(:disabled):hover .gsi-material-button-state {
 	background-color: #303030;
 	opacity: 8%;
+	text-decoration: underline;
 }

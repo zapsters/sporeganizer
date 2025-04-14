@@ -78,7 +78,7 @@
 
 {#if isNavigating}
 	<div class="loader" transition:fly={{ y: -20, duration: 300 }}>
-		<img src="images/ui/ShaggyInkCapAnim.gif" alt="loader" srcset="" />
+		<img src="/images/ui/ShaggyInkCapAnim.gif" alt="loader" srcset="" />
 		<p style="padding: 0; margin: 0;">Loading...</p>
 	</div>
 {/if}
@@ -89,31 +89,31 @@
 			<ul>
 				<li>
 					<a href="/">
-						<i><img src="./images/Sporeganizer.png" class="logo" alt="" srcset="" /></i>
+						<i><img src="/images/Sporeganizer.png" class="logo" alt="" srcset="" /></i>
 						<span class="logo">Sporeganizer</span>
 					</a>
 				</li>
 				<li id="nav-homeTab" class="hideOnMobile">
 					<a href="/">
-						<i><img src="images/ui/home.svg" alt="dashboard" srcset="" /></i>
+						<i><img src="/images/ui/home.svg" alt="dashboard" srcset="" /></i>
 						<span>Home</span>
 					</a>
 				</li>
 				<li>
 					<a href="/dashboard">
-						<i><img src="images/ui/dashboard.png" alt="dashboard" srcset="" /></i>
+						<i><img src="/images/ui/dashboard.png" alt="dashboard" srcset="" /></i>
 						<span>Dashboard</span>
 					</a>
 				</li>
 				<li id="nav-signInTab">
 					<a href="/signin">
-						<i><img src="images/ui/person.svg" alt="login icon" srcset="" /></i>
+						<i><img src="/images/ui/person.svg" alt="login icon" srcset="" /></i>
 						<span>Login</span>
 					</a>
 				</li>
 				<li id="nav-accountTab" style="display: none">
 					<a href="/account" class="wordWrap">
-						<i><img src="images/ui/person.svg" alt="account icon" srcset="" /></i>
+						<i><img src="/images/ui/person.svg" alt="account icon" srcset="" /></i>
 						<span class="displayName">Account</span>
 					</a>
 				</li>
@@ -128,7 +128,13 @@
 							</li> -->
 				<li id="nav-optionsTab">
 					<a href="/options">
-						<i><img src="images/ui/settings.svg" style="width: 100%" alt="dashboard" srcset="" /></i
+						<i
+							><img
+								src="/images/ui/settings.svg"
+								style="width: 100%"
+								alt="dashboard"
+								srcset=""
+							/></i
 						>
 						<span>Options</span>
 					</a>

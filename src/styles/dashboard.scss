@@ -182,13 +182,13 @@ hr {
 			aspect-ratio: 1/1;
 			pointer-events: none;
 			@include themify($themes) {
-				@include recolor(themed('primary'), 1);
+				filter: #{themed(primaryFilter)};
 				color: themed('primary') !important;
 			}
 		}
 		&:has(input:focus-visible) i {
 			@include themify($themes) {
-				@include recolor(themed('primary'), 2);
+				filter: #{themed(primaryFilter)};
 				outline: 2px solid;
 			}
 		}

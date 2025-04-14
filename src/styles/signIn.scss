@@ -82,7 +82,7 @@
 				filter: none;
 				transform: translateY(2px);
 				@include themify($themes) {
-					@include recolor(themed('text'), 1);
+					filter: #{themed(text)};
 				}
 			}
 		}

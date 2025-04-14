@@ -17,7 +17,7 @@
 			cursor: pointer;
 			font-size: 40px;
 			@include themify($themes) {
-				@include recolor(themed('text'));
+				filter: #{themed(primaryFilter)};
 				color: themed('text') !important;
 			}
 		}

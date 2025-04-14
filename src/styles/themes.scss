@@ -5,9 +5,11 @@ $themes: (
 	light: (
 		text: #0a0b27,
 		background: #dbdbe5,
-		backgroundAlt: #dde1ea,
+		backgroundAlt: #c9cbd1,
 		primary: #9a8458,
-		secondary: #146d46,
+		primaryFilter:
+			'brightness(0) saturate(100%) invert(53%) sepia(33%) saturate(462%) hue-rotate(2deg) brightness(93%) contrast(85%);',
+		secondary: #d3c9b6,
 		accent: #134533,
 		navHover: #95959533,
 		navText: #f1f9f7,
@@ -22,6 +24,8 @@ $themes: (
 		background: #134533,
 		backgroundAlt: #0c3526,
 		primary: #cfbb95,
+		primaryFilter:
+			'brightness(0) saturate(100%) invert(76%) sepia(35%) saturate(260%) hue-rotate(1deg) brightness(97%) contrast(82%);',
 		secondary: #146d46,
 		accent: #041e18,
 		navHover: #00000033,
@@ -56,30 +60,4 @@ $themes: (
 
 @function themed($key) {
 	@return map.get($theme-map, $key);
-}
-
-@mixin recolor($color: #000, $opacity: 1) {
-	$r: calc(color.channel($color, 'red', $space: rgb) / 255);
-	$g: calc(color.channel($color, 'green', $space: rgb) / 255);
-	$b: calc(color.channel($color, 'blue', $space: rgb) / 255);
-	$a: $opacity;
-
-	// grayscale fallback if SVG from data url is not supported
-	$lightness: color.channel($color, 'lightness', $space: hsl);
-	filter: saturate(0%) brightness(0%) invert($lightness) opacity($opacity);
-
-	// color filter
-	$svg-filter-id: 'recolor';
-	filter: url('data:image/svg+xml;utf8,\
-    <svg xmlns="http://www.w3.org/2000/svg">\
-      <filter id="#{$svg-filter-id}" color-interpolation-filters="sRGB">\
-        <feColorMatrix type="matrix" values="\
-          0 0 0 0 #{$r}\
-          0 0 0 0 #{$g}\
-          0 0 0 0 #{$b}\
-          0 0 0 #{$a} 0\
-        "/>\
-      </filter>\
-    </svg>\
-    ##{$svg-filter-id}');
 }

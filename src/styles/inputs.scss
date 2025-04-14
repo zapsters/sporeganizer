@@ -104,7 +104,7 @@ select {
 
 input::-webkit-calendar-picker-indicator {
 	@include themify($themes) {
-		@include recolor(themed('primary'), 1);
+		filter: #{themed(primaryFilter)};
 		cursor: pointer;
 		color: themed('primary') !important;
 	}

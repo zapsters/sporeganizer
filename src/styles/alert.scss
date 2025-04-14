@@ -34,7 +34,7 @@
 			icon {
 				font-size: 70px !important;
 				@include themify($themes) {
-					@include recolor(themed('primary'), 1);
+					filter: #{themed(primaryFilter)};
 					color: themed('primary') !important;
 				}
 			}
