@@ -149,8 +149,8 @@
 	<footer>
 		<span>Made with ❤ by Erin Ballinger</span>
 		<span style="font-size: smaller; font-weight: 100 !important;"
-			>Banner image and Mushrooms artwork was designed by <a href="https://erinballinger.com"
-				>Mushollow</a
+			>Banner image and Mushrooms artwork was designed by <a
+				href="https://www.instagram.com/mushollow">Mushollow</a
 			></span
 		>
 		<span style="font-size: smaller; margin-top: 0px;"
