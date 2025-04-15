@@ -24,5 +24,10 @@ export const mushroomBank = [
 		title: 'Fly Agaric',
 		icon: 'images/mushrooms/flyAgaric.png',
 		scale: '104%'
+	},
+	{
+		title: 'Chanterelle',
+		icon: 'images/mushrooms/chanterelle.png',
+		scale: '104%'
 	}
 ];

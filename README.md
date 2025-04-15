@@ -33,3 +33,5 @@ Check it out live at: [Sporeganizer.com](https://sporeganizer.com/)
 ## Contributing
 
 I welcome contributions to Sporeganizer! Feel free to fork the repository, create a pull request, or open issues to suggest new features or report bugs.
+
+> Mushroom artwork was created by [Mushollow](https://www.instagram.com/mushollow).

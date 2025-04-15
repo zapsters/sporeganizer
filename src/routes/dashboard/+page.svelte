@@ -31,20 +31,25 @@
 			const tomorrow = new Date();
 			tomorrow.setDate(today.getDate() + 1);
 
+			// Filter first
+			let filteredClasses;
 			switch ($selectedFilter) {
-				case 'today':
-					return $classCache.filter((c) => {
-						const dayOfTheWeek = getDayOfTheWeekAbbr(today);
-						return c.time[dayOfTheWeek] != undefined;
-					});
-				case 'tomorrow':
-					return $classCache.filter((c) => {
-						const dayOfTheWeek = getDayOfTheWeekAbbr(tomorrow);
-						return c.time[dayOfTheWeek] != undefined;
-					});
+				case 'today': {
+					const day = getDayOfTheWeekAbbr(today);
+					filteredClasses = $classCache.filter((c) => c.time[day] !== undefined);
+					break;
+				}
+				case 'tomorrow': {
+					const day = getDayOfTheWeekAbbr(tomorrow);
+					filteredClasses = $classCache.filter((c) => c.time[day] !== undefined);
+					break;
+				}
 				default:
-					return $classCache; // "all" case
+					filteredClasses = $classCache;
 			}
+
+			// Sort alphabetically by name
+			return [...filteredClasses].sort((a, b) => a.name.localeCompare(b.name));
 		}
 	);
 
@@ -74,8 +79,6 @@
 		checkScreenSize();
 		window.addEventListener('resize', checkScreenSize);
 		await getAuth().authStateReady();
-		await getAllUserMadeClasses();
-		await getAllUserMadeAssignments();
 		if (!getAuth().currentUser) {
 			generateModalAlert({
 				icon: 'warning-box',
@@ -114,6 +117,15 @@
 						notes: 'MATH-M 216 | 100% Online',
 						classId: 'preview2',
 						time: {}
+					},
+					{
+						name: 'Intermediate Application Development',
+						icon: 'Chanterelle',
+						notes: 'INFO-I 220',
+						classId: 'preview3',
+						time: {
+							Tue: ['03:00', '05:40']
+						}
 					}
 				]);
 			}
@@ -147,9 +159,9 @@
 						completed: false
 					},
 					{
-						name: 'Series Convergence Project',
-						notes: 'Ask the professor about this...',
-						classId: 'preview2',
+						name: 'Group Assignment MySQL Schema',
+						notes: 'Group meeting this Thursday!',
+						classId: 'preview3',
 						assignmentId: 'preview3',
 						time: getDateWithDayOffset(0),
 						completed: false
@@ -181,6 +193,9 @@
 				]);
 			}
 			settingsCacheFetched.set(true);
+		} else {
+			await getAllUserMadeClasses();
+			await getAllUserMadeAssignments();
 		}
 		// @ts-ignore
 		document.getElementById('dashboardAssignmentTab').addEventListener('change', () => {
