@@ -5,7 +5,6 @@
 .mainContainer {
 	flex: 1;
 	border-radius: 12px;
-	font-size: 25px;
 	transition-property: background-color;
 	transition-duration: 0.2s;
 	transition-timing-function: linear;
@@ -44,11 +43,11 @@
 			filter: #{themed(text)};
 		}
 		header {
-			padding: 3px 9px 3px 9px;
+			padding: 3px 9px 3px 10px;
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
-			font-size: 32px;
+			font-size: 36px;
 			font-weight: 400;
 			border-bottom: 3px solid themed('text');
 
@@ -107,50 +106,8 @@
 			input {
 				font-size: 20px;
 			}
-
-			h5 {
-				padding: 0 10px;
-				font-weight: 400;
-				font-size: 27px;
-				margin-top: 4px;
-				margin-bottom: 1px;
-				z-index: 10;
-				i {
-					color: themed('primary');
-					font-size: inherit;
-					display: inline-block;
-					transform: scale(1.2) translate(8px, 4px);
-					animation-name: example;
-					animation-duration: 1s;
-					overflow: visible;
-					animation-iteration-count: infinite;
-					animation-direction: alternate-reverse;
-					animation-timing-function: ease-in-out;
-					transform-origin: 50% 60%;
-				}
-				@keyframes example {
-					from {
-						scale: 1.2;
-					}
-					to {
-						scale: 1;
-					}
-				}
-			}
-			h2 {
-				margin-top: 10px !important;
-				margin-bottom: 4px !important;
-			}
 		}
-	}
-}
-
-.mainContainer-alt {
-	@include themify($themes) {
-		header {
-			font-size: 47px;
-		}
-		.mainContainer-content {
+		.mainContainer-content.padding {
 			padding: 8px 20px;
 		}
 	}

@@ -9,7 +9,7 @@ export function getMushroomDataFromName(name = 'missingno') {
 	return thisMushroomBankJson;
 }
 
-export const mushroomBank = [
+const mushroomBank = [
 	{
 		title: 'missingno',
 		icon: 'images/mushrooms/missingno.png',
@@ -31,3 +31,8 @@ export const mushroomBank = [
 		scale: '104%'
 	}
 ];
+
+export function getMushroomBank() {
+	// Sort alphabetically by name
+	return [...mushroomBank].sort((a, b) => a.title.localeCompare(b.title));
+}

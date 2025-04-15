@@ -78,11 +78,11 @@
 	});
 </script>
 
-<div class="mainContainer mainContainer-alt account options">
+<div class="mainContainer account options">
 	<header>
 		<h1><span>Options</span></h1>
 	</header>
-	<div class="mainContainer-content">
+	<div class="mainContainer-content padding">
 		<h2>Time Settings</h2>
 		<section>
 			<span>24 hour time</span>

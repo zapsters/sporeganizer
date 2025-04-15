@@ -11,7 +11,7 @@ import {
 	updateAssignmentInDatabase,
 	updateClassInDatabase
 } from './firestoreDatabase';
-import { getMushroomDataFromName, mushroomBank } from '$lib/mushroomBank';
+import { getMushroomDataFromName, getMushroomBank } from '$lib/mushroomBank';
 import { alertManager } from '$lib';
 import { areAllEntriesEqual, DOMPurifyFunc, formatDateToIsoAlt } from './helpers';
 
@@ -714,7 +714,7 @@ async function getClassesForDropdown() {
 
 function getMushroomElementsForDropdown() {
 	var dropdownContent = '';
-
+	const mushroomBank = getMushroomBank();
 	mushroomBank.forEach((mushroomElement, index) => {
 		if (mushroomElement.title == 'missingno') return;
 		dropdownContent += `

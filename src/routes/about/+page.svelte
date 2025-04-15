@@ -12,5 +12,17 @@
 	<header>
 		<h1><span>About Sporeganizer</span></h1>
 	</header>
-	<Footer />
+	<div class="mainContainer-content padding">
+		<h2 style="font-weight: 400;">
+			<strong>Sporeganizer</strong>. The mushroom themed class and homework productivity app.
+		</h2>
+		<table>
+			<tbody>
+				<tr>
+					<td style="padding-right: 0px;">Website Design</td>
+					<td>Erin Ballinger</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </div>

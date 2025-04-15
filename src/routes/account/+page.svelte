@@ -247,11 +247,11 @@
 	}
 </script>
 
-<div class="mainContainer mainContainer-alt account">
+<div class="mainContainer account">
 	<header>
 		<h1><span>Account</span></h1>
 	</header>
-	<div class="mainContainer-content">
+	<div class="mainContainer-content padding">
 		<h2>Hi <span class="displayName">###</span>,</h2>
 		<section>
 			<h3>Display Name</h3>
