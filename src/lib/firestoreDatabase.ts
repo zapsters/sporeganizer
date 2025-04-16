@@ -28,7 +28,7 @@ import {
 } from '$lib/userData';
 import { DOMPurifyFunc } from './helpers';
 import { get } from 'svelte/store';
-import type { AssignmentJson } from './types';
+import type { AssignmentJson, ClassJson } from './types';
 
 export async function getUserSettings() {
 	const user = getAuth().currentUser;
@@ -49,7 +49,8 @@ export async function getUserSettings() {
 		settingsCacheFetched.set(true);
 		return settings;
 	} else {
-		console.error('No user found');
+		console.error('No user found in database...');
+		addUserToCollection(getAuth().currentUser);
 		return null;
 	}
 }
@@ -110,7 +111,7 @@ export async function updateFieldInUserCollection(key, value) {
 }
 
 // Add class / assignment Documents
-export async function addClassToDatabase(classJson) {
+export async function addClassToDatabase(classJson: ClassJson) {
 	if (!checkLogInStatus()) {
 		let classes = Array(await getAllUserMadeClasses());
 		classJson.classId = `preview${classes.length}`;
@@ -127,6 +128,11 @@ export async function addClassToDatabase(classJson) {
 			userId: getAuth().currentUser.uid,
 			createdAt: serverTimestamp()
 		});
+
+		await updateDoc(classRef, {
+			classId: classRef.id
+		});
+
 		updateClassInCache(classRef.id, classJson);
 		return classRef.id;
 	} catch (error) {
