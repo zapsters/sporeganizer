@@ -10,15 +10,18 @@
 
 	if (!classData?.classId) throw new Error('NO CLASSID WAS PASSED');
 
+	// Handle fetching class details
 	async function handleEditClick() {
 		const classDetails = await getClassById(classData.classId);
 		callClassModal('edit', classDetails);
 	}
 
-	function ifDayIsSelected(dayAbbreviation) {
+	// Determine if a day is selected
+	function ifDayIsSelected(dayAbbreviation: string): string {
 		return classData.time?.[dayAbbreviation] ? 'selected' : '';
 	}
 
+	// Format the times for the class schedule
 	function getTimes() {
 		const time = classData.time;
 		if (!time || Object.keys(time).length === 0) return '';
@@ -31,43 +34,33 @@
 
 		if (times.length === 0) return '';
 
+		// If all entries are equal, return a single time slot
 		if (areAllEntriesEqual(time)) {
 			let { start, end } = times[0];
 			return `<tr><td>${start} - ${end}</td></tr>`;
 		}
 
+		// Otherwise, return a list of all times
 		return times
 			.map(({ day, start, end }) => `<tr><td>${day}</td><td>${start} - ${end}</td></tr>`)
 			.join('');
 	}
 
+	// Get the day selection UI for the class schedule
 	function getDatesContainer() {
 		if (!classData.time || Object.keys(classData.time).length === 0) return '';
-		// If Saturday and Sunday are not selected, then hide them in the class element.
-		if (ifDayIsSelected('Sat') != 'selected' && ifDayIsSelected('Sun') != 'selected') {
-			return `
-      <ul class="classDatesContainer">
-			<li class="${ifDayIsSelected('Mon')}">Mon</li>
-			<li class="${ifDayIsSelected('Tue')}">Tue</li>
-			<li class="${ifDayIsSelected('Wed')}">Wed</li>
-			<li class="${ifDayIsSelected('Thu')}">Thu</li>
-			<li class="${ifDayIsSelected('Fri')}">Fri</li>
-      </ul>
-			`;
-		}
+
+		const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+		const selectedDays = daysOfWeek.filter((day) => ifDayIsSelected(day));
+
 		return `
-      <ul class="classDatesContainer">
-			<li class="${ifDayIsSelected('Mon')}">Mon</li>
-			<li class="${ifDayIsSelected('Tue')}">Tue</li>
-			<li class="${ifDayIsSelected('Wed')}">Wed</li>
-			<li class="${ifDayIsSelected('Thu')}">Thu</li>
-			<li class="${ifDayIsSelected('Fri')}">Fri</li>
-			<li class="${ifDayIsSelected('Sat')}">Sat</li>
-			<li class="${ifDayIsSelected('Sun')}">Sun</li>
-      </ul>
-			`;
+			<ul class="classDatesContainer">
+				${selectedDays.map((day) => `<li class="${ifDayIsSelected(day)}">${day}</li>`).join('')}
+			</ul>
+		`;
 	}
 
+	// Reactive assignment for mushroom icon data
 	$: mushroomIconData = getMushroomDataFromName(classData.icon);
 </script>
 
@@ -87,7 +80,7 @@
 	<div class="actionBtns">
 		<div class="actionButton">
 			<button
-				onclick={handleEditClick}
+				on:click={handleEditClick}
 				class="raw editOnClick pixelart-icons-font-edit"
 				aria-label="Edit class"
 			></button>

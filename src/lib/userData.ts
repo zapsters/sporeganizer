@@ -110,16 +110,25 @@ export async function updateAssignmentInCache(assignmentId, assignmentJson) {
 
 	if (index === -1) {
 		// Class doesn't exist in cache — add it
-		assignmentCache.update((assignments) => [...assignments, { ...assignmentJson, assignmentId }]);
+		assignmentCache.update((assignments) => {
+			const updatedAssignments = [...assignments, { ...assignmentJson, assignmentId }];
+			// Sort the assignments by due date
+			return updatedAssignments.sort(
+				(a, b) => new Date(a.time).getTime() - new Date(b.time).getTime()
+			);
+		});
 	} else if (Object.keys(assignmentJson).length === 0) {
-		// If the new data is empty — remove the class
+		// If the new data is empty — remove the assignment
 		assignmentCache.update((assignments) =>
 			assignments.filter((c) => c.assignmentId !== assignmentId)
 		);
 	} else {
-		// Update the existing class
-		assignmentCache.update((assignments) =>
-			assignments.map((c) => (c.assignmentId === assignmentId ? { ...c, ...assignmentJson } : c))
+		// Update the existing assignment
+		assignmentCache.update(
+			(assignments) =>
+				assignments
+					.map((c) => (c.assignmentId === assignmentId ? { ...c, ...assignmentJson } : c))
+					.sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime()) // Sort the updated list
 		);
 	}
 	console.log('Updated assignment cache:', get(assignmentCache));

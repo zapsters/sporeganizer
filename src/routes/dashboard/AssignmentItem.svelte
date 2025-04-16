@@ -11,13 +11,13 @@
 	let classData: ClassJson | null = null;
 	let mushroomIconData = null;
 
-	// Subscribe to class store and react to changes
-	$: {
-		classCache.subscribe(($classes) => {
-			classData = $classes.find((c) => c.classId === assignmentData.classId) ?? null;
-			mushroomIconData = getMushroomDataFromName(classData?.icon);
-		});
-	}
+	// Subscribe to class store outside the reactive block to avoid infinite loops
+	classCache.subscribe(($classes) => {
+		classData = $classes.find((c) => c.classId === assignmentData.classId) ?? null;
+		if (classData) {
+			mushroomIconData = getMushroomDataFromName(classData.icon);
+		}
+	});
 
 	function handleEditClick() {
 		callAssignmentModal('edit', assignmentData);

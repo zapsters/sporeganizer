@@ -60,11 +60,31 @@
 			const tomorrow = new Date();
 			tomorrow.setDate(today.getDate() + 1);
 
-			return $assignmentCache.sort(function (a, b) {
+			// Sort assignments chronologically
+			const sortedAssignments = $assignmentCache.sort((a, b) => {
 				return new Date(a.time).getTime() - new Date(b.time).getTime();
-			}); // "all" case
+			});
+
+			// Group assignments by formatted date
+			const grouped = sortedAssignments.reduce(
+				(groups, assignment) => {
+					const formattedDate = formatDate(new Date(assignment.time));
+
+					if (!groups[formattedDate]) {
+						groups[formattedDate] = [];
+					}
+					groups[formattedDate].push(assignment);
+					return groups;
+				},
+				{} as Record<string, typeof $assignmentCache>
+			);
+
+			return grouped;
 		}
 	);
+
+	$: groupedAssignments = $assignmentQueryResult;
+	$: groupedDates = Object.keys(groupedAssignments);
 
 	// Checking if our device is mobile.
 	let isMobile = false;
@@ -97,102 +117,7 @@
 				]
 			});
 
-			if (!get(classCacheFetched)) {
-				classCacheFetched.set(true);
-				classCache.set([
-					{
-						name: 'PRINCIPLES OF CHEMISTRY I',
-						icon: 'Shaggy Ink Cap',
-						notes: 'CHEM-C 105',
-						classId: 'preview1',
-						time: {
-							Mon: ['09:00', '11:50'],
-							Wed: ['09:00', '11:50'],
-							Fri: ['09:00', '11:50']
-						}
-					},
-					{
-						name: 'CALCULUS II',
-						icon: 'Fly Agaric',
-						notes: 'MATH-M 216 | 100% Online',
-						classId: 'preview2',
-						time: {}
-					},
-					{
-						name: 'Intermediate Application Development',
-						icon: 'Chanterelle',
-						notes: 'INFO-I 220',
-						classId: 'preview3',
-						time: {
-							Tue: ['03:00', '05:40']
-						}
-					}
-				]);
-			}
-			if (!get(assignmentCacheFetched)) {
-				assignmentCacheFetched.set(true);
-				function getDateWithDayOffset(dateOffset: number) {
-					var result = new Date();
-					result.setDate(result.getDate() + dateOffset);
-					return setTimeMidnight(result);
-				}
-				function setTimeMidnight(date: Date) {
-					date.setHours(23);
-					date.setMinutes(59);
-					return date;
-				}
-				assignmentCache.set([
-					{
-						name: 'Atomic Structure and Periodicity Worksheet',
-						notes: 'Pages 1-5',
-						classId: 'preview1',
-						assignmentId: 'preview1',
-						time: getDateWithDayOffset(-3),
-						completed: false
-					},
-					{
-						name: 'Techniques of Integration Problem Set',
-						notes: '',
-						classId: 'preview2',
-						assignmentId: 'preview2',
-						time: getDateWithDayOffset(-1),
-						completed: false
-					},
-					{
-						name: 'Group Assignment MySQL Schema',
-						notes: 'Group meeting this Thursday!',
-						classId: 'preview3',
-						assignmentId: 'preview3',
-						time: getDateWithDayOffset(0),
-						completed: false
-					},
-					{
-						name: 'Stoichiometry Lab Report',
-						notes: 'Determining the Limiting Reactant',
-						classId: 'preview1',
-						assignmentId: 'preview4',
-						time: getDateWithDayOffset(1),
-						completed: false
-					},
-					{
-						name: 'Taylor Series Worksheet',
-						classId: 'preview2',
-						notes: '',
-						assignmentId: 'preview5',
-						time: getDateWithDayOffset(5),
-						completed: false
-					},
-					{
-						name: 'Mole-to-Mass Conversions Lab',
-						classId: 'preview1',
-						notes: '',
-						assignmentId: 'preview6',
-						time: getDateWithDayOffset(5),
-						completed: false
-					}
-				]);
-			}
-			settingsCacheFetched.set(true);
+			createPreviewData();
 		} else {
 			await getAllUserMadeClasses();
 			await getAllUserMadeAssignments();
@@ -202,17 +127,124 @@
 			resizeSelect('dashboardAssignmentTab');
 		});
 	});
+
+	function createPreviewData() {
+		if (!$classCacheFetched) {
+			// Set classCache
+			classCacheFetched.set(true);
+			classCache.set([
+				{
+					name: 'PRINCIPLES OF CHEMISTRY I',
+					icon: 'Shaggy Ink Cap',
+					notes: 'CHEM-C 105',
+					classId: 'preview1',
+					time: {
+						Mon: ['09:00', '11:50'],
+						Wed: ['09:00', '11:50'],
+						Fri: ['09:00', '11:50']
+					}
+				},
+				{
+					name: 'CALCULUS II',
+					icon: 'Fly Agaric',
+					notes: 'MATH-M 216 | 100% Online',
+					classId: 'preview2',
+					time: {}
+				},
+				{
+					name: 'Intermediate Application Development',
+					icon: 'Chanterelle',
+					notes: 'INFO-I 220',
+					classId: 'preview3',
+					time: {
+						Tue: ['03:00', '05:40']
+					}
+				}
+			]);
+		}
+		// Set AssignmentCache
+		if (!$assignmentCacheFetched) {
+			assignmentCacheFetched.set(true);
+			function getDateWithDayOffset(dateOffset: number) {
+				var result = new Date();
+				result.setDate(result.getDate() + dateOffset);
+				return setTimeMidnight(result);
+			}
+			function setTimeMidnight(date: Date) {
+				date.setHours(23);
+				date.setMinutes(59);
+				return date;
+			}
+			assignmentCache.set([
+				{
+					name: 'Atomic Structure and Periodicity Worksheet',
+					notes: 'Pages 1-5',
+					classId: 'preview1',
+					assignmentId: 'preview1',
+					time: getDateWithDayOffset(-3),
+					completed: false
+				},
+				{
+					name: 'Techniques of Integration Problem Set',
+					notes: '',
+					classId: 'preview2',
+					assignmentId: 'preview2',
+					time: getDateWithDayOffset(-1),
+					completed: false
+				},
+				{
+					name: 'Group Assignment MySQL Schema',
+					notes: 'Group meeting this Thursday!',
+					classId: 'preview3',
+					assignmentId: 'preview3',
+					time: getDateWithDayOffset(0),
+					completed: false
+				},
+				{
+					name: 'Stoichiometry Lab Report',
+					notes: 'Determining the Limiting Reactant',
+					classId: 'preview1',
+					assignmentId: 'preview4',
+					time: getDateWithDayOffset(1),
+					completed: false
+				},
+				{
+					name: 'Taylor Series Worksheet',
+					classId: 'preview2',
+					notes: '',
+					assignmentId: 'preview5',
+					time: getDateWithDayOffset(5),
+					completed: false
+				},
+				{
+					name: 'Mole-to-Mass Conversions Lab',
+					classId: 'preview1',
+					notes: '',
+					assignmentId: 'preview6',
+					time: getDateWithDayOffset(5),
+					completed: false
+				}
+			]);
+		}
+		settingsCacheFetched.set(true);
+	}
+
 	function updateFilter(thisElem) {
 		Jquery(thisElem).parent().find('button').removeClass('active');
 		Jquery(thisElem).addClass('active');
 		selectedFilter.set(Jquery(thisElem).data('filter'));
 	}
-	let lastDateOnAssignmentScreen = '';
+	let lastDateOnAssignmentScreen = null;
+	let assignmentHeaders = new Map();
+
 	function handleAssignmentDateHeaders(assignmentDate: Date) {
 		const formattedDate = formatDate(assignmentDate);
-		if (formattedDate == lastDateOnAssignmentScreen) return;
+		if (formattedDate === lastDateOnAssignmentScreen) return;
+
 		lastDateOnAssignmentScreen = formattedDate;
-		return `<h5>${formattedDate}</h5>`;
+		// Store the header for each assignment date
+		assignmentHeaders.set(formattedDate, `<h5>${formattedDate}</h5>`);
+		return formattedDate;
 	}
 </script>
 
@@ -220,9 +252,14 @@
 	<div class="mainContainer" style="flex: 0.8; min-width: 200px">
 		<header>
 			<h1>Classes</h1>
-			<button id="classAddBtn" on:click={() => callClassModal('create')} class="raw">
-				<img src="images/ui/plus.svg" alt="Add Class" srcset="" />
-			</button>
+
+			<button
+				id="classAddBtn"
+				style="font-size: 40px;"
+				on:click={() => callClassModal('create')}
+				aria-label="Add Class"
+				class="raw pixelart-icons-font-plus"
+			></button>
 		</header>
 		<div class="buttonContainer" id="classSectionFilters">
 			<button
@@ -266,13 +303,21 @@
 		</select>
 
 		{#if selectedScreen == 'classes'}
-			<button id="classAddBtn" on:click={() => callClassModal('create')} class="raw">
-				<img src="images/ui/plus.svg" alt="Add Class" srcset="" />
-			</button>
+			<button
+				id="classAddBtn"
+				style="font-size: 40px;"
+				on:click={() => callClassModal('create')}
+				aria-label="Add Class"
+				class="raw pixelart-icons-font-plus"
+			></button>
 		{:else}
-			<button id="assignmentAddBtn" on:click={() => callAssignmentModal('create')} class="raw">
-				<img src="images/ui/plus.svg" alt="Add Assignment" srcset="" />
-			</button>
+			<button
+				id="assignmentAddBtn"
+				style="font-size: 40px;"
+				on:click={() => callAssignmentModal('create')}
+				aria-label="Add Assignment"
+				class="raw pixelart-icons-font-plus"
+			></button>
 		{/if}
 	</header>
 	{#if selectedScreen == 'classes'}
@@ -326,9 +371,13 @@
 					</div>
 				</div>
 			</div> -->
-			{#each $assignmentQueryResult as assignmentData}
-				{@html handleAssignmentDateHeaders(new Date(assignmentData.time))}
-				<AssignmentItem {assignmentData} />
+			{#each groupedDates as date}
+				<div>
+					<h5>{@html date}</h5>
+					{#each groupedAssignments[date] as assignmentData}
+						<AssignmentItem {assignmentData} />
+					{/each}
+				</div>
 			{/each}
 		</div>
 	{/if}
