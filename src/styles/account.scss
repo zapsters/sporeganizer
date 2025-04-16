@@ -1,15 +1,19 @@
 .account {
-  h2 {
-    font-size: 30px;
-  }
-  h3 {
-    font-size: 20px;
-    margin-bottom: 0;
-  }
-  span {
-    word-break: break-all;
-  }
-  .signoutBtn {
-    margin-top: 40px;
-  }
+	h2:first-of-type {
+		margin-top: 0;
+	}
+	h2 {
+		font-size: 30px;
+		margin: 14px 0 0 0;
+	}
+	h3 {
+		font-size: 20px;
+		margin-bottom: 0;
+	}
+	span {
+		word-break: break-all;
+	}
+	.signoutBtn {
+		margin-top: 40px;
+	}
 }

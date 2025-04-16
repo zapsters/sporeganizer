@@ -45,7 +45,7 @@
 		header {
 			padding: 3px 9px 3px 10px;
 			display: flex;
-			align-items: center;
+			align-items: flex-end;
 			justify-content: space-between;
 			font-size: 36px;
 			font-weight: 400;
@@ -66,7 +66,7 @@
 				appearance: none;
 				background: url('/images/ui/chevron-down.svg') 100% / 36px no-repeat;
 				background-position: right;
-				filter: #{themed(text)};
+
 				option {
 					font-size: 24px;
 				}
@@ -75,8 +75,8 @@
 				display: flex;
 				align-items: center;
 				justify-content: space-evenly;
-				filter: #{themed(text)};
-				transform: translateY(-2px);
+				margin: 0 !important;
+				color: themed('text') !important;
 				cursor: pointer;
 				svg:not(.gsi-material-button svg),
 				img {
