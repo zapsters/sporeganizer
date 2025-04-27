@@ -5,19 +5,23 @@
 	import { convertTo12Hour } from '$lib/helpers';
 	import type { ClassJson } from '$lib/types';
 	import { classCache } from '$lib/userData';
+	import { get } from 'svelte/store';
 
 	export let assignmentData;
 
 	let classData: ClassJson | null = null;
 	let mushroomIconData = null;
 
-	// Subscribe to class store outside the reactive block to avoid infinite loops
-	classCache.subscribe(($classes) => {
+	$: if (assignmentData.classId) {
+		const $classes = get(classCache);
 		classData = $classes.find((c) => c.classId === assignmentData.classId) ?? null;
+
 		if (classData) {
 			mushroomIconData = getMushroomDataFromName(classData.icon);
+		} else {
+			mushroomIconData = getMushroomDataFromName('');
 		}
-	});
+	}
 
 	function handleEditClick() {
 		callAssignmentModal('edit', assignmentData);

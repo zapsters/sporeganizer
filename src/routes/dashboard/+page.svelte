@@ -61,7 +61,7 @@
 			tomorrow.setDate(today.getDate() + 1);
 
 			// Sort assignments chronologically
-			const sortedAssignments = $assignmentCache.sort((a, b) => {
+			const sortedAssignments = [...$assignmentCache].sort((a, b) => {
 				return new Date(a.time).getTime() - new Date(b.time).getTime();
 			});
 
