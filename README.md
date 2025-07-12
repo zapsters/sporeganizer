@@ -2,8 +2,6 @@
 
 Sporeganizer is a fun and engaging homework tracking and productivity app with a mushroom theme! It helps users stay organized and on top of their homework assignments, all while offering a unique, visually pleasing interface.
 
-> _Built with love for my partner, who adores mushrooms <3 <br> Big thanks to them for the artwork! Check them and their work out on Instagram at [Mushollow](https://www.instagram.com/mushollow)!_
-
 Sporeganizer is hosted live at: [Sporeganizer.com](https://sporeganizer.com/)
 
 ## Key Features
@@ -34,10 +32,8 @@ Sporeganizer is hosted live at: [Sporeganizer.com](https://sporeganizer.com/)
 
 I welcome contributions to Sporeganizer! Feel free to fork the repository, create a pull request, or open issues to suggest new features or report bugs.
 
-> Mushroom artwork was created by [Mushollow](https://www.instagram.com/mushollow).
-
 ## Want to support me?
 
-As a college student independently creating and hosting free, accessible web experiences like Sporeganizer, I fund everything out of pocket—your support helps make these projects possible. Support me by [buying me a coffee](https://buymeacoffee.com/erinballinger). :3
+As a college student independently creating and hosting free, accessible web tools & experiences like Sporeganizer, I fund everything out of pocket—your support helps make these projects possible. Support me by [buying me a coffee](https://buymeacoffee.com/erinballinger). :3
 
 Thank you for taking the time to check out my projects — your support truly means the world to me.
