@@ -43,11 +43,11 @@
 			filter: #{themed(text)};
 		}
 		header {
-			padding: 3px 9px 3px 10px;
+			padding: 6px 9px 5px 10px;
 			display: flex;
-			align-items: flex-end;
+			align-items: center;
 			justify-content: space-between;
-			font-size: 36px;
+			font-size: 27px;
 			font-weight: 400;
 			border-bottom: 3px solid themed('text');
 
@@ -64,7 +64,7 @@
 				-webkit-appearance: none;
 				-moz-appearance: none;
 				appearance: none;
-				background: url('/images/ui/chevron-down.svg') 100% / 36px no-repeat;
+				background: url('/images/ui/chevron-down.svg') 100% / 29px no-repeat;
 				background-position: right;
 
 				option {
@@ -76,6 +76,7 @@
 				align-items: center;
 				justify-content: space-evenly;
 				margin: 0 !important;
+				font-size: 29px !important;
 				color: themed('text') !important;
 				cursor: pointer;
 				svg:not(.gsi-material-button svg),

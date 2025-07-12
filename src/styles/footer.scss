@@ -8,7 +8,7 @@ footer {
 	margin: 0 auto;
 	margin-top: 60px;
 	width: fit-content;
-	padding: 3px 14px;
+	padding: 5px 50px 7px;
 	@include themify($themes) {
 		background-color: themed('navHover');
 		border: 4px solid themed('primary') !important;
