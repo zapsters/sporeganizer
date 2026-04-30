@@ -1,5 +1,5 @@
 <footer>
-	<span>Made with ❤ by <a target="_blank" href="https://erinballinger.com">Erin Ballinger</a></span
+	<span>Made with ❤ by <a target="_blank" href="https://erinballinger.com">Apollo Ballinger</a></span
 	>
 	<!-- <span style="font-size: smaller; margin: -3px 0px 5px 0px !important;"
 		>Want to support me? <i
